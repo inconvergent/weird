@@ -82,8 +82,8 @@ In addition to the 2d/3d vectors proided via
    (either (print "form 1") (print "form 2"))
    ```
 
-   See [rnd.lisp](src/rnd/3rnd.lisp), [2rnd.lisp](src/rnd/2rnd.lisp) and
-   [2rnd.lisp](src/rnd/3rnd.lisp), for all available functions.
+   See [rnd.lisp](src/rnd/rnd.lisp), [2rnd.lisp](src/rnd/2rnd.lisp) and
+   [3rnd.lisp](src/rnd/3rnd.lisp), for all available functions.
 
 6. A tool for drawing `svg` files: `wsvg`. See [draw.lisp](/example/draw.lisp).
 
