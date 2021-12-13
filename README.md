@@ -95,7 +95,7 @@ The most interesting part of the `weir` graph structure is `alterations`. An
 `alteration` is a change that will be applied to the structure at the end of a
 given context, provided it is valid.
 
-The main motivation behid this is that this makes it possible to "queue" up a
+The main motivation behind this is that this makes it possible to "queue" up a
 number of changes that will be applied at a later time. This makes it possible
 to access the state in the `weir` instance while you are creating the
 alterations. Without there being any changes made to the state of the `weir`
@@ -113,7 +113,7 @@ Existing alterations in `weir` are postfixed with `?`. it might look like this:
 `(% ...)` is used to collect alterations. They will be executed at the end of
 the `with` context. If an `alteration` evaluates to `nil`, nothing will happen.
 
-Here is an example of how the forces are calcualted in my [Tangle of Webs
+Here is an example of how the forces are calculated in my [Tangle of Webs
 simulation](https://inconvergent.net/2019/a-tangle-of-webs/):
 
 ```lisp
@@ -128,7 +128,7 @@ simulation](https://inconvergent.net/2019/a-tangle-of-webs/):
                                     1 0))))
         (loop for i in e and s in '(-1.0 1.0)
               ; alteration is created, but nothing happens
-              do (% (weir:2move-vert? i
+              do (% (2move-vert? i
                       (veq:f2scale force (* s stp)))))))))
     ; alterations are applied at the end
     ; of the context
@@ -173,6 +173,40 @@ that depends on a future that fails (or returns `nil`) will be skipped.
 
 You can use `(weir:with (wer % :bd t) ...)` to see how an alteration is
 expanded. This might make it easier to see what is going on.
+
+As en example. The `alteration`:
+```lisp
+(% (2move-vert? :vert?
+     (veq:f2scale
+       (veq:f2- (veq:f2$ (weir:2get-verts wer '(1 3)) 1 0))
+       1f0)))
+```
+will be expanded to:
+```lisp
+(VEQ:F2LET
+ ((#:OUT-F2!P53
+   (VEQ:F2SCALE (VEQ:F2- (VEQ:F2$ (WEIR:2GET-VERTS WER '(1 3)) 1 0)) 1.0)))
+ (LET ((#:OUT-REL54 T))
+   (LAMBDA (#:WER541)
+     (CASE (WEIR::-IF-ALL-RESOLVED #:ALT-RES29 (LIST :VERT?))
+       (:OK
+        (VALUES T
+                (PROGN
+                 (WHEN
+                     (WEIR::-VALID-VERT #:WER541
+                                        (VALUES (GETHASH :VERT? #:ALT-RES29)))
+                   (PROGN
+                    (WEIR:2MOVE-VERT! #:WER541
+                                      (VALUES (GETHASH :VERT? #:ALT-RES29))
+                                      (WEIR::VAL* #:OUT-F2!P53)
+                                      :REL #:OUT-REL54)
+                    (VALUES (GETHASH :VERT? #:ALT-RES29)))))))
+       (:BAIL (PROGN NIL (VALUES T NIL)))
+       (T (VALUES NIL NIL))))))
+```
+Which won't work in its own unless `VERT?` is also defined. But you can see how
+the promise resolution is handled. An how values (`#:OUT-REL54`,
+`#:OUT-F2!P53`) are defined in the surrounding closure.
 
 ![Scribbles](img/scribble.png)
 
