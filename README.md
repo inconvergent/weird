@@ -8,17 +8,17 @@ _NOTE: you should not use this code for anything remotely important_
 `weird` is the next iteration of [weir](https://github.com/inconvergent/weir)
 which was the next iteration of [snek](https://github.com/inconvergent/snek).
 The library is written to be useful for a broad range of ways in which I create
-art using various generative algorithms. Almost everything I have made over the
+art using generative algorithms. Almost everything I have made over the
 past several years has been made using some version of this system.
 
 ![Elastic Web](img/web.png)
 
 ## Components
 
-In addition to the 2d/3d vectors proided via
+In addition to the 2d/3d vectors provided via
 [cl-veq](https://github.com/inconvergent/cl-veq), the main components are:
 
-3. A simple (undirected) graph data structure, `weir`. The structure can be
+1. A simple (undirected) graph data structure, `weir`. The structure can be
    manipulated directly, or via `alterations`. The latter is described in more
    detail below.  Here is a simple example of how you can manipulate the
    structure directly:
@@ -85,7 +85,7 @@ In addition to the 2d/3d vectors proided via
    See [rnd.lisp](src/rnd/rnd.lisp), [2rnd.lisp](src/rnd/2rnd.lisp) and
    [3rnd.lisp](src/rnd/3rnd.lisp), for all available functions.
 
-6. A tool for drawing `svg` files: `wsvg`. See [draw.lisp](/example/draw.lisp).
+3. A tool for drawing `svg` files: `wsvg`. See [draw.lisp](/example/draw.lisp).
 
 ![Sun](img/sun.png)
 
