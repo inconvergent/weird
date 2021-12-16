@@ -58,7 +58,7 @@ In addition to the 2d/3d vectors provided via
      (get-incident-edges wer 0))
    ```
    See [examples/draw.lisp](examples/draw.lisp) and
-   [examples/draw.lisp](examples/draw.lisp) for more.
+   [examples/ex.lisp](examples/ex.lisp) for more.
 
 2. Random numbers, some examples:
 
