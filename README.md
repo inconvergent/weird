@@ -85,7 +85,7 @@ In addition to the 2d/3d vectors provided via
    See [rnd.lisp](src/rnd/rnd.lisp), [2rnd.lisp](src/rnd/2rnd.lisp) and
    [3rnd.lisp](src/rnd/3rnd.lisp), for all available functions.
 
-3. A tool for drawing `svg` files: `wsvg`. See [draw.lisp](/example/draw.lisp).
+3. A tool for drawing `svg` files: `wsvg`. See [draw.lisp](/examples/draw.lisp).
 
 ![Sun](img/sun.png)
 
