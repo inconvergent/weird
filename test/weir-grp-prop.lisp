@@ -139,7 +139,7 @@
 
     (veq:vprogn
       (weir:with (wer %)
-        (% (2split-edge? 0 1 (veq:f2< 1f0 2f0)) :res :a?)
+        (% (2split-edge? 0 1 (veq:f2 1f0 2f0)) :res :a?)
         (% (mcopy-edge-props? '(0 1) (list (list 0 :a?) (list 1 :a?)))))
 
       (is (veq:lst (weir:edge-prop->path wer :path)) '((2 0 3 1) T)))))

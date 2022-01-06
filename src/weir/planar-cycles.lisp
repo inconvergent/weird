@@ -56,7 +56,7 @@
 (veq:vdef -get-cw-most-vert (curr prev &key dirfx adjfx)
   (declare #.*opt* (fixnum curr prev) (function dirfx adjfx))
   "this is only used once at the beginning of the algoritm"
-  (veq:f2let ((dcurr (if (< prev 0) (veq:f2< 0f0 -1f0)
+  (veq:f2let ((dcurr (if (< prev 0) (veq:f2 0f0 -1f0)
                                     (funcall dirfx curr prev))))
     (let ((adj (funcall adjfx curr prev)))
       (declare (list adj))
@@ -64,7 +64,7 @@
       ; nil if adj is empty
       (when (< (length adj) 2) (return-from -get-cw-most-vert (car adj)))
 
-      (veq:f2let ((dnext (veq:f2< 0f0 0f0)))
+      (veq:f2let ((dnext (veq:f2 0f0 0f0)))
         (loop with next of-type fixnum = (car adj)
               with convex of-type boolean
               for a of-type fixnum in (cdr adj)
@@ -74,16 +74,16 @@
                    (if convex (when (or (< (-dot-perp dcurr da) eps)
                                         (< (-dot-perp dnext da) eps))
                                     (setf next a convex (-is-convex da dcurr))
-                                    (veq:f2vset dnext (veq:f2< da)))
+                                    (veq:f2vset dnext (veq:f2 da)))
                               (when (and (< (-dot-perp dcurr da) eps)
                                          (< (-dot-perp dnext da) eps))
                                     (setf next a convex (-is-convex da dcurr))
-                                    (veq:f2vset dnext (veq:f2< da)))))
+                                    (veq:f2vset dnext (veq:f2 da)))))
               finally (return next))))))
 
 (veq:vdef -get-ccw-most-vert (curr prev &key dirfx adjfx)
   (declare #.*opt* (fixnum curr prev) (function dirfx adjfx))
-  (veq:f2let ((dcurr (if (< prev 0) (veq:f2< 0f0 -1f0)
+  (veq:f2let ((dcurr (if (< prev 0) (veq:f2 0f0 -1f0)
                                     (funcall dirfx curr prev))))
     (let ((adj (funcall adjfx curr prev)))
       (declare (list adj))
@@ -91,7 +91,7 @@
       ; nil if adj is empty
       (when (< (length adj) 2) (return-from -get-ccw-most-vert (car adj)))
 
-      (veq:f2let ((dnext (veq:f2< 0f0 0f0)))
+      (veq:f2let ((dnext (veq:f2 0f0 0f0)))
         ; infinite loops thend to happen here
         (loop with next of-type fixnum = (car adj)
               with convex of-type boolean
@@ -102,11 +102,11 @@
                    (if convex (when (and (> (-dot-perp dcurr da) (- eps))
                                          (> (-dot-perp dnext da) (- eps)))
                                     (setf next a convex (-is-convex da dcurr))
-                                    (veq:f2vset dnext (veq:f2< da)))
+                                    (veq:f2vset dnext (veq:f2 da)))
                               (when (or (> (-dot-perp dcurr da) (- eps))
                                         (> (-dot-perp dnext da) (- eps)))
                                     (setf next a convex (-is-convex da dcurr))
-                                    (veq:f2vset dnext (veq:f2< da)))))
+                                    (veq:f2vset dnext (veq:f2 da)))))
               finally (return next))))))
 
 (declaim (inline -absub))

@@ -8,7 +8,11 @@
 (defmacro -srt (e) `(sort ,e #'<))
 (defmacro -prop (wer key) `(gethash ,key (weir-props ,wer)))
 (defmacro -clear-prop (wer key) `(remhash ,key (weir-props ,wer)))
-(defun clear-prop (wer key) (declare (weir wer)) (-clear-prop wer key))
+
+(defun clear-prop (wer key)
+  (declare (weir wer))
+  "clear all props from item/key (edge, grp, vert)"
+  (-clear-prop wer key))
 
 (defun -get-prop (wer key prop &key default)
   (declare #.*opt* (weir wer) (symbol prop))
@@ -22,12 +26,25 @@
 
 (defun -set-prop (wer key prop &optional (val t))
   (declare #.*opt* (weir wer) (symbol prop))
-  "set prop of key to val.  hadows previous entries (in alist) of prop"
+  "set prop of key to val.  shadows previous entries (in alist) of prop"
   (mvb (_ exists) (-prop wer key)
     (declare (ignore _))
     (if exists (setf (-prop wer key) (acons prop val (-prop wer key)))
                (setf (-prop wer key) `((,prop . ,val)))))
     val)
+
+(defun clear-specific-prop (wer prop)
+  (declare #.*opt* (weir wer) (symbol prop))
+  "remove prop from every item (vert, edge, grp)."
+  (loop for key being the hash-keys of (weir-props wer) using (hash-value v)
+        do (when (-get-prop wer key prop)
+             (setf (-prop wer key)
+                   (remove-if (lambda (al) (eq (car al) prop))
+                              (-prop wer key))))))
+(defun clear-specific-props (wer props)
+  (declare #.*opt* (weir wer) (list props))
+  (loop for prop in props
+        do (clear-specific-prop wer prop)))
 
 ; SET
 
@@ -52,7 +69,7 @@
         do (set-vert-prop wer v prop val)))
 
 (defun set-grp-prop (wer g prop &optional (val t))
-  (declare #.*opt* (weir wer) (symbol g) (symbol prop))
+  (declare #.*opt* (weir wer) (symbol g prop))
   "set prop of grp g"
   (-set-prop wer g prop val))
 
@@ -67,7 +84,7 @@
   "get prop of vert v"
   (-get-prop wer v prop :default default))
 (defun get-grp-prop (wer g prop &key default)
-  (declare #.*opt* (weir wer) (symbol g) (symbol prop))
+  (declare #.*opt* (weir wer) (symbol g prop))
   "get prop of grp g"
   (-get-prop wer g prop :default default))
 
@@ -84,13 +101,13 @@
 ; TODO: replace all, side-effects of copied props (alists) ?
 (defun copy-edge-props (wer from to &key clear)
   (declare (weir wer) (list from to))
-  "copy props from to"
+  "copy props from to. use clear to clear prosp from to first."
   (when clear (-clear-prop wer to))
   (loop for (k . v) in (reverse (get-edge-props wer from))
         do (set-edge-prop wer to k v)))
 (defun copy-vert-props (wer from to &key clear)
   (declare (weir wer) (pos-int from to))
-  "copy props from to"
+  "copy props from to. use clear to clear props from to first."
   (when clear (-clear-prop wer to))
   (loop for (k . v) in (reverse (get-vert-props wer from))
         do (set-vert-prop wer to k v)))

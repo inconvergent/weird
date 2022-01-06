@@ -147,6 +147,13 @@
                      collect `(progn ,@(replace-pairs body pairs))))))
 
 
+(defmacro make-animation ((ani) &body body)
+  `(push (lambda () (progn ,@body)) ,ani))
+(defmacro animate (ani)
+  (weird:awg (a)
+    `(setf ,ani (remove-if-not (lambda (,a) (funcall ,a)) ,ani))))
+
+
 (defun append-postfix (fn postfix)
   (declare (string fn postfix))
   (concatenate 'string fn postfix))
@@ -203,19 +210,17 @@
 
 
 (defun make-adjustable-vector (&key init (type t) (size 128))
-  (let ((res (if init (make-array (length init)
-                                  :fill-pointer 0 :initial-contents init
-                                  :element-type type :adjustable t)
-                      (make-array size :fill-pointer 0 :element-type type
-                                       :adjustable t))))
-    (when init (lvextend init res))
-    res))
+  (if init (make-array (length init)
+             :fill-pointer t :initial-contents init
+             :element-type type :adjustable t)
+           (make-array size
+             :fill-pointer 0 :element-type type :adjustable t)))
 
 
 (defun to-vector (init &key (type t))
   (declare (list init))
   (make-array (length init)
-              :initial-contents init :adjustable nil :element-type type))
+    :initial-contents init :adjustable nil :element-type type))
 
 
 (defun ensure-vector (o &key (type t))

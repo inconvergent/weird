@@ -4,6 +4,7 @@
    #:*opt*
    #:abbrev
    #:aif
+   #:animate
    #:append-number
    #:append-postfix
    #:awf
@@ -24,6 +25,7 @@
    #:lvextend
    #:mac
    #:make-adjustable-vector
+   #:make-animation
    #:mkstr
    #:mvb
    #:mvc
@@ -240,6 +242,7 @@
     #:2nn
     #:2rad
     #:2relneigh!
+    #:2simplify-segments!
     #:2walk-graph
     #:3->2
     #:3add-box!
@@ -259,6 +262,9 @@
     #:center!
     #:clear!
     #:clear-prop
+    #:clear-specific-prop
+    #:clear-specific-props
+    #:clone-grp!
     #:collapse-verts!
     #:copy-edge-props
     #:copy-vert-props
@@ -316,6 +322,7 @@
     #:mcopy-vert-props
     #:mset-edge-prop
     #:mset-vert-prop
+    #:reset-grp!
     #:set-edge-prop
     #:set-grp-prop
     #:set-vert-prop
@@ -343,4 +350,3 @@
     #:vextend
     #:with-struct)
   (:import-from #:math #:last*))
-

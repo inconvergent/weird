@@ -24,12 +24,12 @@
   (let ((wer (weir:make :dim 3)))
 
     (weir:with (wer %)
-      (% (3add-vert? (veq:f3< 11f0 3f0 9f0)))
+      (% (3add-vert? (veq:f3 11f0 3f0 9f0)))
       (list 4.5
-            (% (3move-vert? 0 (veq:f3< 1f0 0f0 9f0)))
+            (% (3move-vert? 0 (veq:f3 1f0 0f0 9f0)))
             nil t
-            (list 5 (% (3add-vert? (veq:f3< 12f0 3f0 3f0)))
-                    (% (3add-vert? (veq:f3< 13f0 3f0 2f0))))
+            (list 5 (% (3add-vert? (veq:f3 12f0 3f0 3f0)))
+                    (% (3add-vert? (veq:f3 13f0 3f0 2f0))))
             (list nil)
             (list (list))))
 
@@ -40,9 +40,9 @@
       (weir:with (wer %)
         (list)
         1 nil
-        (% (3add-vert? (veq:f3< 12f0 3f0 2f0)))
-        (% (3add-vert? (veq:f3< 13f0 6f0 3f0)))
-        (% (3add-vert? (veq:f3< 13f0 3f0 3f0))))
+        (% (3add-vert? (veq:f3 12f0 3f0 2f0)))
+        (% (3add-vert? (veq:f3 13f0 6f0 3f0)))
+        (% (3add-vert? (veq:f3 13f0 3f0 3f0))))
 
       (weir:with (wer %)
         (% (add-edge? 1 2))
@@ -66,9 +66,9 @@
     (weir:add-edge! wer 2 0)
 
     (weir:with (wer %)
-      (% (3split-edge? 0 1 (veq:f3< 30f0 20f0 3f0)) :res :a?)
-      (% (3lsplit-edge? '(1 2) (veq:f3< 31f0 23f0 4f0)) :res :b?)
-      (% (3lsplit-edge? '(2 1) (veq:f3< 32f0 24f0 5f0)) :res :c?))
+      (% (3split-edge? 0 1 (veq:f3 30f0 20f0 3f0)) :res :a?)
+      (% (3lsplit-edge? '(1 2) (veq:f3 31f0 23f0 4f0)) :res :b?)
+      (% (3lsplit-edge? '(2 1) (veq:f3 32f0 24f0 5f0)) :res :c?))
 
     (is (flatten-ht (weir:get-alteration-result-map wer))
         '(:C? 3 :B? :A? 4))

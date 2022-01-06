@@ -8,12 +8,12 @@
   (subtest "test-weir-with "
     (let ((wer (init-weir)))
       (weir:with (wer %)
-        (% (2add-vert? (veq:f2< 11f0 3f0)))
+        (% (2add-vert? (veq:f2 11f0 3f0)))
         (list 4.5
-              (% (2move-vert? 0 (veq:f2< 1f0 0f0)))
+              (% (2move-vert? 0 (veq:f2 1f0 0f0)))
               nil t
-              (list 5 (% (2add-vert? (veq:f2< 12f0 3f0)))
-                      (% (2add-vert? (veq:f2< 13f0 3f0))))
+              (list 5 (% (2add-vert? (veq:f2 12f0 3f0)))
+                      (% (2add-vert? (veq:f2 13f0 3f0))))
               (list nil)
               (list (list))))
 
@@ -26,8 +26,8 @@
 
       (weir:with (wer %)
         (list) 1 nil
-        (% (2add-vert? (veq:f2< 12f0 3f0)))
-        (% (2add-vert? (veq:f2< 13f0 6f0))) ; 11
+        (% (2add-vert? (veq:f2 12f0 3f0)))
+        (% (2add-vert? (veq:f2 13f0 6f0))) ; 11
         (% (add-edge? 1 2))
         (% (add-edge? 2 7)))
 
@@ -40,10 +40,10 @@
 
     (let ((wer (weir:make)))
       (weir:with (wer %)
-        (% (2add-vert? (veq:f2< 1f0 2f0) ) :res :a?)
-        (% (2add-vert? (veq:f2< 2f0 2f0 )) :res :b?)
+        (% (2add-vert? (veq:f2 1f0 2f0) ) :res :a?)
+        (% (2add-vert? (veq:f2 2f0 2f0 )) :res :b?)
         (% (add-edge? :a? :b?) :res :e1?)
-        (% (2append-edge? (first :e1?) (veq:f2< 4f0 3f0)) :res :e2?))
+        (% (2append-edge? (first :e1?) (veq:f2 4f0 3f0)) :res :e2?))
 
       ; TODO: there is a bug vprogn/vdef. it does not handle dotted pairs
       (is (flatten-ht (weir:get-alteration-result-map wer))
@@ -52,17 +52,17 @@
 
 
     (let ((wer (weir:make)))
-      (veq:f2let ((v (veq:f2< 1f0 2f0)))
+      (veq:f2let ((v (veq:f2 1f0 2f0)))
         (weir:with (wer %)
-          (% (2add-vert? (veq:f2< 1f0 2f0)) :res :a?)
-          (veq:f2let ((ww (veq:f2< v)))
+          (% (2add-vert? (veq:f2 1f0 2f0)) :res :a?)
+          (veq:f2let ((ww (veq:f2 v)))
             (% (? (x) (list ww :a?)) :res :l?)
             (% (? (x) (veq:lst (veq:f2- ww 1f0 2f0))) :res :l2?))
-          (veq:f2vset v (veq:f2< 2f0 2f0))))
+          (veq:f2vset v (veq:f2 2f0 2f0))))
 
       (is (gethash :l? (weir:get-alteration-result-map wer)) `(1.0f0 2.0f0 0))
       (is (gethash :l2? (weir:get-alteration-result-map wer)) '(0f0 0f0))
-      (weir:with (wer %) (% (2move-vert? 0 (veq:f2< 4f0 7f0)) :res :a?))
+      (weir:with (wer %) (% (2move-vert? 0 (veq:f2 4f0 7f0)) :res :a?))
       (is (gethash :a? (weir:get-alteration-result-map wer)) 0))
 
     (let ((wer (init-weir)))
@@ -78,9 +78,9 @@
 
   (defun make-sfx-weir ()
     (let ((wer (weir:make)))
-      (weir:2add-vert! wer (veq:f2< 1f0 1f0))
-      (weir:2add-vert! wer (veq:f2< 2f0 2f0))
-      (weir:2add-vert! wer (veq:f2< 3f0 3f0))
+      (weir:2add-vert! wer (veq:f2 1f0 1f0))
+      (weir:2add-vert! wer (veq:f2 2f0 2f0))
+      (weir:2add-vert! wer (veq:f2 3f0 3f0))
       wer))
 
 
@@ -140,22 +140,22 @@
   (subtest "test-weir-add "
     (let ((wer (init-weir)))
       (weir:with (wer %)
-        (% (2add-vert? (veq:f2< 10f0 3f0))))
+        (% (2add-vert? (veq:f2 10f0 3f0))))
 
       (is (veq:lst (weir:2get-vert wer 11)) `( 10f0 3f0))
 
       (is (weir:get-num-verts wer) 12)
 
       (weir:with (wer %)
-         (% (2add-vert? (veq:f2< 80f0 3f0)) :res :a?)
-         (% (2add-vert? (veq:f2< 70f0 3f0)) :res :b?))
+         (% (2add-vert? (veq:f2 80f0 3f0)) :res :a?)
+         (% (2add-vert? (veq:f2 70f0 3f0)) :res :b?))
       (is (flatten-ht (weir:get-alteration-result-map wer))
           `(:b? 12 :a? 13 ))
 
       (is (weir:get-num-verts wer) 14)
 
       (weir:with (wer %)
-        (% (2vadd-edge? (veq:f2< 7f0 3f0) (veq:f2< 100f0 0.99f0))))
+        (% (2vadd-edge? (veq:f2 7f0 3f0) (veq:f2 100f0 0.99f0))))
 
       (is (weir:get-edges wer)
                '((14 15) (5 6) (3 7) (0 1) (1 3) (1 2)))))
@@ -163,10 +163,10 @@
   (subtest "test-weir-move "
     (let ((wer (init-weir)))
       (weir:with (wer %)
-        (% (2move-vert? 0 (veq:f2< 3f0 3f0)) :res :a?)
-        (% (2move-vert? 1 (veq:f2< 1f0 3f0)) :res :b?)
-        (% (2move-vert? 3 (veq:f2< 2f0 3f0) :rel nil) :res :c?)
-        (% (2move-vert? 2 (veq:f2< 3f0 4f0)) :res :d?))
+        (% (2move-vert? 0 (veq:f2 3f0 3f0)) :res :a?)
+        (% (2move-vert? 1 (veq:f2 1f0 3f0)) :res :b?)
+        (% (2move-vert? 3 (veq:f2 2f0 3f0) :rel nil) :res :c?)
+        (% (2move-vert? 2 (veq:f2 3f0 4f0)) :res :d?))
       (is (weir:2get-all-verts wer)
           #(3.0 5.0 3.0 6.0 6.0 8.0 2.0 3.0 5.0 4.0 0.0 6.0 -1.0 7.0 0.0 8.0 0.0
             9.0 10.0 1.0 3.0 1.0)
@@ -200,9 +200,9 @@
       (is (weir:get-num-verts wer) 11)
 
       (weir:with (wer %)
-        (% (2append-edge? 3 (veq:f2< 3f0 4f0)) :res :a?)
-        (% (2append-edge? 3 (veq:f2< 8f0 5f0) :rel nil) :res :b?)
-        (% (2append-edge? 7 (veq:f2< 1f0 2f0)) :res :c?))
+        (% (2append-edge? 3 (veq:f2 3f0 4f0)) :res :a?)
+        (% (2append-edge? 3 (veq:f2 8f0 5f0) :rel nil) :res :b?)
+        (% (2append-edge? 7 (veq:f2 1f0 2f0)) :res :c?))
 
       (is (flatten-ht (weir:get-alteration-result-map wer))
           '(:C? 7 11 :B? 3 12 :A? 3 13))
@@ -218,9 +218,9 @@
   (subtest "test-weir-split "
     (let ((wer (init-weir)))
       (weir:with (wer %)
-        (% (2split-edge? 1 2 (veq:f2< 30f0 20f0)) :res :a?)
-        (% (2lsplit-edge? '(1 2) (veq:f2< 31f0 23f0)) :res :b?)
-        (% (2lsplit-edge? '(5 6) (veq:f2< 32f0 24f0)) :res :c?))
+        (% (2split-edge? 1 2 (veq:f2 30f0 20f0)) :res :a?)
+        (% (2lsplit-edge? '(1 2) (veq:f2 31f0 23f0)) :res :b?)
+        (% (2lsplit-edge? '(5 6) (veq:f2 32f0 24f0)) :res :c?))
       (is (flatten-ht (weir:get-alteration-result-map wer))
           '(:C? 11 :B? 12 :A?))
 
@@ -241,8 +241,8 @@
     (let ((wer (init-weir)))
       (weir:with (wer %)
         (weir:with-rnd-vert (wer v)
-          (% (2move-vert? v (veq:f2< 2f0 2f0)))
-          (% (2append-edge? v (veq:f2< 3f0 2f0)))))
+          (% (2move-vert? v (veq:f2 2f0 2f0)))
+          (% (2append-edge? v (veq:f2 3f0 2f0)))))
 
       (is (weir:get-num-edges wer) 6)
 
@@ -250,7 +250,7 @@
 
       (weir:with (wer %)
         (weir:itr-verts (wer v)
-          (% (2move-vert? v (veq:f2< 2f0 2f0)))))
+          (% (2move-vert? v (veq:f2 2f0 2f0)))))
 
       (is (sort (weir:itr-verts (wer i :collect t) i) #'<)
           '(0 1 2 3 4 5 6 7 8 9 10 11))
@@ -270,7 +270,7 @@
 
       (weir:with (wer %)
         (weir:with-rnd-edge (wer e)
-          (% (2lsplit-edge? e (veq:f2< 31f0 23f0)))))
+          (% (2lsplit-edge? e (veq:f2 31f0 23f0)))))
 
       (is (weir:get-num-edges wer) 7)
       (is (weir:get-num-verts wer) 13))))

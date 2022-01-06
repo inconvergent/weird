@@ -16,6 +16,14 @@
       (itr-edges (wer e) (ladd-edge! new e))
       new)))
 
+(defun clone-grp! (wer &key from to)
+  (declare #.*opt* (weir wer))
+  "will force gto into existence"
+  (reset-grp! wer :g to)
+  (itr-edges (wer e :g from)
+    (ladd-edge! wer e :g to)))
+
+
 (veq:vdef* 2cut-to-area! (wer &key g (top 0f0) (left 0f0)
                                      (bottom 1000f0) (right 1000f0))
   (declare (weir wer) (veq:ff top left bottom right))
@@ -60,7 +68,7 @@
             (:outside (% (ldel-edge? e :g g)))
             (:split (% (ldel-edge? e :g g))
                     (% (2append-edge?
-                         (if rev (second e) (first e)) (veq:f2< px py) :rel nil :g g)
+                         (if rev (second e) (first e)) (veq:f2 px py) :rel nil :g g)
                        :res ae?)
                     (% (set-edge-prop? ae? :cut))))))))))
 

@@ -3,9 +3,10 @@
 
 (defvar *wgs* (gensym (mkstr "WER")))
 
+; TODO: fix inconsistent use of get in names
+
 (defun build-alt (wname pairs aexpr &key alt-res res db)
   (declare #.*opt* (symbol wname) (list pairs aexpr) (symbol alt-res))
-
 
   ; example result for add-edge?:
 
@@ -130,8 +131,11 @@
   (apply #'build-alt 'w `(ab ,ab g ,g from ,from)
          '(lswap-edge! w ab :g g :from from) rest))
 
-(defmacro add-path? ((l &key g) &rest rest)
-  (apply #'build-alt 'w `(l ,l g ,g) '(add-path! w l :g g) rest))
+(defmacro 2add-path? ((l &key g) &rest rest)
+  (apply #'build-alt 'w `(l ,l g ,g) '(2add-path! w l :g g) rest))
+(defmacro 3add-path? ((l &key g) &rest rest)
+  (apply #'build-alt 'w `(l ,l g ,g) '(3add-path! w l :g g) rest))
+
 (defmacro del-path? ((l &key g) &rest rest)
   (apply #'build-alt 'w `(l ,l g ,g) '(del-path! w l :g g) rest))
 
@@ -247,10 +251,16 @@
 
 (defmacro verts-with-prop% ((prop &key val) &rest rest)
   (apply #'build-alt 'w `(prop ,prop val ,val)
-    `(verts-with-prop w prop :val val) rest))
+    `(get-verts-with-prop w prop :val val) rest))
+(defmacro vert-with-prop% ((prop &key val) &rest rest)
+  (apply #'build-alt 'w `(prop ,prop val ,val)
+    `(car (get-verts-with-prop w prop :val val)) rest))
 (defmacro edges-with-prop% ((prop &key val) &rest rest)
   (apply #'build-alt 'w `(prop ,prop val ,val)
-    `(edges-with-prop w prop :val val) rest))
+    `(get-edges-with-prop w prop :val val) rest))
+(defmacro edge-with-prop% ((prop &key val) &rest rest)
+  (apply #'build-alt 'w `(prop ,prop val ,val)
+    `(car (get-edges-with-prop w prop :val val)) rest))
 
 (defmacro edge-prop-nxt-vert% ((v prop &key val (except -1) g) &rest rest)
   (apply #'build-alt 'w `(v ,v prop ,prop val ,val except ,except g ,g)

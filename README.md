@@ -106,7 +106,7 @@ Existing alterations in `weir` are postfixed with `?`. it might look like this:
 
 ```lisp
 (weir:with (wer %)
-  (% (add-vert? (veq:f2< 100.0 740.0))
+  (% (add-vert? (veq:f2 100.0 740.0))
   (% (add-edge? 1 4)))
 ```
 
@@ -152,9 +152,9 @@ alterations:
 ```lisp
 (in-package :weir)
 (with (wer %)
-  (veq:f2let ((pt (veq:f2< 1f0 3f0)))
+  (veq:f2let ((pt (veq:f2 1f0 3f0)))
     (% (2add-vert? pt) :res :a?) ; alteration result is named :a?
-    (% (2add-vert? (veq:f2< 1.0 2.0)) :res :b?) ; result named :b?
+    (% (2add-vert? (veq:f2 1.0 2.0)) :res :b?) ; result named :b?
     (% (add-edge? :a? :b?)))) ; depends on :a? and :b?
 
 ; all alteration results:
@@ -221,15 +221,15 @@ more careful consideration. Here is an example:
 (with (wer % :db t)
   (loop for x in (math:linspace 20 -20.0 20.0) do
     (loop for z in (list 1.0 2.0) do
-      (veq:f3let ((xy (veq:f3< x y z)))
+      (veq:f3let ((xy (veq:f3 x y z)))
         ; create a distinct name
         (let ((g? (gensym "g")))
           (% (add-grp? :name (gensym "line")) :res g?)
           (% (2add-path?
                (veq:f$_ (list (veq:f3-
-                                xy (veq:f3< 1.0 8.0 (rnd:rnd)))
+                                xy (veq:f3 1.0 8.0 (rnd:rnd)))
                               (veq:f3+
-                                xy (veq:f3< 1.0 2.0 (rnd:rnd)))))
+                                xy (veq:f3 1.0 2.0 (rnd:rnd)))))
                :g g?)))))))
 ```
 

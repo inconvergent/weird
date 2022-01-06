@@ -37,13 +37,15 @@
                (:file "weir/props" :depends-on ("weir/main"))
                (:file "weir/vert-utils" :depends-on ("weir/main"))
                (:file "weir/planar-cycles" :depends-on ("weir/main" "graph/mst-cycle"))
-               (:file "weir/paths" :depends-on ("weir/main" "draw/simplify-path"))
+               (:file "weir/paths" :depends-on ("weir/props" "draw/simplify-path"))
                (:file "weir/alteration-utils" :depends-on ("weir/main"))
                (:file "weir/alterations" :depends-on ("weir/alteration-utils"))
                (:file "weir/with-macro" :depends-on ("weir/alteration-utils"))
                (:file "weir/kdtree" :depends-on ("weir/alteration-utils"))
                (:file "weir/relneigh" :depends-on ("weir/kdtree"))
-               (:file "weir/extra" :depends-on ("weir/main" "weir/props" "weir/vert-utils"))))
+               (:file "weir/extra"
+                      :depends-on ("weir/main" "weir/props" "weir/vert-utils"
+                                   "weir/macros"))))
 
 (asdf:defsystem #:weird/tests
   :depends-on (#:weird #:prove)

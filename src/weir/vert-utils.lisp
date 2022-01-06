@@ -344,7 +344,7 @@
 
 (veq:vdef* 2is-intersection (wer a b)
   (declare (weir wer) (pos-int a b))
-  (veq:f2segx (2gv wer a) (2gv wer a)))
+  (veq:f2segx (2gv wer a) (2gv wer b)))
 
 
 (defun 3add-box! (wer &key (s (math:nrep 3 100f0)) (xy (math:nrep 3 0f0)) g)

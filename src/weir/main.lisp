@@ -59,13 +59,21 @@
     :verts (veq:f$make :dim dim :n max-verts)
     :grps (-init-grps adj-size set-size)))
 
-(defun clear! (wer)
-  (declare #.*opt* (weir wer))
-  (setf (weir-num-verts wer) 0
-        (weir-props wer) (make-hash-table :test #'equal :size 500 :rehash-size 2f0)
-        (weir-grps wer) (-init-grps (weir-adj-size wer) (weir-set-size wer))
-        (weir-kdtree wer) nil
+(defun clear! (wer &key keep-props keep-verts keep-grps)
+  (declare #.*opt* (weir wer) (boolean keep-props keep-grps keep-verts))
+  "clear values of weir instance. unless keep is set for a given property"
+  ; TODO: hard reset verts to 0?
+
+  (setf (weir-kdtree wer) nil
         (weir-alt-res wer) (make-hash-table :test #'eq :size 20 :rehash-size 2f0))
+
+  (unless keep-verts (setf (weir-num-verts wer) 0))
+  (unless keep-props
+          (setf (weir-props wer)
+                (make-hash-table :test #'equal :size 500 :rehash-size 2f0)))
+  (unless keep-grps
+          (setf (weir-grps wer)
+                (-init-grps (weir-adj-size wer) (weir-set-size wer))))
   wer)
 
 
@@ -100,6 +108,13 @@
                                  :grph (graph:make :adj-size adj-size
                                                    :set-size set-size))))
   name*)
+
+(defun reset-grp! (wer &key g)
+  (declare #.*opt* (weir wer))
+  (setf (gethash g (weir-grps wer))
+          (-make-grp :name (if g g :main)
+                     :grph (graph:make :adj-size (weir-adj-size wer)
+                                       :set-size (weir-set-size wer)))))
 
 (defun del-grp! (wer &key g)
   (declare #.*opt* (symbol g))
@@ -247,10 +262,8 @@
 (defun swap-edge! (wer a b &key g from)
   (declare #.*opt* (weir wer) (pos-int a b))
   "move edge from grp from to g"
-  (let ((ee (list a b)))
-    (declare (list ee))
-    (when (del-edge! wer a b :g from)
-          (add-edge! wer a b :g g))))
+  (when (del-edge! wer a b :g from)
+        (add-edge! wer a b :g g)))
 
 (defun lswap-edge! (wer ee &key g from)
   (declare #.*opt* (weir wer) (list ee))

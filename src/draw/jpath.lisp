@@ -35,7 +35,7 @@
 (veq:vdef -make-joint-grid ((veq:varg 2 p) io)
   (declare (veq:ff p) (veq:fvec io))
   " 8 offset points around p "
-  (veq:f2let ((z (veq:f2< 0f0 0f0))
+  (veq:f2let ((z (veq:f2 0f0 0f0))
               (i (veq:f2$ io))
               (o (veq:f2$ io 1)))
     (veq:f$_ (list (o+- p o i) (o+- p z i) (o-- p o i) (o-+ p o z)

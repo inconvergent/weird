@@ -74,7 +74,7 @@ view plane offset (xy) and scaling (s).
       (lambda ((veq:varg 3 pt))
         (declare #.*opt* (veq:ff pt))
         (veq:f3let ((pt* (veq:f3- pt cam)))
-          (veq:f2< (+ x (veq:f3. su pt*)) (+ y (veq:f3. sv pt*))))))))
+          (veq:f2 (+ x (veq:f3. su pt*)) (+ y (veq:f3. sv pt*))))))))
 
 
 (veq:vdef make-rayfx (proj)
