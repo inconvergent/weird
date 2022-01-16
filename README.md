@@ -1,30 +1,33 @@
 # WEIRD-A Generative Art System
 
-_NOTE: you should not use this code for anything remotely important_
+**NOTE: This code is likely to change with little or no warning. You should not
+use this for anything remotely important. Make sure to clone the repo if you
+need it to remain stable.**
 
 
 ## About
 
-`weird` is the next iteration of [weir](https://github.com/inconvergent/weir)
+`weird` is the next iteration of [weir](https://github.com/inconvergent/weir),
 which was the next iteration of [snek](https://github.com/inconvergent/snek).
+
 The library is written to be useful for a broad range of ways in which I create
-art using generative algorithms. Almost everything I have made over the
-past several years has been made using some version of this system.
+art using generative algorithms. Almost everything I have made over the past
+several years has been made using some version of this system.
 
 ![Elastic Web](img/web.png)
 
 ## Components
 
-The main components are:
+Here are the main components:
 
 1. 2d/3d vector mathematics via
    [cl-veq](https://github.com/inconvergent/cl-veq).  See
    [examples](https://github.com/inconvergent/cl-veq/blob/master/examples/ex.lisp)
    in veq for more details.
 
-2. A simple (undirected) graph data structure, `weir`. The structure can be
-   manipulated directly, or via `alterations`. The latter is described in more
-   detail below.  Here is a simple example of how you can manipulate the
+2. A simple (undirected) graph data structure called `weir`. The structure can
+   be manipulated directly, or via `alterations`. The latter is described in
+   more detail below. Here is a simple example of how you can manipulate the
    structure directly:
 
    ```lisp
@@ -91,22 +94,25 @@ The main components are:
 
 4. A tool for drawing `svg` files: `wsvg`. See [draw.lisp](/examples/draw.lisp).
 
+In addition the library contains a number of useful tools for dealing with
+(predominantly) vector graphics.
+
 ![Sun](img/sun.png)
 
 ## Weir Graphs and Alterations
 
-The most interesting part of the `weir` graph structure is `alterations`. An
-`alteration` is a change that will be applied to the structure at the end of a
-given context, provided it is valid.
+In my opinion, the most interesting part of the `weir` graph structure is
+`alterations`. An `alteration` is a change that will be applied to the
+structure at the end of a given context, provided it is valid.
 
-The main motivation behind this is that this makes it possible to "queue" up a
-number of changes that will be applied at a later time. This makes it possible
-to access the state in the `weir` instance while you are creating the
-alterations. Without there being any changes made to the state of the `weir`
-instance while the alterations are being created. Once all alterations are
-created, the valid ones will be applied.
+The main motivation behind this is that this makes it possible to gather up a
+number of changes that will be applied to the graph at a later time. This makes
+it possible to access the state in the `weir` instance while you are creating
+the alterations. Without there being any changes made to the state of the
+`weir` instance while the alterations are being created. Once all alterations
+are created, the valid ones will be applied.
 
-Existing alterations in `weir` are postfixed with `?`. it might look like this:
+Existing alterations in `weir` are postfixed with `?`. It might look like this:
 
 ```lisp
 (weir:with (wer %)
@@ -208,8 +214,8 @@ will be expanded to:
        (:BAIL (PROGN NIL (VALUES T NIL)))
        (T (VALUES NIL NIL))))))
 ```
-Which won't work in its own unless `VERT?` is also defined. But you can see how
-the promise resolution is handled. An how values (`#:OUT-REL54`,
+Which won't work in its own unless `:VERT?` is also defined. But you can see how
+the promise resolution is handled. And how values (`#:OUT-REL54`,
 `#:OUT-F2!P53`) are defined in the surrounding closure.
 
 ![Scribbles](img/scribble.png)
