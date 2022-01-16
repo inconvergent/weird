@@ -15,10 +15,14 @@ past several years has been made using some version of this system.
 
 ## Components
 
-In addition to the 2d/3d vectors provided via
-[cl-veq](https://github.com/inconvergent/cl-veq), the main components are:
+The main components are:
 
-1. A simple (undirected) graph data structure, `weir`. The structure can be
+1. 2d/3d vector mathematics via
+   [cl-veq](https://github.com/inconvergent/cl-veq).  See
+   [examples](https://github.com/inconvergent/cl-veq/blob/master/examples/ex.lisp)
+   in veq for more details.
+
+2. A simple (undirected) graph data structure, `weir`. The structure can be
    manipulated directly, or via `alterations`. The latter is described in more
    detail below.  Here is a simple example of how you can manipulate the
    structure directly:
@@ -60,7 +64,7 @@ In addition to the 2d/3d vectors provided via
    See [examples/draw.lisp](examples/draw.lisp) and
    [examples/ex.lisp](examples/ex.lisp) for more.
 
-2. Random numbers, some examples:
+3. Random numbers, some examples:
 
    ```lisp
    (in-package :rnd)
@@ -85,7 +89,7 @@ In addition to the 2d/3d vectors provided via
    See [rnd.lisp](src/rnd/rnd.lisp), [2rnd.lisp](src/rnd/2rnd.lisp) and
    [3rnd.lisp](src/rnd/3rnd.lisp), for all available functions.
 
-3. A tool for drawing `svg` files: `wsvg`. See [draw.lisp](/examples/draw.lisp).
+4. A tool for drawing `svg` files: `wsvg`. See [draw.lisp](/examples/draw.lisp).
 
 ![Sun](img/sun.png)
 
