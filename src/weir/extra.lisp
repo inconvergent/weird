@@ -37,8 +37,8 @@
     ((inside (i)
       (declare (pos-int i))
       (veq:f2let ((p (2$verts wer i)))
-        (and (> (veq:vref p 0) left) (> (veq:vref p 1) top)
-             (< (veq:vref p 0) right) (< (veq:vref p 1) bottom))))
+        (and (> (:vref p 0) left) (> (:vref p 1) top)
+             (< (:vref p 0) right) (< (:vref p 1) bottom))))
 
      (split-line (ai bi &aux (rev nil))
        (declare (pos-int ai bi) (boolean rev))
@@ -48,10 +48,10 @@
                    (ab (veq:f2- b a)))
          (mvc #'values rev
            (veq:f2lerp a b
-             (cond ((> (veq:vref b 0) right) (/ (- right (veq:vref a 0)) (veq:vref ab 0)))
-                   ((> (veq:vref b 1) bottom) (/ (- bottom (veq:vref a 1)) (veq:vref ab 1)))
-                   ((< (veq:vref b 0) left) (/ (- left (veq:vref a 0)) (veq:vref ab 0)))
-                   (t (/ (- top (veq:vref a 1)) (veq:vref ab 1))))))))
+             (cond ((> (:vref b 0) right) (/ (- right (:vref a 0)) (:vref ab 0)))
+                   ((> (:vref b 1) bottom) (/ (- bottom (:vref a 1)) (:vref ab 1)))
+                   ((< (:vref b 0) left) (/ (- left (:vref a 0)) (:vref ab 0)))
+                   (t (/ (- top (:vref a 1)) (:vref ab 1))))))))
      (cutfx (line)
        (declare (list line))
        (case (length (remove-if-not #'inside line))

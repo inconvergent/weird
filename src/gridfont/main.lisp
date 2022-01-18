@@ -65,7 +65,7 @@
   (declare (list pp) (veq:ff s))
   (mapcar (lambda (x) (veq:ff (* s x))) pp))
 
-(veq:vdef -path-to-arr (paths s (veq:varg 2 x))
+(veq:vdef -path-to-arr (paths s (:varg 2 x))
   (declare (list paths) (veq:ff s x))
   (loop for path of-type list in paths
         collect (veq:f2$+ (values (veq:f$_ (loop for p of-type list in path

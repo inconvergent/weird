@@ -58,7 +58,7 @@
 
 (deftype simple-list () `(simple-array list))
 
-(defun 2intersect-all! (wer &key g prop)
+(veq:vdef 2intersect-all! (wer &key g prop)
   (declare #.*opt* (weir wer))
   (unless (= 2 (weir-dim wer))
           (error "2intersect-all! error. incorrect dimension."))
@@ -73,12 +73,11 @@
          (declare (list old-edge hits) (fixnum i))
          (loop for (c . p) in hits
                if (not (gethash (the list (ic i c)) crossing->vert))
-               do (veq:vprogn
-                    (let ((new (2add-vert! wer (veq:f2lerp (veq:f2$ line 0 1) p))))
-                      (declare (pos-int new))
-                      (setf (gethash (the list (ic i c)) crossing->vert) new)
-                      (when prop (set-vert-prop wer new
-                                   (the keyword prop) old-edge))))))
+               do (let ((new (2add-vert! wer (veq:f2lerp (veq:f2$ line 0 1) p))))
+                    (declare (pos-int new))
+                    (setf (gethash (the list (ic i c)) crossing->vert) new)
+                    (when prop (set-vert-prop wer new
+                                 (the keyword prop) old-edge)))))
 
        (add-new-verts (edges isects)
          (declare (simple-list edges isects))

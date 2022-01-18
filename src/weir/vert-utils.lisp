@@ -32,7 +32,7 @@
                       (transform! . 3transform!) (dst . veq:f3dst)
                       (edge-length . 3edge-length) (ledge-length . 3ledge-length)
                       (move-vert! . 3move-vert!) ($ . veq:f3$)
-                      ($take . veq:f2$take)))))
+                      ($take . veq:f3$take)))))
     `(weird:template
       (,@(loop for dim from 2 to 3
                for pairs in all-pairs
@@ -91,7 +91,7 @@
 
 
 (dimtemplate (add-vert!)
-  (veq:vdef* fx (wer (veq:varg dim x))
+  (veq:vdef* fx (wer (:varg dim x))
     (declare #.*opt* (weir wer) (veq:ff x))
     "adds a new vertex to weir. returns the new vert ind"
     (dimtest wer dim fx)
@@ -104,7 +104,7 @@
       num-verts)))
 
 (dimtemplate (vadd-edge!)
-  (veq:vdef* fx (wer (veq:varg dim a b) &key g)
+  (veq:vdef* fx (wer (:varg dim a b) &key g)
     (declare #.*opt* (weir wer) (veq:ff a b))
     (dimtest wer dim fx)
     (add-edge! wer (add-vert! wer a) (add-vert! wer b) :g g)))
@@ -154,7 +154,7 @@
       (veq:fwith-arrays (:n num-verts :itr k
         :arr ((verts dim verts)
               (res dim (veq:f$make :dim dim :n num-verts)))
-        :fxs ((acc ((veq:varg dim x))
+        :fxs ((acc ((:varg dim x))
                      (declare (optimize speed) (veq:ff x))
                      (values x)))
         :exs ((res k (acc verts))))
@@ -162,7 +162,7 @@
 
 
 (dimtemplate (move-vert!)
-  (veq:vdef* fx (wer i (veq:varg dim x) &key (rel t))
+  (veq:vdef* fx (wer i (:varg dim x) &key (rel t))
     (declare #.*opt* (weir wer) (pos-int i) (veq:ff x) (boolean rel))
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts) wer
@@ -187,7 +187,7 @@
                      'fx inds num-verts))
       (veq:fwith-arrays (:n num-verts :itr k :inds inds
         :arr ((verts dim verts))
-        :fxs ((trans ((veq:varg dim x))
+        :fxs ((trans ((:varg dim x))
                (declare (optimize speed) (veq:ff x))
                (funcall tfx x)))
         :exs ((verts k (trans verts))))))))
@@ -200,7 +200,7 @@
 
 
 (dimtemplate (split-edge!)
-  (veq:vdef* fx (wer u v (veq:varg dim x) &key g force)
+  (veq:vdef* fx (wer u v (:varg dim x) &key g force)
   (declare #.*opt* (weir wer) (pos-int u v) (veq:ff x) (boolean force))
   "split edge (u v) at x. returns new vert ind (and new edges)."
   (dimtest wer dim fx)
@@ -211,14 +211,14 @@
       (values nil nil))))
 
 (dimtemplate (lsplit-edge!)
-  (veq:vdef* fx (wer ll (veq:varg dim x) &key g force)
+  (veq:vdef* fx (wer ll (:varg dim x) &key g force)
     (declare #.*opt* (weir wer) (list ll) (veq:ff x) (boolean))
     (destructuring-bind (u v) ll
       (declare (pos-int u v))
       (split-edge! wer u v x :g g :force force))))
 
 (dimtemplate (append-edge!)
-  (veq:vdef* fx (wer v (veq:varg dim x) &key (rel t) g)
+  (veq:vdef* fx (wer v (:varg dim x) &key (rel t) g)
     "add edge between vert v and new vert at xy"
     (declare (weir wer) (pos-int v) (veq:ff x) (boolean rel))
     (dimtest wer dim fx)
@@ -310,7 +310,7 @@
             (declare (veq:ff s))
             (veq:fwith-arrays (:n num-verts :itr k
               :arr ((verts 2 verts))
-              :fxs ((cent ((veq:varg 2 x))
+              :fxs ((cent ((:varg 2 x))
                      (veq:f2+ mx (veq:f2scale (veq:f2- x mx) s))))
               :exs ((verts k (cent verts)))))
             (mvc #'values mx wh s)))))))
@@ -334,7 +334,7 @@
 ;           (declare (veq:ff s))
 ;           (veq:fwith-arrays (:n num-verts :itr k
 ;             :arr ((verts 3 verts))
-;             :fxs ((cent ((veq:varg 3 x))
+;             :fxs ((cent ((:varg 3 x))
 ;                    (veq:f3+ mx (veq:f3scale (veq:f3- x mx) s))))
 ;             :exs ((verts k (cent verts)))))
 ;           (mvc #'values mx wh s))))))

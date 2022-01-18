@@ -27,12 +27,12 @@
   (i 0 :type fixnum :read-only t))
 
 
-(veq:vdef o++ ((veq:varg 2 p v w)) (veq:lst (veq:f2+ (veq:f2+ p v) w)))
-(veq:vdef o-- ((veq:varg 2 p v w)) (veq:lst (veq:f2- (veq:f2- p v) w)))
-(veq:vdef o+- ((veq:varg 2 p v w)) (veq:lst (veq:f2- (veq:f2+ p v) w)))
-(veq:vdef o-+ ((veq:varg 2 p v w)) (veq:lst (veq:f2+ (veq:f2- p v) w)))
+(veq:vdef o++ ((:varg 2 p v w)) (veq:lst (veq:f2+ (veq:f2+ p v) w)))
+(veq:vdef o-- ((:varg 2 p v w)) (veq:lst (veq:f2- (veq:f2- p v) w)))
+(veq:vdef o+- ((:varg 2 p v w)) (veq:lst (veq:f2- (veq:f2+ p v) w)))
+(veq:vdef o-+ ((:varg 2 p v w)) (veq:lst (veq:f2+ (veq:f2- p v) w)))
 
-(veq:vdef -make-joint-grid ((veq:varg 2 p) io)
+(veq:vdef -make-joint-grid ((:varg 2 p) io)
   (declare (veq:ff p) (veq:fvec io))
   " 8 offset points around p "
   (veq:f2let ((z (veq:f2 0f0 0f0))
@@ -49,7 +49,7 @@
   (declare (veq:fvec path) (veq:ff w w*) (boolean closed))
   " joints contain information about how to offset around points in path. "
   (labels
-    ((make-joint (i (veq:varg 2 a p b))
+    ((make-joint (i (:varg 2 a p b))
        (veq:f2let ((in (veq:f2norm (veq:f2- p a)))
                    (out (veq:f2norm (veq:f2- b p))))
          (let* ((alpha (- veq:fpi (acos (veq:f2. in out))))
@@ -61,14 +61,14 @@
                          :orientation (ori in-out)
                          :grid (-make-joint-grid p in-out))))) ; FIX
 
-     (make-start ((veq:varg 2 p b))
+     (make-start ((:varg 2 p b))
        (veq:f2let ((out (veq:f2scale (veq:f2norm (veq:f2- b p)) w)))
         (let ((in-out (veq:f$_ (list (veq:lst (veq:f2rot out *pi2*))
                                       (veq:lst out)))))
            (-make-joint :w w :mode :start :alpha *pi2*
              :in-out in-out :grid (-make-joint-grid p in-out)))))
 
-     (make-end (i (veq:varg 2 a p))
+     (make-end (i (:varg 2 a p))
        (veq:f2let ((in (veq:f2scale (veq:f2norm (veq:f2- p a)) w)))
          (let ((in-out (veq:f$_ (list (veq:lst in)
                                       (veq:lst (veq:f2rot in (- *pi2*)))))))

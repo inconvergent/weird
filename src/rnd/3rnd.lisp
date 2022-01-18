@@ -1,11 +1,11 @@
 
 (in-package :rnd)
 
-(veq:vdef* 3on-line ((veq:varg 3 a b))
+(veq:vdef* 3on-line ((:varg 3 a b))
   (declare #.*opt* (veq:ff a b))
   (veq:f3from a (veq:f3- b a) (rnd)))
 
-(veq:vdef* 3non-line (n (veq:varg 3 a b))
+(veq:vdef* 3non-line (n (:varg 3 a b))
   (declare #.*opt* (veq:ff a b))
   (veq:fwith-arrays (:n n :itr k
     :arr ((arr 3))
@@ -14,17 +14,17 @@
     arr))
 
 
-(veq:vdef* 3in-box ((veq:varg 3 s))
+(veq:vdef* 3in-box ((:varg 3 s))
   (declare #.*opt* (veq:ff s))
-  (values (rnd* (veq:vref s 0))
-          (rnd* (veq:vref s 1))
-          (rnd* (veq:vref s 2))))
+  (values (rnd* (:vref s 0))
+          (rnd* (:vref s 1))
+          (rnd* (:vref s 2))))
 
 (veq:vdef* 3in-cube (s)
   (declare #.*opt* (veq:ff s))
   (3in-box s s s))
 
-(veq:vdef* 3nin-box (n (veq:varg 3 s))
+(veq:vdef* 3nin-box (n (:varg 3 s))
   (declare #.*opt* (veq:ff s))
   (veq:fwith-arrays (:n n :itr k
     :arr ((a 3))

@@ -12,7 +12,7 @@ view plane offset (xy) and scaling (s).
 (declaim (inline from-list))
 (defun from-list (l) (declare #.*opt* (list l)) (apply #'values l))
 
-(veq:vdef 3identity ((veq:varg 3 x)) (values x))
+(veq:vdef 3identity ((:varg 3 x)) (values x))
 
 
 (defstruct (ortho)
@@ -57,7 +57,7 @@ view plane offset (xy) and scaling (s).
   "distance from pt to camera plane with current parameters"
   (veq:f3let ((cam (from-list (ortho-cam proj)))
               (vpn (from-list (ortho-vpn proj))))
-    (lambda ((veq:varg 3 pt)) (declare (veq:ff pt))
+    (lambda ((:varg 3 pt)) (declare (veq:ff pt))
       (weird:mvb (hit d) (veq:f3planex vpn cam pt (veq:f3+ pt vpn))
         (declare (boolean hit) (veq:ff d))
         (if hit d 0f0)))))
@@ -71,7 +71,7 @@ view plane offset (xy) and scaling (s).
               (cam (from-list (ortho-cam proj))))
     (weird:mvb (x y) (from-list (ortho-xy proj))
       (declare (veq:ff x y))
-      (lambda ((veq:varg 3 pt))
+      (lambda ((:varg 3 pt))
         (declare #.*opt* (veq:ff pt))
         (veq:f3let ((pt* (veq:f3- pt cam)))
           (veq:f2 (+ x (veq:f3. su pt*)) (+ y (veq:f3. sv pt*))))))))
@@ -82,7 +82,7 @@ view plane offset (xy) and scaling (s).
   "cast a ray in direction -vpn from pt"
   (veq:f3let ((dir (veq:f3scale (veq:f3neg (from-list (ortho-vpn proj)))
                                 (ortho-raylen proj))))
-    (lambda ((veq:varg 3 pt))
+    (lambda ((:varg 3 pt))
       (declare #.*opt* (veq:ff pt))
       (weird:mvc #'values pt (veq:f3+ pt dir)))))
 
@@ -158,7 +158,7 @@ view plane offset (xy) and scaling (s).
         (ortho-projfx proj) (make-projfx proj)
         (ortho-rayfx proj) (make-rayfx proj)))
 
-(veq:vdef* project (proj (veq:varg 3 pt))
+(veq:vdef* project (proj (:varg 3 pt))
   (declare #.*opt* (ortho proj) (veq:ff pt))
   "project single point"
   (weird:mvc #'values (funcall (ortho-projfx proj) pt)
@@ -172,9 +172,9 @@ view plane offset (xy) and scaling (s).
     (declare (function projfx dstfx))
     (veq:fwith-arrays (:n (veq:3$num path) :itr k
       :arr ((path 3 path) (p 2) (d 1))
-      :fxs ((proj ((veq:varg 3 x)) (declare #.*opt* (veq:ff x))
+      :fxs ((proj ((:varg 3 x)) (declare #.*opt* (veq:ff x))
                     (funcall projfx x))
-            (dst ((veq:varg 3 x)) (declare #.*opt* (veq:ff x))
+            (dst ((:varg 3 x)) (declare #.*opt* (veq:ff x))
                     (funcall dstfx x)))
       :exs ((p k (proj path))
             (d k (dst path))))
