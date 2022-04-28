@@ -5,13 +5,18 @@
 ; are also some subtle difference between functions that would be unnecessarily
 ; tedious to generalize. at least for now.
 
-(defmacro -srt (e) `(sort ,e #'<))
+; TODO: there was a weird side-effect in poly props. it happened because
+; this sort was unprotected. should find a cleaner way to handle edges/polys??
+(defmacro -srt (e) `(sort (copy-list ,e) #'<))
 (defmacro -prop (wer key) `(gethash ,key (weir-props ,wer)))
 (defmacro -clear-prop (wer key) `(remhash ,key (weir-props ,wer)))
 
+; TODO: add all poly prop operations
+; TODO: write macros to deduplicate some code
+
 (defun clear-prop (wer key)
   (declare (weir wer))
-  "clear all props from item/key (edge, grp, vert)"
+  "clear all props from item/key (edge, grp, vert, poly)"
   (-clear-prop wer key))
 
 (defun -get-prop (wer key prop &key default)
@@ -35,7 +40,7 @@
 
 (defun clear-specific-prop (wer prop)
   (declare #.*opt* (weir wer) (symbol prop))
-  "remove prop from every item (vert, edge, grp)."
+  "remove prop from every item (vert, edge, grp, poly)."
   (loop for key being the hash-keys of (weir-props wer) using (hash-value v)
         do (when (-get-prop wer key prop)
              (setf (-prop wer key)
@@ -47,6 +52,16 @@
         do (clear-specific-prop wer prop)))
 
 ; SET
+
+(defun set-poly-prop (wer e prop &optional (val t))
+  (declare #.*opt* (weir wer) (list e) (symbol prop))
+  "set prop of poly e"
+  (-set-prop wer (-srt e) prop val))
+(defun mset-poly-prop (wer polys prop &optional (val t))
+  (declare #.*opt* (weir wer) (list polys) (symbol prop))
+  "set prop of polys"
+  (loop for e of-type list in polys
+        do (set-poly-prop wer e prop val)))
 
 (defun set-edge-prop (wer e prop &optional (val t))
   (declare #.*opt* (weir wer) (list e) (symbol prop))
@@ -75,6 +90,10 @@
 
 ; GET
 
+(defun get-poly-prop (wer e prop &key default)
+  (declare #.*opt* (weir wer) (list e) (symbol prop))
+  "get prop ov poly e"
+  (-get-prop wer (-srt e) prop :default default))
 (defun get-edge-prop (wer e prop &key default)
   (declare #.*opt* (weir wer) (list e) (symbol prop))
   "get prop ov edge e"
@@ -90,9 +109,11 @@
 
 (defsetf -get-prop -set-prop)
 (defsetf get-edge-prop set-edge-prop)
+(defsetf get-poly-prop set-poly-prop)
 (defsetf get-vert-prop set-vert-prop)
 (defsetf get-grp-prop set-grp-prop)
 
+(defun get-poly-props (wer e) (declare (weir wer) (list e)) (-prop wer e))
 (defun get-edge-props (wer e) (declare (weir wer) (list e)) (-prop wer e))
 (defun get-vert-props (wer v) (declare (weir wer) (pos-int v)) (-prop wer v))
 
@@ -191,5 +212,5 @@
 
 (defun show-props (wer)
   (loop for key being the hash-keys of (weir-props wer) using (hash-value v)
-        do (format t "~%~%------~%~a~%~a~%" key v)))
+        do (format t "~&------~%~a~%~a~%" key v)))
 

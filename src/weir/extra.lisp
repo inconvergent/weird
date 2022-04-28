@@ -9,10 +9,10 @@
            (new-verts (weir-verts new)))
       (declare (weir new) (veq:fvec new-verts))
       (setf (weir-num-verts new) num-verts)
-      (veq:3with-rows (num-verts verts)
+      (veq:f3$with-rows (num-verts verts)
         (lambda (i (veq:varg 3 x))
           (declare (pos-int i) (veq:ff x))
-          (veq:2vaset (new-verts i) (funcall fx x))))
+          (veq:2$vset (new-verts i) (funcall fx x))))
       (itr-edges (wer e) (ladd-edge! new e))
       new)))
 

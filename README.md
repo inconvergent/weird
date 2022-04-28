@@ -296,6 +296,10 @@ For a long term solution, add the following to `.sbclrc`:
 You will have to make sure `cl-veq` is also available in the same fashion for
 any of this to work.
 
+### Versions and Compatability
+
+Weird version 6.0.x requires version `cl-veq` 2.0.x.
+
 
 ### Tests
 

@@ -8,14 +8,9 @@
   (if silent (slot-value (asdf:find-system 'weird) 'asdf:version)
              (format t "~%weird version: ~a~%"
                (slot-value (asdf:find-system 'weird) 'asdf:version))))
-
-
 (defun f? (f)
   (declare (symbol f))
-  (format t "~%---~%")
-  (describe f)
-  (format t "~%---~%") )
-
+  (format t "~%---~%") (describe f) (format t "~%---~%"))
 (defun i? (f) (inspect f))
 
 
@@ -96,6 +91,7 @@
 
 (defun filter-by-predicate (l fx)
   (declare (list l) (function fx))
+  "split l into (values yes no) according to fx"
   (loop for x in l
         if (funcall fx x) collect x into yes
         else collect x into no
@@ -154,10 +150,17 @@
     `(setf ,ani (remove-if-not (lambda (,a) (funcall ,a)) ,ani))))
 
 
-(defun append-postfix (fn postfix)
-  (declare (string fn postfix))
-  (concatenate 'string fn postfix))
+(defun split (s c)
+  (declare (string s))
+  "split s at c"
+  (split-sequence (typecase c (string (char c 0)) (character c)
+                    (t (error "split must be string or char, got ~a" c)))
+                  s))
 
+
+(defun append-postfix (fn postfix)
+  (declare (string fn))
+  (format nil "~a~a" fn postfix))
 
 (defun append-number (fn i)
   (declare (string fn) (fixnum i))
@@ -167,18 +170,16 @@
 (defun ensure-filename (fn &optional (postfix "") (silent nil))
   (let ((fn* (append-postfix (if fn fn "tmp") postfix)))
     (declare (string fn*))
-    (format (not silent) "~%file: ~a~%~%" fn*)
+    (format (not silent) "~&file: ~a~%" fn*)
     fn*))
 
 
 (defun print-every (i &optional (n 1))
   (declare (fixnum i n))
-  (when (= 0 (mod i n)) (format t "~%itt: ~a~%" i)))
+  (when (zerop (mod i n)) (format t "~&itt: ~a~&" i)))
 
 
-(defun string-list-concat (l)
-  (declare (list l))
-  (format nil "~{~a~}" l))
+(defun string-list-concat (l) (declare (list l)) (format nil "~{~a~}" l))
 
 
 (defun numshow (a &key (ten 6) (prec 6))
@@ -198,15 +199,14 @@
 
 
 (declaim (inline vector-last))
-(defun vector-last (a)
-  (declare (vector a))
-  (aref a (1- (the fixnum (length a)))))
-
-
+(defun vector-last (a) (declare (vector a)) (aref a (1- (length a))))
 (declaim (inline vector-first))
-(defun vector-first (a)
-  (declare (vector a))
-  (aref a 0))
+(defun vector-first (a) (declare (vector a)) (aref a 0))
+(abbrev vl vector-last)
+(abbrev tl to-list)
+(abbrev tv to-vector)
+(abbrev ev ensure-vector)
+(abbrev tav to-adjustable-vector)
 
 
 (defun make-adjustable-vector (&key init (type t) (size 128))
@@ -246,4 +246,27 @@
 (defun internal-path-string (path)
   (declare (string path))
   (namestring (asdf:system-relative-pathname :weird path)))
+
+
+; TODO: this is probably not very general
+(defun show-ht (ht)
+  (typecase ht
+    (hash-table
+      (when (< (hash-table-count ht) 1) (format t "~& { empty~%"))
+      (loop for k being the hash-keys of ht
+            using (hash-value v)
+            for i from 0
+            do (format t "~& { ~d: ~a: ~@{~a~^ ~}~&" i k v)))
+    (t (warn "~& { nil")))
+  ht)
+
+(defmacro reorder (a &rest rest)
+  (declare (symbol a))
+  `(concatenate 'vector
+    ,@(loop for ind in rest
+            collect (typecase ind (number `(list (aref ,a ,ind)))
+                                  (symbol `(list (aref ,a ,ind)))
+                                  (cons (case (length ind)
+                                          (1 `(list (aref ,a ,@ind)))
+                                          (2 `(subseq ,a ,@ind))))))))
 

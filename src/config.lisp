@@ -8,6 +8,9 @@
 (setf *random-state* (make-random-state t))
 (setf *print-pretty* t)
 
+(declaim (single-float *eps*) (boolean *dev*) (cons *opt*))
+(defparameter *eps* 1f-7)
+
 
 ; from: http://cl-cookbook.sourceforge.net/os.html
 (defun vgetenv (name &optional default)
@@ -20,12 +23,12 @@
             #+LISPWORKS (lispworks:environment-variable name)
             default))
 
-(let ((devmode (string-downcase (vgetenv "DEV" ""))))
-  (if (> (length devmode) 0)
-    (progn
-      (defparameter *opt* '(optimize (safety 2) (speed 1) debug (space 1)
-                                     compilation-speed))
-      (format t "~%!!!!! WEIRD DEVMODE !!!!!~%~%"))
+(if (> (length (string-downcase (vgetenv "DEV" ""))) 0)
+  (progn
+    (defparameter *dev* t)
+    (defparameter *opt* '(optimize safety (speed 1) debug (space 2)))
+    (format t "~&---------!!!!! WEIRD DEVMODE !!!!!---------~%"))
+  (progn
+    (defparameter *dev* nil)
     (defparameter *opt* '(optimize (safety 1) speed (debug 2) space))))
-
 

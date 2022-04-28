@@ -9,7 +9,7 @@
   (leap -1 :type fixnum :read-only t)
   (ind -1 :type fixnum :read-only t))
 
-(veq:vdef -qsort-kdtree (argsort a &key dim (leap 0) (lo 0) hi)
+(veq:fvdef -qsort-kdtree (argsort a &key dim (leap 0) (lo 0) hi)
   "
   construct a kd tree of dim using quicksort for partitioning.
   argsort will contain the index into the spatial data in a
@@ -62,7 +62,7 @@
 
 ; TODO: 3rad/3nn. 2/3 macro?
 
-(veq:vdef* 2rad (wer (:varg 2 x) rad &aux (rad2 (* rad rad)) (res (list)))
+(veq:fvdef* 2rad (wer (:varg 2 x) rad &aux (rad2 (* rad rad)) (res (list)))
   "get indices of all verts in rad around x"
   (declare #.*opt* (weir wer) (veq:ff x rad rad2) (list res))
 
@@ -84,7 +84,7 @@
            (when (not node) (return-from -rad))
            (with-struct (node- ind leap left right) node
              (declare (pos-int ind leap))
-             (let* ((xv (case leap (0 (:vref x 0)) (1 (:vref x 1))))
+             (let* ((xv (case leap (0 (:vref x 0)) (otherwise (:vref x 1))))
                     (nv (leapget leap ind))
                     (axdst2 (expt (- xv nv) 2f0))
                     (dst2 (xdst2 ind)))
@@ -98,7 +98,7 @@
       (-rad (kdtree-node kdtree))
       res))))
 
-(veq:vdef* 2nn (wer (:varg 2 x) &aux (res -1) (resdst2 0f0))
+(veq:fvdef* 2nn (wer (:varg 2 x) &aux (res -1) (resdst2 0f0))
   "get index of nearest neighbour of x"
   (declare #.*opt* (weir wer) (veq:ff x resdst2) (fixnum res))
 
@@ -120,7 +120,7 @@
            (when (not node) (return-from -nn))
            (with-struct (node- ind leap left right) node
              (declare (pos-int ind leap))
-             (let* ((xv (case leap (0 (:vref x 0)) (1 (:vref x 1))))
+             (let* ((xv (case leap (0 (:vref x 0)) (otherwise (:vref x 1))))
                     (nv (leapget leap ind))
                     (axdst2 (expt (- xv nv) 2f0))
                     (dst2 (xdst2 ind)))
@@ -140,7 +140,7 @@
       (values res (sqrt resdst2))))))
 
 
-(veq:vdef* 3nn (wer (:varg 3 x) &aux (res -1) (resdst2 0f0))
+(veq:fvdef* 3nn (wer (:varg 3 x) &aux (res -1) (resdst2 0f0))
   "get index of nearest neighbour of x"
   (declare #.*opt* (weir wer) (veq:ff x resdst2) (fixnum res))
 
@@ -164,7 +164,7 @@
              (declare (pos-int ind leap))
              (let* ((xv (case leap (0 (:vref x 0))
                                    (1 (:vref x 1))
-                                   (2 (:vref x 2))))
+                                   (otherwise (:vref x 2))))
                     (nv (leapget leap ind))
                     (axdst2 (expt (- xv nv) 2f0))
                     (dst2 (xdst2 ind)))

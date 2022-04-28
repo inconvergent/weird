@@ -103,7 +103,7 @@
 
 (defun make (&key (layout :a4-landscape) stroke stroke-width rep-scale
                   fill-opacity stroke-opacity so rs fo sw)
-  (destructuring-bind (width height) (cdr (assoc layout *layouts*))
+  (dsb (width height) (cdr (assoc layout *layouts*))
     (make-wsvg :layout layout
                    :height height :width width
                    :stroke (-hex (if stroke stroke "black"))
@@ -135,8 +135,10 @@
 ;   (cl-svg:line-to (first p) (second p)))
 
 (veq:vdef -mid (a b)
-  (dsb (ax ay) a
-    (dsb (bx by) b
+  (dsb (ax ay &rest rest) a
+    (declare (ignore rest))
+    (dsb (bx by &rest rest) b
+      (declare (ignore rest))
       (list (veq:fmid ax bx) (veq:fmid ay by)))))
 
 
@@ -165,13 +167,12 @@
 (defun compound (wsvg components &key sw fill stroke fo so)
   (declare (wsvg wsvg) (sequence components))
   (draw% (wsvg-scene wsvg)
-    (:path
-      :d (loop with pth = (cl-svg:make-path)
-               for (ct c) in components
-               do (case ct (:path (loop for p in c
-                                        do (-accumulate-path pth p)))
-                           (:bzspl (list)))
-               finally (return pth)))
+    (:path :d (loop with pth = (cl-svg:make-path)
+                    for (ct c) in components
+                    do (case ct (:path (loop for p in c
+                                             do (-accumulate-path pth p)))
+                         (:bzspl (list)))
+                    finally (return pth)))
     :fill (-select-fill fill)
     :fill-opacity (-select-fo wsvg fo)
     :stroke (-select-stroke wsvg stroke)
@@ -180,7 +181,7 @@
 
 (defun ensure-list (pts)
   (typecase pts (list pts)
-                (veq:fvec (veq:2to-list pts))
+                (veq:fvec (veq:2$to-list pts))
                 (t (error "incorrect path: ~a~%" pts))))
 
 
@@ -301,7 +302,8 @@
 
 (defun rect (wsvg w h &key (xy *zero*) fill sw stroke so fo)
   (declare (wsvg wsvg) (list xy) (number w h))
-  (dsb (x y) xy
+  (dsb (x y &rest rest) xy
+    (declare (ignore rest))
     (draw% (wsvg-scene wsvg)
            (:rect :x (- x w) :y (- y h)
                   :height (* 2 h) :width (* 2 w))
@@ -318,7 +320,8 @@
 
 (defun circ (wsvg rad &key (xy *zero*) fill sw stroke so fo)
   (declare (wsvg wsvg) (list xy) (number rad))
-  (dsb (x y) xy
+  (dsb (x y &rest rest) xy
+    (declare (ignore rest))
     (draw% (wsvg-scene wsvg) (:circle :cx x :cy y :r rad)
            :fill (-select-fill fill)
            :fill-opacity (-select-fo wsvg fo)

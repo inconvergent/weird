@@ -12,7 +12,7 @@
 (defvar eps (* 3f0 single-float-epsilon))
 
 
-(veq:vdef -get-west-most-vert (verts vertfx incidentfx)
+(veq:fvdef -get-west-most-vert (verts vertfx incidentfx)
   (declare #.*opt* (list verts) (function vertfx incidentfx))
 
   (unless verts (return-from -get-west-most-vert nil))
@@ -42,18 +42,18 @@
 
 
 (declaim (inline -dot-perp))
-(veq:vdef -dot-perp ((veq:varg 2 a b))
+(veq:fvdef -dot-perp ((:varg 2 a b))
   (declare #.*opt* (veq:ff a b))
   ; (veq:f2. a (veq:f2perp b))
-  (- (* (veq:vref a 0) (veq:vref b 1))
-     (* (veq:vref a 1) (veq:vref b 0))))
+  (- (* (:vref a 0) (:vref b 1))
+     (* (:vref a 1) (:vref b 0))))
 
 (declaim (inline -is-convex))
-(veq:vdef -is-convex ((veq:varg 2 a b))
+(veq:fvdef -is-convex ((:varg 2 a b))
   (declare #.*opt* (veq:ff a b))
   (<= (-dot-perp a b) eps))
 
-(veq:vdef -get-cw-most-vert (curr prev &key dirfx adjfx)
+(veq:fvdef -get-cw-most-vert (curr prev &key dirfx adjfx)
   (declare #.*opt* (fixnum curr prev) (function dirfx adjfx))
   "this is only used once at the beginning of the algoritm"
   (veq:f2let ((dcurr (if (< prev 0) (veq:f2 0f0 -1f0)
@@ -68,20 +68,20 @@
         (loop with next of-type fixnum = (car adj)
               with convex of-type boolean
               for a of-type fixnum in (cdr adj)
-              initially (veq:f2vset dnext (funcall dirfx next curr))
+              initially (veq:f2vset (dnext) (funcall dirfx next curr))
                         (setf convex (-is-convex dnext dcurr))
               do (veq:f2let ((da (funcall dirfx a curr)))
                    (if convex (when (or (< (-dot-perp dcurr da) eps)
                                         (< (-dot-perp dnext da) eps))
                                     (setf next a convex (-is-convex da dcurr))
-                                    (veq:f2vset dnext (veq:f2 da)))
+                                    (veq:f2vset (dnext) (veq:f2 da)))
                               (when (and (< (-dot-perp dcurr da) eps)
                                          (< (-dot-perp dnext da) eps))
                                     (setf next a convex (-is-convex da dcurr))
-                                    (veq:f2vset dnext (veq:f2 da)))))
+                                    (veq:f2vset (dnext) (veq:f2 da)))))
               finally (return next))))))
 
-(veq:vdef -get-ccw-most-vert (curr prev &key dirfx adjfx)
+(veq:fvdef -get-ccw-most-vert (curr prev &key dirfx adjfx)
   (declare #.*opt* (fixnum curr prev) (function dirfx adjfx))
   (veq:f2let ((dcurr (if (< prev 0) (veq:f2 0f0 -1f0)
                                     (funcall dirfx curr prev))))
@@ -96,21 +96,21 @@
         (loop with next of-type fixnum = (car adj)
               with convex of-type boolean
               for a of-type fixnum in (cdr adj)
-              initially (veq:f2vset dnext (funcall dirfx next curr))
+              initially (veq:f2vset (dnext) (funcall dirfx next curr))
                         (setf convex (-is-convex dnext dcurr))
               do (veq:f2let ((da (funcall dirfx a curr)))
                    (if convex (when (and (> (-dot-perp dcurr da) (- eps))
                                          (> (-dot-perp dnext da) (- eps)))
                                     (setf next a convex (-is-convex da dcurr))
-                                    (veq:f2vset dnext (veq:f2 da)))
+                                    (veq:f2vset (dnext) (veq:f2 da)))
                               (when (or (> (-dot-perp dcurr da) (- eps))
                                         (> (-dot-perp dnext da) (- eps)))
                                     (setf next a convex (-is-convex da dcurr))
-                                    (veq:f2vset dnext (veq:f2 da)))))
+                                    (veq:f2vset (dnext) (veq:f2 da)))))
               finally (return next))))))
 
 (declaim (inline -absub))
-(veq:vdef -absub (verts i j)
+(veq:fvdef -absub (verts i j)
   (declare #.*opt* (veq:fvec verts) (pos-int i j))
   ; (when (< (veq:f2dst (veq:f2$ verts i j)) eps) (error "oh no"))
   (veq:f2- (veq:f2$ verts i j)))

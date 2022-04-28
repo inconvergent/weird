@@ -131,15 +131,83 @@
                         do (-add! (gethash (ic i a) crossing->vert)
                                   (gethash (ic i b) crossing->vert)
                                   :g g :e ei)))))
-             ; ((v1 v2) (v8 v1) ...)
+             ; edges ((v1 v2) (v8 v1) ...)
       (let* ((edges (to-vector (get-edges wer :g g)))
-             ; (#(ax ay bx by) #(cx cy dx dy) ...)
+             ; lines: (#(ax ay bx by) #(cx cy dx dy) ...)
              (lines (to-vector (edges-as-lines edges)))
-             ; ((e1 e2 p) (e3 e4 q) ...) ex is the index into edges.
+             ; isects: #(((16 . 0.18584675) (5 . 0.35215548)) NIL NIL ...)
              (isects (sort-hits (veq:f2lsegx lines)))) ;  p/q is the lerp
         (declare (simple-list isects edges) (simple-array lines))
         (del-hit-edges edges isects g)
         (add-new-verts edges isects)
         (add-new-edges edges isects g))))
+  nil)
+
+
+; TODO: clean this up and rename
+(veq:vdef 3intersect-all! (wer fx &key g prop)
+  (declare #.*opt* (weir wer) (function fx))
+
+  (unless (= 3 (weir-dim wer))
+          (error "3intersect-all! error. incorrect dimension."))
+
+  (labels
+    ((add-path-verts (old-edge line hits)
+       (declare (list old-edge hits))
+       "add verts along edge for each intersect"
+       (loop for (c . p) in hits
+             collect (let ((new (3add-vert! wer
+                                  (veq:f3lerp (veq:f3$ line 0 1) p))))
+                       (declare (pos-int new))
+                       (when prop (set-vert-prop wer new
+                                    (the keyword prop) old-edge))
+                       new)))
+
+     (add-new-paths (edges isects g)
+       (declare (simple-list edges isects))
+       "add new edge along old edge with new verts for each intersect"
+       (loop for hits across isects
+             for i of-type fixnum from 0
+             if hits
+             do (let* ((old-edge (aref edges i))
+                       (path-ind (add-path-verts old-edge
+                                    (3gvs wer old-edge) hits)))
+                  (declare (list old-edge path-ind))
+                  ; insert path-ind into old-edge
+                  (when path-ind
+                    (add-path-ind! wer
+                      (cons (first old-edge)
+                            (concatenate 'list path-ind (last old-edge)))
+                      :g g)))))
+
+     (edges-as-lines (edges)
+       (declare (simple-list edges))
+       (loop for edge of-type list across edges
+             collect (3gvs wer edge)))
+
+     (del-hit-edges (edges isects g)
+       (declare (simple-list edges isects))
+       (loop for hits of-type list across isects
+             for i of-type fixnum from 0
+             if hits do (ldel-edge! wer (aref edges i) :g g)
+                        (loop for (c . p) in hits
+                              do (ldel-edge! wer (aref edges c) :g g))))
+
+     (sort-hits (isects)
+       (declare (simple-list isects))
+       (loop for i of-type fixnum from 0 below (length isects)
+             if (aref isects i)
+             do (setf (aref isects i)
+                      (sort (aref isects i) #'< :key #'cdr)))
+       isects))
+           ; edges: ((v1 v2) (v8 v1) ...)
+    (let* ((edges (to-vector (get-edges wer :g g)))
+           ; lines: (#(ax ay bx by) #(cx cy dx dy) ...)
+           (lines (map 'vector fx (edges-as-lines edges)))
+           ; isects: #(((16 . 0.18584675) (5 . 0.35215548)) NIL NIL ...)
+           (isects (sort-hits (veq:f2lsegx lines)))) ;  p/q is the lerp
+      (declare (simple-list isects edges) (simple-array lines))
+      (add-new-paths edges isects g)
+      (del-hit-edges edges isects g)))
   nil)
 

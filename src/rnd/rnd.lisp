@@ -4,7 +4,7 @@
 
 
 (defun set-rnd-state (i)
-  (declare (fixnum i))
+  (declare (number i))
    #+SBCL ; this is called feature expressions
    (setf *random-state* (sb-ext:seed-random-state i))
 
@@ -13,7 +13,6 @@
           to implement state for your environment."))
 
 (defun make-rnd-state () (setf *random-state* (make-random-state t)))
-
 
 ; NUMBERS AND RANGES
 
@@ -75,6 +74,7 @@
 
 
 ; https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
+(declaim (inline norm))
 (defun norm (&key (mu 0f0) (sigma 1f0))
   (declare #.*opt* (veq:ff mu sigma))
   "box-muller transform"

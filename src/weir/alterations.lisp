@@ -15,16 +15,14 @@
 
   ; (LET ((#:OUTER-G62 NIL))
   ;   (LAMBDA (#:WER541)
-  ;     (DECLARE (OPTIMIZE (SAFETY 1) SPEED (DEBUG 2) SPACE)
-  ;              (WEIR::WEIR #:WER541)
-  ;              (IGNORABLE #:WER541))
+  ;     (DECLARE (OPTIMIZE ...) (WEIR::WEIR #:WER541) (IGNORABLE #:WER541))
   ;     (CASE (WEIR::-IF-ALL-RESOLVED #:ALT-RES15 (LIST :MID? :E1?))
   ;       (:OK
   ;        (VALUES T
-  ;                (PROGN
-  ;                 (WEIR:ADD-EDGE! #:WER541 (VALUES (GETHASH :MID? #:ALT-RES15))
-  ;                                 (VALUES (GETHASH :E1? #:ALT-RES15)) :G
-  ;                                 #:OUTER-G62))))
+  ;           (PROGN
+  ;            (WEIR:ADD-EDGE! #:WER541 (VALUES (GETHASH :MID? #:ALT-RES15))
+  ;                            (VALUES (GETHASH :E1? #:ALT-RES15)) :G
+  ;                            #:OUTER-G62))))
   ;       (:BAIL (PROGN NIL (VALUES T NIL)))
   ;       (T (VALUES NIL NIL)))))
 
@@ -32,6 +30,7 @@
              (declare #.*opt* (symbol s))
              (cond ((fdim-symbp s :dim 2) 'veq:f2let)
                    ((fdim-symbp s :dim 3) 'veq:f3let)
+                   ((fdim-symbp s :dim 4) 'veq:f4let)
                    (t 'let)))
            (wraplet (pairs inner)
              (declare #.*opt* (list pairs) (cons inner))
@@ -65,7 +64,7 @@
     (mvb (future-pairs outer-pairs) (split-pairs pairs)
       (declare (list outer-pairs future-pairs))
 
-      (when db (format t "~%outer pairs: ~a~%~%future-pairs: ~a~%"
+      (when db (format t "~&outer pairs: ~a~%~%future-pairs: ~a~%"
                        outer-pairs future-pairs))
 
         (let* ((aexpr (subst *wgs* wname
@@ -96,6 +95,7 @@
 ; ---- ALTERATIONS
 ; TODO: avoid var capture with gensyms in aexpr
 ; TODO: ignore nil alts
+; TODO: fix inconsistent name add-poly!, add-polygon!
 
 (defmacro val* (&body body) `(mvc #'values ,@body))
 
@@ -113,6 +113,14 @@
 
 (defmacro add-grp? ((g) &rest rest)
   (apply #'build-alt 'w `(g ,g) '(unless (grp-exists w :g g) (add-grp! w g)) rest))
+
+
+(defmacro add-poly? ((poly &key g) &rest rest)
+  (apply #'build-alt 'w `(poly ,poly g ,g) '(add-polygon! w poly :g g) rest))
+
+(defmacro del-poly? ((poly &key g) &rest rest)
+  (apply #'build-alt 'w `(poly ,poly g ,g) '(del-polygon! w poly :g g) rest))
+
 
 (defmacro add-edge? ((a b &key g) &rest rest)
   (apply #'build-alt 'w `(a ,a b ,b g ,g) '(add-edge! w a b :g g) rest))

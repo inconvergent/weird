@@ -1,45 +1,58 @@
 
 (in-package :weir)
 
-
 (deftype single-array () `(simple-array veq:ff))
 (deftype pos-int (&optional (bits 31)) `(unsigned-byte ,bits))
 
+(defmacro make-ht (tst &optional (s 20) (r 2f0))
+  (declare (number s r))
+  `(make-hash-table :test ,tst :size ,s :rehash-size ,r))
+
+(defun -roll-once (a)
+  (declare (list a))
+  (append (subseq a 1) (list (first a))))
+
+(defun -hash-table-get-key (ht key)
+  (declare #.*opt* (hash-table ht) (list key))
+  (veq:mvb (v exists) (gethash key ht)
+    (if exists v nil)))
+
+(declaim (inline -sort-list))
+(defun -sort-list (l)
+  (declare #.*opt* (list l))
+  (sort (copy-list l) #'<))
+
+
 
 (defstruct (weir (:constructor -make-weir))
-  (adj-size 100 :type pos-int :read-only t)
-  (alt-res (make-hash-table :test #'eq :size 20 :rehash-size 2f0))
-  (dim 2 :type pos-int :read-only t)
-  (grps (make-hash-table :test #'equal :size 20 :rehash-size 2f0))
-  (kdtree nil :read-only nil)
-  (max-verts 5000 :type pos-int :read-only t)
   (name :main :type symbol :read-only t)
+  (dim 2 :type pos-int :read-only t)
   (num-verts 0 :type pos-int)
-  (props (make-hash-table :test #'equal :size 500 :rehash-size 2f0))
+  (max-verts 5000 :type pos-int)
+  (verts nil :type veq:fvec)
+  (kdtree nil :read-only nil)
+  (adj-size 100 :type pos-int :read-only t)
   (set-size 5 :type pos-int :read-only t)
-  (verts nil :type veq:fvec))
+  (alt-res (make-ht #'eq))
+  (grps (make-ht #'equal))
+  (props (make-ht #'equal 500)))
 
 
 (defstruct (grp (:constructor -make-grp))
   (name nil :type symbol :read-only t)
-  (grph nil :type graph::graph))
+  (grph nil :type graph::graph)
+  (polygons (make-ht #'equal) :type hash-table) ; (a b c) -> (() () ())
+  (edges->poly (make-ht #'equal) :type hash-table))
 
-
-(declaim (inline -make-hash-table))
-(defun -make-hash-table (&key init (test #'equal))
-  (declare #.*opt* (list init) (function test))
-  (loop with res = (make-hash-table :test test)
-        for (k v) in init
-        do (setf (gethash k res) v)
-        finally (return res)))
-
-(declaim (inline -init-grps))
 (defun -init-grps (adj-size set-size)
   (declare #.*opt* (number adj-size set-size))
-  (-make-hash-table
-    :init `((nil ,(-make-grp :name :main
-                             :grph (graph:make :adj-size adj-size
-                                               :set-size set-size))))))
+  (labels ((-make (init) (loop with res = (make-ht #'equal)
+                               for (k v) in init
+                               do (setf (gethash k res) v)
+                               finally (return res))))
+    (-make `((nil ,(-make-grp :name :main
+                     :grph (graph:make :adj-size adj-size
+                                       :set-size set-size)))))))
 
 (defun make (&key (max-verts 5000) (adj-size 4) (set-size 10) name (dim 2))
   "
@@ -65,19 +78,16 @@
   ; TODO: hard reset verts to 0?
 
   (setf (weir-kdtree wer) nil
-        (weir-alt-res wer) (make-hash-table :test #'eq :size 20 :rehash-size 2f0))
+        (weir-alt-res wer) (make-ht #'eq))
 
   (unless keep-verts (setf (weir-num-verts wer) 0))
-  (unless keep-props
-          (setf (weir-props wer)
-                (make-hash-table :test #'equal :size 500 :rehash-size 2f0)))
-  (unless keep-grps
-          (setf (weir-grps wer)
-                (-init-grps (weir-adj-size wer) (weir-set-size wer))))
+  (unless keep-props (setf (weir-props wer) (make-ht #'equal 500)))
+  (unless keep-grps (setf (weir-grps wer) (-init-grps (weir-adj-size wer)
+                                                      (weir-set-size wer))))
   wer)
 
 
-(defun add-grp! (wer &key name &aux (name* (if name name (gensym "grp"))))
+(defun add-grp! (wer &key name &aux (name* (if name name (gensym "GRP"))))
   (declare #.*opt* (weir wer))
   "
   constructor for grp instances.
@@ -130,8 +140,7 @@
       (let ((,grps (weir-grps ,wname)))
         (multiple-value-bind (,g* ,exists)
           (gethash ,gname ,grps)
-            (unless ,exists
-                    (error "attempted to access invalid group: ~a" ,gname))
+            (unless ,exists (error "weir: invalid group: ~a" ,gname))
             (progn ,@body))))))
 
 
@@ -139,7 +148,7 @@
   (declare #.*opt* (weir wer) (boolean main))
   "returns all grps. use :main t to include main/nil grp"
   (loop for g being the hash-keys of (weir-grps wer)
-        ; ignores nil (main) grp, unless overridden with :main t
+        ; ignores main/nil grp, unless overridden with :main t
         if (or g main) collect g))
 
 (defun get-grp (wer &key g)
@@ -156,8 +165,7 @@
 
 (defun get-num-edges (wer &key g)
   (declare #.*opt* (weir wer))
-  (with-grp (wer g* g)
-    (graph:get-num-edges (grp-grph g*))))
+  (with-grp (wer g* g) (graph:get-num-edges (grp-grph g*))))
 
 (defun get-num-grps (wer)
   (declare #.*opt* (weir wer))
@@ -167,14 +175,12 @@
 
 (defun get-edges (wer &key g)
   (declare #.*opt* (weir wer))
-  (with-grp (wer g* g)
-    (graph:get-edges (grp-grph g*))))
+  (with-grp (wer g* g) (graph:get-edges (grp-grph g*))))
 
 (defun get-connected-verts (wer &key g)
   (declare #.*opt* (weir wer))
   "get verts in g with at least one connected edge"
-  (with-grp (wer g* g)
-    (graph:get-verts (grp-grph g*))))
+  (with-grp (wer g* g) (graph:get-verts (grp-grph g*))))
 
 (defun get-grp-as-path (wer &key g)
   (declare #.*opt* (weir wer))
@@ -182,12 +188,10 @@
   (graph:edge-set->path (weir:get-edges wer :g g)))
 
 
-; TODO: get-all-incident-edges (not just in grp g)?
 (defun get-incident-edges (wer v &key g)
   (declare #.*opt* (weir wer) (pos-int v))
   "incident edges of v"
-  (with-grp (wer g* g)
-    (graph:get-incident-edges (grp-grph g*) v)))
+  (with-grp (wer g* g) (graph:get-incident-edges (grp-grph g*) v)))
 
 (defun get-incident-verts (wer v &key g)
   (declare #.*opt* (weir wer) (pos-int v))
@@ -247,16 +251,14 @@
 
 (defun del-edge! (wer a b &key g)
   (declare #.*opt* (weir wer) (pos-int a b))
-  (with-grp (wer g* g)
-    (with-struct (grp- grph) g*
-      (graph:del grph a b))))
+  (with-grp (wer g* g) (with-struct (grp- grph) g*
+                         (graph:del grph a b))))
 
 
 (defun ldel-edge! (wer ee &key g)
   (declare #.*opt* (weir wer) (list ee))
-  (with-grp (wer g* g)
-    (with-struct (grp- grph) g*
-      (apply #'graph:del grph ee))))
+  (with-grp (wer g* g) (with-struct (grp- grph) g*
+                         (apply #'graph:del grph ee))))
 
 
 (defun swap-edge! (wer a b &key g from)
@@ -268,7 +270,7 @@
 (defun lswap-edge! (wer ee &key g from)
   (declare #.*opt* (weir wer) (list ee))
   "move edge from grp from to g"
-  ; (when (eq g from) (error "nothing to do"))
+  (when (eq g from) (return-from lswap-edge! nil))
   (when (ldel-edge! wer ee :g from)
         (ladd-edge! wer ee :g g)))
 
@@ -299,7 +301,7 @@
 
 (defun collapse-verts! (wer u v &key g)
   (declare #.*opt* (weir wer) (pos-int u v))
-  "move all incident verts of v to u. returns the moved verts."
+  "move all incident edges of v to u. returns the moved verts."
   (loop with incident = (get-incident-verts wer v :g g)
         for w in incident
         do (del-edge! wer v w :g g)
@@ -308,7 +310,7 @@
 
 (defun lcollapse-verts! (wer uv &key g)
   (declare #.*opt* (weir wer) (list uv))
-  "move all incident verts of v1, v2, ... to u. assuming uv = (u v1 v2 ...)"
+  "move all incident edges of v1, v2, ... to u. assuming uv = (u v1 v2 ...)"
   (loop with u of-type pos-int = (car uv)
         with res of-type list = (list)
         for v of-type pos-int in (cdr uv)
@@ -329,4 +331,6 @@
 
 (weird:abbrev ae! add-edge!)
 (weird:abbrev de! del-edge!)
+
+;;;; -----------------------------------------------
 

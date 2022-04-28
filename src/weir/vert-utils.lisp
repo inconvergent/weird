@@ -20,7 +20,7 @@
   (let ((all-pairs `(((add-vert! . 2add-vert!) (add-verts! . 2add-verts!)
                       (get-vert . 2get-vert) (get-verts . 2get-verts)
                       (split-edge! . 2split-edge!) (v+ . veq:f2+)
-                      (vaset . veq:2vaset) (vlet . veq:f2let)
+                      (vaset . veq:2$vset) (vlet . veq:f2let)
                       (transform! . 2transform!) (dst . veq:f2dst)
                       (edge-length . 2edge-length) (ledge-length . 2ledge-length)
                       (move-vert! . 2move-vert!) ($ . veq:f2$)
@@ -28,7 +28,7 @@
                      ((add-vert! . 3add-vert!) (add-verts! . 3add-verts!)
                       (get-vert . 3get-vert) (get-verts . 3get-verts)
                       (split-edge! . 3split-edge!) (v+ . veq:f3+)
-                      (vaset . veq:3vaset) (vlet . veq:f3let)
+                      (vaset . veq:3$vset) (vlet . veq:f3let)
                       (transform! . 3transform!) (dst . veq:f3dst)
                       (edge-length . 3edge-length) (ledge-length . 3ledge-length)
                       (move-vert! . 3move-vert!) ($ . veq:f3$)
@@ -46,10 +46,10 @@
 
 (dimtemplate ($verts)
   (defmacro fx (wer &rest rest)
-    `($ (weir-verts ,wer) ,@rest)))
+    `(veq:fvprogn ($ (weir-verts ,wer) ,@rest))))
 
 (dimtemplate (get-verts)
-  (veq:vdef fx (wer inds)
+  (veq:fvdef fx (wer inds)
     (declare #.*opt* (weir wer) (list inds))
     "get the coordinates (vec) of verts in inds"
     (dimtest wer dim fx)
@@ -91,7 +91,7 @@
 
 
 (dimtemplate (add-vert!)
-  (veq:vdef* fx (wer (:varg dim x))
+  (veq:fvdef* fx (wer (:varg dim x))
     (declare #.*opt* (weir wer) (veq:ff x))
     "adds a new vertex to weir. returns the new vert ind"
     (dimtest wer dim fx)
@@ -104,14 +104,14 @@
       num-verts)))
 
 (dimtemplate (vadd-edge!)
-  (veq:vdef* fx (wer (:varg dim a b) &key g)
+  (veq:fvdef* fx (wer (:varg dim a b) &key g)
     (declare #.*opt* (weir wer) (veq:ff a b))
     (dimtest wer dim fx)
     (add-edge! wer (add-vert! wer a) (add-vert! wer b) :g g)))
 
 
 (dimtemplate (add-verts!)
-  (veq:vdef fx (wer vv)
+  (veq:fvdef fx (wer vv)
     (declare #.*opt* (weir wer) (veq:fvec vv))
     "adds new vertices to weir. returns the ids of the new vertices"
     (dimtest wer dim fx)
@@ -132,7 +132,7 @@
 
 
 (dimtemplate (get-vert)
-  (veq:vdef fx (wer v)
+  (veq:fvdef fx (wer v)
     (declare #.*opt* (weir wer) (pos-int v))
     "get the coordinate of vert v"
     (dimtest wer dim fx)
@@ -145,7 +145,7 @@
 
 
 (dimtemplate (get-all-verts)
-  (veq:vdef fx (wer)
+  (veq:fvdef fx (wer)
     (declare #.*opt* (weir wer))
     "returns the coordinates of all vertices"
     (dimtest wer dim fx)
@@ -162,7 +162,7 @@
 
 
 (dimtemplate (move-vert!)
-  (veq:vdef* fx (wer i (:varg dim x) &key (rel t))
+  (veq:fvdef* fx (wer i (:varg dim x) &key (rel t))
     (declare #.*opt* (weir wer) (pos-int i) (veq:ff x) (boolean rel))
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts) wer
@@ -176,7 +176,7 @@
 
 
 (dimtemplate (transform!)
-  (veq:vdef fx (wer inds tfx)
+  (veq:fvdef fx (wer inds tfx)
     (declare #.*opt* (weir wer) (list inds) (function tfx))
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts) wer
@@ -200,7 +200,7 @@
 
 
 (dimtemplate (split-edge!)
-  (veq:vdef* fx (wer u v (:varg dim x) &key g force)
+  (veq:fvdef* fx (wer u v (:varg dim x) &key g force)
   (declare #.*opt* (weir wer) (pos-int u v) (veq:ff x) (boolean force))
   "split edge (u v) at x. returns new vert ind (and new edges)."
   (dimtest wer dim fx)
@@ -211,14 +211,14 @@
       (values nil nil))))
 
 (dimtemplate (lsplit-edge!)
-  (veq:vdef* fx (wer ll (:varg dim x) &key g force)
+  (veq:fvdef* fx (wer ll (:varg dim x) &key g force)
     (declare #.*opt* (weir wer) (list ll) (veq:ff x) (boolean))
     (destructuring-bind (u v) ll
       (declare (pos-int u v))
       (split-edge! wer u v x :g g :force force))))
 
 (dimtemplate (append-edge!)
-  (veq:vdef* fx (wer v (:varg dim x) &key (rel t) g)
+  (veq:fvdef* fx (wer v (:varg dim x) &key (rel t) g)
     "add edge between vert v and new vert at xy"
     (declare (weir wer) (pos-int v) (veq:ff x) (boolean rel))
     (dimtest wer dim fx)
@@ -228,7 +228,7 @@
 
 
 (dimtemplate (edge-length)
-  (veq:vdef fx (wer u v)
+  (veq:fvdef fx (wer u v)
     (declare #.*opt* (weir wer) (pos-int u v))
     "returns the length of edge e=(u v). regardless of whether the edge exists"
     (dimtest wer dim fx)
@@ -292,7 +292,7 @@
 (weird:abbrev 3gv 3get-vert)
 
 
-(veq:vdef center! (wer &key max-side non-edge g)
+(veq:fvdef center! (wer &key max-side non-edge g)
   (declare #.*opt* (weir wer))
   "center the verts of wer on xy. returns the previous center"
   (dimtest wer 2 '2center!)
@@ -320,7 +320,7 @@
 ;   (declare #.*opt* (veq:ff ms w h))
 ;   (if (> w h) (/ ms w) (/ ms h)))
 
-; (veq:vdef center! (wer &key max-side non-edge g)
+; (veq:fvdef center! (wer &key max-side non-edge g)
 ;   "center the verts of wer on xy. returns the previous center"
 ;   (dimtest wer 3 '3center!)
 ;   (with-struct (weir- verts num-verts) wer
@@ -342,7 +342,7 @@
 
 ; SHAPES ----------------------
 
-(veq:vdef* 2is-intersection (wer a b)
+(veq:fvdef* 2is-intersection (wer a b)
   (declare (weir wer) (pos-int a b))
   (veq:f2segx (2gv wer a) (2gv wer b)))
 

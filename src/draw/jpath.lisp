@@ -12,7 +12,7 @@
                    #.(/ veq:fpi 7.99f0)))
 
 (declaim (inline ori))
-(veq:vdef ori (a)
+(veq:fvdef ori (a)
   (declare (veq:fvec a))
   (> (veq:f2cross (veq:f2$ a 0 1)) #.veq:*eps*))
 
@@ -27,12 +27,12 @@
   (i 0 :type fixnum :read-only t))
 
 
-(veq:vdef o++ ((:varg 2 p v w)) (veq:lst (veq:f2+ (veq:f2+ p v) w)))
-(veq:vdef o-- ((:varg 2 p v w)) (veq:lst (veq:f2- (veq:f2- p v) w)))
-(veq:vdef o+- ((:varg 2 p v w)) (veq:lst (veq:f2- (veq:f2+ p v) w)))
-(veq:vdef o-+ ((:varg 2 p v w)) (veq:lst (veq:f2+ (veq:f2- p v) w)))
+(veq:fvdef o++ ((:varg 2 p v w)) (veq:lst (veq:f2+ (veq:f2+ p v) w)))
+(veq:fvdef o-- ((:varg 2 p v w)) (veq:lst (veq:f2- (veq:f2- p v) w)))
+(veq:fvdef o+- ((:varg 2 p v w)) (veq:lst (veq:f2- (veq:f2+ p v) w)))
+(veq:fvdef o-+ ((:varg 2 p v w)) (veq:lst (veq:f2+ (veq:f2- p v) w)))
 
-(veq:vdef -make-joint-grid ((:varg 2 p) io)
+(veq:fvdef -make-joint-grid ((:varg 2 p) io)
   (declare (veq:ff p) (veq:fvec io))
   " 8 offset points around p "
   (veq:f2let ((z (veq:f2 0f0 0f0))
@@ -43,7 +43,7 @@
                    (veq:lst p)))))
 
 
-(veq:vdef path->joints (path w* &key closed
+(veq:fvdef path->joints (path w* &key closed
                              &aux (w (* 0.5f0 w*))
                                   (n (round (/ (length path) 2))))
   (declare (veq:fvec path) (veq:ff w w*) (boolean closed))
@@ -97,7 +97,7 @@
 
     (if closed (closed-path->joints) (open-path->joints))))
 
-(veq:vdef path->diagonals (path w &key closed (limits *limits*))
+(veq:fvdef path->diagonals (path w &key closed (limits *limits*))
   (declare (veq:fvec path) (veq:ff w) (boolean closed))
   "
   return (orientation line) for every point in path. lerp-ing along lines will
@@ -144,7 +144,7 @@
        (reverse res))))
 
 
-(veq:vdef jpath (path w &key (rep 3) closed (limits *limits*))
+(veq:fvdef jpath (path w &key (rep 3) closed (limits *limits*))
   (declare (veq:fvec path) (veq:ff w) (fixnum rep) (boolean closed))
   (let* ((diagonals (to-vector (path->diagonals path w
                                  :closed closed :limits limits)))

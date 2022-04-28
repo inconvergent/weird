@@ -116,10 +116,10 @@
   (declare #.*opt* (rgba c))
   (labels ((-hex (d)
              (declare #.*opt* (veq:ff d))
-             (format nil "~2,'0d" (min 255 (max 0 (floor (veq:ff (* d 256))))))))
+             (min 255 (max 0 (floor (veq:ff (* d 256)))))))
     (weird:dsb (r g b a) (to-list c)
-    (declare #.*opt* (veq:ff r g b a))
-    (values (format nil "#~a~a~a" (-hex r) (-hex g) (-hex b)) a))))
+      (declare #.*opt* (veq:ff r g b a))
+      (values (format nil "#~@{~2,'0x~}" (-hex r) (-hex g) (-hex b)) a))))
 
 
 (defun cmyk (c m y k &optional (a 1f0))
@@ -152,7 +152,7 @@
              (declare #.*opt* (veq:ff ca cb df p))
              ;(mod a b) is remainder of (floor a b)
              (weird:mvb (_ res)
-               (floor (the veq:ff (+ p (* 0.16666667
+               (floor (the veq:ff (+ p (* #.(/ 6f0)
                                           (/ (the veq:ff (- ca cb)) df)))))
                (declare (ignore _) (veq:ff res))
                res)))
@@ -167,8 +167,8 @@
               (declare (veq:ff df))
               (list (cond ((= imn imx) 0f0)
                           ((= imx 0) (-mod g b df 1f0))
-                          ((= imx 1) (-mod b r df 0.33333334))
-                          ((= imx 2) (-mod r g df 0.6666667)))
+                          ((= imx 1) (-mod b r df #.(/ 3f0)))
+                          ((= imx 2) (-mod r g df #.(/ 2f0 3f0))))
                     (if (<= mx 0f0) 0f0 (/ df mx))
                     mx
                     a))))))))

@@ -1,6 +1,7 @@
 (defpackage #:weird
   (:use #:common-lisp)
   (:export
+   #:*eps*
    #:*opt*
    #:abbrev
    #:aif
@@ -14,6 +15,7 @@
    #:dsb
    #:ensure-filename
    #:ensure-vector
+   #:ev
    #:f?
    #:filter-by-predicate
    #:group
@@ -33,24 +35,34 @@
    #:pos-int
    #:print-every
    #:psymb
+   #:reorder
    #:reread
+   #:show-ht
    #:string-list-concat
    #:symb
+   #:tav
    #:template
    #:terminate
+   #:tl
    #:to-adjustable-vector
    #:to-list
    #:to-vector
    #:tree-find
    #:tree-find-all
+   #:tv
    #:undup
    #:v?
+   #:split
    #:vector-first
    #:vector-last
    #:vextend
-   #:with-struct))
+   #:vl
+   #:with-struct)
+  (:import-from #:split-sequence #:split-sequence))
 
-(defpackage #:fn (:use #:common-lisp) (:export #:fn))
+(defpackage #:fn
+  (:use #:common-lisp)
+  (:export #:fn) )
 
 (defpackage #:parallel (:use #:common-lisp)
   (:export #:create-channel #:end #:info #:init))
@@ -228,6 +240,22 @@
            #:path #:rect #:save #:square #:update #:wpath)
   (:import-from #:weird #:dsb #:ensure-filename #:with-struct))
 
+
+(defpackage #:bvh
+  (:use #:common-lisp)
+  (:export
+    #:bvh
+    #:bvh-normals
+    #:bvh-root
+    #:make-line-bbox-test
+    #:make-result
+    #:node #:node-l
+    #:node-leaves
+    #:node-ma
+    #:node-mi
+    #:node-r)
+  (:import-from #:weird #:*opt* *eps*))
+
 (defpackage #:weir
   (:use #:common-lisp)
   (:export
@@ -251,10 +279,13 @@
     #:3avs!
     #:3gv
     #:3gvs
+    #:3triangulate!
     #:add-edge!
     #:add-edges!
     #:add-grp!
     #:add-path-ind!
+    #:add-polygon!
+    #:add-polygons!
     #:ae!
     #:all-grps->main!
     #:append-edge!
@@ -272,15 +303,19 @@
     #:del-edge!
     #:del-grp!
     #:del-path!
+    #:del-polygon!
+    #:del-polygons!
     #:edge-exists
     #:edge-has-prop
     #:edge-prop->path
     #:edge-prop-nxt-vert
     #:export-verts-grp
     #:get-all-grps
+    #:get-all-polygons
     #:get-alt-res
     #:get-alteration-result-list
     #:get-alteration-result-map
+    #:get-edge-polygons
     #:get-edge-prop
     #:get-edge-props
     #:get-edges
@@ -296,7 +331,10 @@
     #:get-min-spanning-tree
     #:get-num-edges
     #:get-num-grps
+    #:get-num-polygons
     #:get-num-verts
+    #:get-poly-prop
+    #:get-polygon-edges
     #:get-segments
     #:get-spanning-tree
     #:get-vert-inds
@@ -314,6 +352,7 @@
     #:ladd-edge!
     #:lcollapse-verts!
     #:ldel-edge!
+    #:load-internal-model!
     #:lsplit-edge!
     #:lsplit-edge-ind!
     #:lswap-edge!
@@ -321,10 +360,14 @@
     #:mcopy-edge-props
     #:mcopy-vert-props
     #:mset-edge-prop
+    #:mset-poly-prop
     #:mset-vert-prop
+    #:obj-export
+    #:obj-import!
     #:reset-grp!
     #:set-edge-prop
     #:set-grp-prop
+    #:set-poly-prop
     #:set-vert-prop
     #:split-edge-ind!
     #:swap-edge!
@@ -336,6 +379,7 @@
     #:with-rnd-vert)
   (:import-from #:weird
     #:*opt*
+    #:*eps*
     #:awf
     #:awg
     #:dsb

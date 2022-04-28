@@ -3,7 +3,7 @@
 
 (plan 8)
 
-(veq:vprogn
+(veq:fvprogn
 
   (subtest "test-weir-with "
     (let ((wer (init-weir)))
@@ -46,6 +46,7 @@
         (% (2append-edge? (first :e1?) (veq:f2 4f0 3f0)) :res :e2?))
 
       ; TODO: there is a bug vprogn/vdef. it does not handle dotted pairs
+      ; TODO: the dotted pairs bug is fiexed. so maybe rewrite this?
       (is (flatten-ht (weir:get-alteration-result-map wer))
           ; '((:A . 1) (:B . 0) (:E1 0 1) (:E2 . 0 2))
           '(:B? 0 :A? 1 :E1? 0 1 :E2? 0 2)))
@@ -58,7 +59,7 @@
           (veq:f2let ((ww (veq:f2 v)))
             (% (? (x) (list ww :a?)) :res :l?)
             (% (? (x) (veq:lst (veq:f2- ww 1f0 2f0))) :res :l2?))
-          (veq:f2vset v (veq:f2 2f0 2f0))))
+          (veq:f2vset (v) (veq:f2 2f0 2f0))))
 
       (is (gethash :l? (weir:get-alteration-result-map wer)) `(1.0f0 2.0f0 0))
       (is (gethash :l2? (weir:get-alteration-result-map wer)) '(0f0 0f0))

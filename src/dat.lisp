@@ -223,15 +223,15 @@ START, END:     bounding index designators of SEQUENCE.
 
 ;; ----------------------------------------------------------------------
 
-(defun export-data (o fn)
-  (with-open-file (fstream (ensure-filename fn ".dat")
+(defun export-data (o fn &optional (postfix ".dat"))
+  (with-open-file (fstream (ensure-filename fn postfix)
                            :direction :output :if-exists :supersede)
     (declare (stream fstream))
     (print o fstream)))
 
 
-(defun import-data (fn)
-  (with-open-file (fstream (ensure-filename fn ".dat" t) :direction :input)
+(defun import-data (fn &optional (postfix ".dat"))
+  (with-open-file (fstream (ensure-filename fn postfix) :direction :input)
     (declare (stream fstream))
     (read fstream)))
 

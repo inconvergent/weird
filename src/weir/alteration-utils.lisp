@@ -23,12 +23,12 @@
 
 
 (defun -print-debug (alt lvl)
-  (format t "~%----------------------~%")
+  (format t "~&----------------------~%")
   (pprint alt)
   (when (and (symbolp lvl) (eq lvl :verbose))
     (format t "~%~%--->~%")
     (pprint (third (sb-cltl2:macroexpand-all `(veq:vprogn ,alt)))))
-  (format t "~%--------------------~%~%"))
+  (format t "~&--------------------~%"))
 
 
 (defun -if-all-resolved (alt-res arg)
