@@ -1,6 +1,6 @@
 # This image is only intended to run the tests
 
-FROM ubuntu:latest AS base
+FROM ubuntu:20.04 AS base
 
 RUN apt-get -qq update &&\
     apt-get -qq install -y sbcl curl gcc libpng-dev git
@@ -11,8 +11,9 @@ RUN sbcl --noinform --load /opt/quicklisp.lisp\
          --eval '(quicklisp-quickstart:install :path "/opt/quicklisp")'\
          --eval '(sb-ext:quit)'
 
-RUN mkdir -p /root/quicklisp &&\
-    ln -s /opt/quicklisp/setup.lisp /root/quicklisp/setup.lisp
+RUN mkdir -p quicklisp
+# &&\
+    # ln -s /opt/quicklisp/setup.lisp quicklisp/setup.lisp
 RUN mkdir -p /opt/data
 RUN apt-get -qq remove curl -y &&\
     apt-get -qq autoremove -y &&\
@@ -20,15 +21,15 @@ RUN apt-get -qq remove curl -y &&\
 
 from base AS build
 
-WORKDIR /root
-ADD src /root/weird/src
-ADD test /root/weird/test
-ADD weird.asd /root/weird
-ADD docker-run-tests.sh /root/weird/run-tests.sh
+WORKDIR /opt
+ADD src quicklisp/local-projects/weird/src
+ADD test quicklisp/local-projects/weird/test
+ADD weird.asd quicklisp/local-projects/weird
+ADD docker-run-tests.sh quicklisp/local-projects/weird/run-tests.sh
 
-RUN git clone https://github.com/inconvergent/cl-veq.git veq
+RUN git clone https://github.com/inconvergent/cl-veq.git quicklisp/local-projects/veq
 
-WORKDIR /root/weird
+WORKDIR /opt/quicklisp/local-projects/weird
 
 CMD ["bash", "./run-tests.sh"]
 
