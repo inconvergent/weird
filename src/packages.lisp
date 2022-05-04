@@ -11,12 +11,12 @@
    #:awf
    #:awg
    #:cmd-args
+   #:d?
    #:define-struct-load-form
    #:dsb
    #:ensure-filename
    #:ensure-vector
    #:ev
-   #:f?
    #:filter-by-predicate
    #:group
    #:i?
@@ -38,6 +38,7 @@
    #:reorder
    #:reread
    #:show-ht
+   #:split
    #:string-list-concat
    #:symb
    #:tav
@@ -52,7 +53,6 @@
    #:tv
    #:undup
    #:v?
-   #:split
    #:vector-first
    #:vector-last
    #:vextend
@@ -394,3 +394,9 @@
     #:vextend
     #:with-struct)
   (:import-from #:math #:last*))
+
+(defpackage #:voxel
+  (:use #:common-lisp)
+  (:export #:get-mesh #:getvoxel #:make #:setvoxel)
+  (:import-from #:weird #:*opt* #:*eps* pos-int))
+

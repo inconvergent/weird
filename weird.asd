@@ -2,14 +2,14 @@
 
 (asdf:defsystem #:weird
   :description "A System for Making Generative Systems"
-  :version "6.0.1"
+  :version "6.0.3"
   :author "anders hoff/inconvergent"
   :licence "MIT"
   :in-order-to ((asdf:test-op (asdf:test-op #:weird/tests)))
   :pathname "src/"
   :serial nil
   :depends-on (#:alexandria #:cl-json #:cl-svg #:lparallel
-               #:veq #:split-sequence #:parse-number)
+               #:veq #:zpng #:split-sequence #:parse-number)
   :components ((:file "packages")
                (:file "config" :depends-on ("packages"))
                (:file "utils" :depends-on ("config"))
@@ -41,7 +41,7 @@
                 :depends-on ("weir/main" "graph/mst-cycle"))
                (:file "weir/paths"
                 :depends-on ("weir/props" "draw/simplify-path"))
-               (:file "weir/alteration-utils" :depends-on ("weir/main"))
+               (:file "weir/alteration-utils" :depends-on ("weir/vert-utils"))
                (:file "weir/alterations" :depends-on ("weir/alteration-utils"))
                (:file "weir/with-macro" :depends-on ("weir/alteration-utils"))
                (:file "weir/kdtree" :depends-on ("weir/alteration-utils"))
@@ -53,7 +53,9 @@
                 :depends-on ("weir/macros" "weir/props" "weir/paths"))
                (:file "weir/extra"
                 :depends-on ("weir/main" "weir/props" "weir/vert-utils"
-                             "weir/macros"))))
+                             "weir/macros"))
+               (:file "voxel/init" :depends-on ("weir/extra"))
+               (:file "voxel/voxel" :depends-on ("voxel/init"))))
 
 (asdf:defsystem #:weird/tests
   :depends-on (#:weird #:prove)

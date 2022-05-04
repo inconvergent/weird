@@ -7,7 +7,7 @@ view plane offset (xy) and scaling (s).
 "
 
 (declaim (inline 3identity))
-(veq:fvdef 3identity ((:varg 3 x)) (values x))
+(veq:fvdef 3identity ((:va 3 x)) (values x))
 
 (declaim (inline zero))
 (veq:fvdef zero () (veq:f3$point 0f0 0f0 0f0))
@@ -40,7 +40,7 @@ view plane offset (xy) and scaling (s).
     (veq:f3let ((v (veq:f3norm (veq:f3neg (veq:f3from up vpn
                                             (- (veq:f3. up vpn))))))
                 (u (veq:f3rot v vpn veq:fpi5)))
-      (veq:mvc #'values u v (veq:f3scale u s) (veq:f3scale v s)))))
+      (veq:~ u v (veq:f3scale u s) (veq:f3scale v s)))))
 
 
 (veq:fvdef -look (cam look)
@@ -53,7 +53,7 @@ view plane offset (xy) and scaling (s).
   "distance from pt to camera plane with current parameters"
   (veq:f3let ((cam (veq:f3$ (ortho-cam proj)))
               (vpn (veq:f3$ (ortho-vpn proj))))
-    (lambda ((:varg 3 pt)) (declare (veq:ff pt))
+    (lambda ((:va 3 pt)) (declare (veq:ff pt))
       (weird:mvb (hit d) (veq:f3planex vpn cam pt (veq:f3+ pt vpn))
         (declare (boolean hit) (veq:ff d))
         (if hit d 0f0)))))
@@ -67,7 +67,7 @@ view plane offset (xy) and scaling (s).
               (cam (veq:f3$ (ortho-cam proj))))
     (weird:mvb (x y) (veq:f2$ (ortho-xy proj))
       (declare (veq:ff x y))
-      (lambda ((:varg 3 pt))
+      (lambda ((:va 3 pt))
         (declare #.*opt* (veq:ff pt))
         (veq:f3let ((pt* (veq:f3- pt cam)))
           (veq:f2 (+ x (veq:f3. su pt*)) (+ y (veq:f3. sv pt*))))))))
@@ -78,9 +78,9 @@ view plane offset (xy) and scaling (s).
   "cast a ray in direction -vpn from pt"
   (veq:f3let ((dir (veq:f3scale (veq:f3neg (veq:f3$ (ortho-vpn proj)))
                                 (ortho-raylen proj))))
-    (lambda ((:varg 3 pt))
+    (lambda ((:va 3 pt))
       (declare #.*opt* (veq:ff pt))
-      (weird:mvc #'values pt (veq:f3+ pt dir)))))
+      (veq:~ pt (veq:f3+ pt dir)))))
 
 
 (veq:fvdef make (&key (up (veq:f3$point 0f0 0f0 1f0))
@@ -106,13 +106,12 @@ view plane offset (xy) and scaling (s).
          (vpn* (if vpn vpn (-look cam look))))
     (weird:mvb ((:va 3 u v su sv)) (-get-u-v up vpn* s)
       (declare (veq:ff u v su sv))
-      (let ((res (make-ortho
-                   :vpn vpn* :up up :cam cam
-                   :s s :xy xy :raylen raylen
-                   :u (veq:f3$point u)
-                   :v (veq:f3$point v)
-                   :su (veq:f3$point su)
-                   :sv (veq:f3$point sv))))
+      (let ((res (make-ortho :vpn vpn* :up up :cam cam
+                             :s s :xy xy :raylen raylen
+                             :u (veq:f3$point u)
+                             :v (veq:f3$point v)
+                             :su (veq:f3$point su)
+                             :sv (veq:f3$point sv))))
         (setf (ortho-dstfx res) (make-dstfx res)
               (ortho-projfx res) (make-projfx res)
               (ortho-rayfx res) (make-rayfx res))
@@ -155,21 +154,21 @@ view plane offset (xy) and scaling (s).
         (weird:mvb ((:va 3 u v su sv))
                    (-get-u-v (ortho-up proj) (ortho-vpn proj) (ortho-s proj))
           (declare (veq:ff u v su sv))
-          (setf (veq:3$ (ortho-u proj) 0) (list u)
-                (veq:3$ (ortho-v proj) 0) (list v)
-                (veq:3$ (ortho-su proj) 0) (list su)
-                (veq:3$ (ortho-sv proj) 0) (list sv))))
+          (setf (veq:3$ (ortho-u proj)) (list u)
+                (veq:3$ (ortho-v proj)) (list v)
+                (veq:3$ (ortho-su proj)) (list su)
+                (veq:3$ (ortho-sv proj)) (list sv))))
 
   (setf (ortho-dstfx proj) (make-dstfx proj)
         (ortho-projfx proj) (make-projfx proj)
         (ortho-rayfx proj) (make-rayfx proj))
   proj)
 
-(veq:fvdef* project (proj (:varg 3 pt))
+(veq:fvdef* project (proj (:va 3 pt))
   (declare #.*opt* (ortho proj) (veq:ff pt))
   "project single point. returns (values x y d)"
-  (weird:mvc #'values (funcall (ortho-projfx proj) pt)
-                      (funcall (ortho-dstfx proj) pt)))
+  (veq:~ (funcall (ortho-projfx proj) pt)
+         (funcall (ortho-dstfx proj) pt)))
 
 
 (veq:vdef project* (proj path)
@@ -181,9 +180,9 @@ view plane offset (xy) and scaling (s).
     (declare (function projfx dstfx))
     (veq:fwith-arrays (:n (veq:3$num path) :itr k
       :arr ((path 3 path) (p 2) (d 1))
-      :fxs ((proj ((:varg 3 x)) (declare #.*opt* (veq:ff x))
+      :fxs ((proj ((:va 3 x)) (declare #.*opt* (veq:ff x))
                     (funcall projfx x))
-            (dst ((:varg 3 x)) (declare #.*opt* (veq:ff x))
+            (dst ((:va 3 x)) (declare #.*opt* (veq:ff x))
                     (funcall dstfx x)))
       :exs ((p k (proj path))
             (d k (dst path))))

@@ -298,7 +298,7 @@ any of this to work.
 
 ### Versions and Compatability
 
-Weird version 6.0.x requires version `cl-veq` 2.0.x.
+Weird version 6.0.3 requires version `cl-veq` 2.0.3.
 
 
 ### Tests

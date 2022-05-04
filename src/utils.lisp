@@ -4,13 +4,11 @@
 
 (deftype pos-int (&optional (bits 31)) `(unsigned-byte ,bits))
 
-(defun v? (&optional silent)
-  (if silent (slot-value (asdf:find-system 'weird) 'asdf:version)
-             (format t "~%weird version: ~a~%"
-               (slot-value (asdf:find-system 'weird) 'asdf:version))))
-(defun f? (f)
-  (declare (symbol f))
-  (format t "~%---~%") (describe f) (format t "~%---~%"))
+(defun v? (&optional (silent t))
+  (let ((v (slot-value (asdf:find-system 'weird) 'asdf:version)))
+    (unless silent (format t "~%veq version: ~a~%" v))
+    v))
+(defun d? (f) (describe f))
 (defun i? (f) (inspect f))
 
 

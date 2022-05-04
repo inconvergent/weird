@@ -97,8 +97,6 @@
 ; TODO: ignore nil alts
 ; TODO: fix inconsistent name add-poly!, add-polygon!
 
-(defmacro val* (&body body) `(mvc #'values ,@body))
-
 
 (defmacro ? ((&rest args) &rest rest)
   (apply #'build-alt (caar args) ; caar = w
@@ -148,36 +146,36 @@
   (apply #'build-alt 'w `(l ,l g ,g) '(del-path! w l :g g) rest))
 
 (defmacro 2add-vert? ((p) &rest rest)
-  (apply #'build-alt 'w `(f2!p ,p) '(2add-vert! w (val* f2!p)) rest))
+  (apply #'build-alt 'w `(f2!p ,p) '(2add-vert! w (veq:~ f2!p)) rest))
 (defmacro 3add-vert? ((p) &rest rest)
-  (apply #'build-alt 'w `(f3!p ,p) '(3add-vert! w (val* f3!p)) rest))
+  (apply #'build-alt 'w `(f3!p ,p) '(3add-vert! w (veq:~ f3!p)) rest))
 
 (defmacro 2vadd-edge? ((p q &key g) &rest rest)
   (apply #'build-alt 'w `(f2!p ,p f2!q ,q g ,g)
-    '(2vadd-edge! w (val* f2!p f2!q) :g g) rest))
+    '(2vadd-edge! w (veq:~ f2!p f2!q) :g g) rest))
 (defmacro 3vadd-edge? ((p q &key g) &rest rest)
   (apply #'build-alt 'w `(f3!p ,p f3!q ,q g ,g)
-    '(3vadd-edge! w (val* f3!p f3!q) :g g) rest))
+    '(3vadd-edge! w (veq:~ f3!p f3!q) :g g) rest))
 
 (defmacro 2move-vert? ((i p &key (rel t)) &rest rest)
   (apply #'build-alt 'w `(i ,i f2!p ,p rel ,rel)
     `(when (-valid-vert w i)
-       (progn (2move-vert! w i (val* f2!p) :rel rel)
+       (progn (2move-vert! w i (veq:~ f2!p) :rel rel)
               i)) rest))
 (defmacro 3move-vert? ((i p &key (rel t)) &rest rest)
   (apply #'build-alt 'w `(i ,i f3!p ,p rel ,rel)
     `(when (-valid-vert w i)
-       (progn (3move-vert! w i (val* f3!p) :rel rel)
+       (progn (3move-vert! w i (veq:~ f3!p) :rel rel)
               i)) rest))
 
 (defmacro 2append-edge? ((i p &key g (rel t)) &rest rest)
   (apply #'build-alt 'w `(i ,i f2!p ,p rel ,rel g ,g)
     `(when (-valid-vert w i)
-       (2append-edge! w i (val* f2!p) :rel rel :g g)) rest))
+       (2append-edge! w i (veq:~ f2!p) :rel rel :g g)) rest))
 (defmacro 3append-edge? ((i p &key g (rel t)) &rest rest)
   (apply #'build-alt 'w `(i ,i f3!p ,p rel ,rel g ,g)
     `(when (-valid-vert w i)
-       (3append-edge! w i (val* f3!p) :rel rel :g g)) rest))
+       (3append-edge! w i (veq:~ f3!p) :rel rel :g g)) rest))
 
 (defmacro 2split-edge? ((u v xy &key g force) &rest rest)
   (apply #'build-alt 'w `(u ,u v ,v f2!p ,xy g ,g force ,force)

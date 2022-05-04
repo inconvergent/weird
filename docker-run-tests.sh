@@ -6,7 +6,6 @@ sbcl --quit \
      --eval '(print ql:*local-project-directories*)'\
      --eval '(handler-case (ql:quickload :weird :verbose t)
                            (error (c) (print c) (sb-ext:quit :unix-status 2)))'\
-     --eval '(handler-case (progn (ql:quickload :prove)
-                                  (asdf:test-system :weird))
+     --eval '(handler-case (asdf:test-system :weird)
                            (error (c) (print c) (sb-ext:quit :unix-status 3)))'
 

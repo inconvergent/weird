@@ -50,15 +50,15 @@
     (declare (pos-int axis))
     ; sort by bbox min: (second o)
     (sort objs (lambda (a b)  ; TODO: refactor object format
-                 (and (< (the veq:ff (aref (second a) axis))
-                         (the veq:ff (aref (second b) axis))))))))
+                 (and (< (the veq:ff (aref (the veq:fvec (second a)) axis))
+                         (the veq:ff (aref (the veq:fvec (second b)) axis))))))))
 
 ; leaffx: (poly) -> (-polyx v0 e1 e2 org l) i think ..?
 (defun make (all-objs leaffx &key (num 5))
   (declare #.*opt* (list all-objs) (function leaffx) (pos-int num))
   (labels
     ((build (root objs &aux (m (node-mima root)))
-      (declare (node root) (veq:fvec m))
+      (declare (node root) (veq:fvec m) (list objs))
       (veq:mvb (xmi xma ymi yma zmi zma)
         (-objs-list-bbox (map 'list #'second objs)) ; <--- replace -bbox!!!
         (declare (veq:ff xmi xma ymi yma zmi zma))

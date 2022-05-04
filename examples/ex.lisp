@@ -1,6 +1,7 @@
 #!/usr/bin/sbcl --script
 
-(load "../utils/load")
+(load "~/quicklisp/setup.lisp")
+(ql:quickload :weird)
 
 
 (veq:vdef* init-weir ()
