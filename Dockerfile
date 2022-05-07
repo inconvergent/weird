@@ -25,7 +25,8 @@ WORKDIR /opt
 ADD src quicklisp/local-projects/weird/src
 ADD test quicklisp/local-projects/weird/test
 ADD weird.asd quicklisp/local-projects/weird
-ADD docker-run-tests.sh quicklisp/local-projects/weird/run-tests.sh
+ADD run-tests.sh quicklisp/local-projects/weird/run-tests.sh
+RUN mkdir -p ~/quicklisp/ && ln -s  /opt/quicklisp/setup.lisp ~/quicklisp/setup.lisp
 
 RUN git clone https://github.com/inconvergent/cl-veq.git quicklisp/local-projects/veq
 

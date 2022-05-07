@@ -2,14 +2,14 @@
 
 (asdf:defsystem #:weird
   :description "A System for Making Generative Systems"
-  :version "6.0.4"
+  :version "6.1.0"
   :author "anders hoff/inconvergent"
   :licence "MIT"
   :in-order-to ((asdf:test-op (asdf:test-op #:weird/tests)))
   :pathname "src/"
   :serial nil
-  :depends-on (#:alexandria #:cl-json #:cl-svg #:lparallel
-               #:veq #:zpng #:split-sequence #:parse-number)
+  :depends-on (#:alexandria #:cl-json #:cl-svg #:lparallel #:veq #:zpng
+               #:split-sequence #:parse-number #:prove)
   :components ((:file "packages")
                (:file "config" :depends-on ("packages"))
                (:file "utils" :depends-on ("config"))
