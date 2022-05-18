@@ -201,6 +201,16 @@
                  (return-from edge-prop-nxt-vert w)))
   nil)
 
+(defun get-all-props (wer)
+  (declare (weir wer))
+  (loop for k being the hash-keys of (weir-props wer) using (hash-value v)
+        collect (list k v)))
+
+(defun show-all-props (wer)
+  (declare (weir wer))
+  (loop for k being the hash-keys of (weir-props wer) using (hash-value v)
+        do (format t "~&~a: ~a~&" k v)))
+
 
 ; TODO: this will behave incorrectly if main grp already contains an edge in.
 ; ladd-edge! will return T, not edge, (a b). i think?
@@ -209,8 +219,4 @@
   (itr-grps (wer g*)
     (itr-edges (wer e :g g*)
       (set-edge-prop wer (ladd-edge! wer e :g g) g*))))
-
-(defun show-props (wer)
-  (loop for key being the hash-keys of (weir-props wer) using (hash-value v)
-        do (format t "~&------~%~a~%~a~%" key v)))
 

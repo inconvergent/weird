@@ -130,16 +130,6 @@
                      fields)
          ,@body))))
 
-(defmacro template ((&rest all-pairs) &body body)
-  (declare (optimize speed) (list all-pairs))
-  (labels ((replace-pairs (root pairs)
-             (declare (optimize speed))
-             (loop for (old . new) in pairs
-                   do (setf root (subst new old root)))
-             root))
-     `(progn ,@(loop for pairs in all-pairs
-                     collect `(progn ,@(replace-pairs body pairs))))))
-
 
 (defmacro make-animation ((ani) &body body)
   `(push (lambda () (progn ,@body)) ,ani))
@@ -189,11 +179,11 @@
 
 
 (abbrev vextend vector-push-extend)
-
-(defun lvextend (xx arr)
-  (declare (sequence xx) (vector arr))
-  (typecase xx (cons (loop for x in xx do (vextend x arr)))
-               (t (loop for x across xx do (vextend x arr)))))
+(defun lvextend (x v)
+  (declare (sequence x) (vector v))
+  "extend v with all items in x."
+  (typecase x (cons (loop for o in x do (vextend o v)))
+              (t (loop for o across x do (vextend o v)))))
 
 
 (declaim (inline vector-last))
@@ -214,19 +204,16 @@
            (make-array size
              :fill-pointer 0 :element-type type :adjustable t)))
 
-
 (defun to-vector (init &key (type t))
   (declare (list init))
   (make-array (length init)
     :initial-contents init :adjustable nil :element-type type))
-
 
 (defun ensure-vector (o &key (type t))
   (declare (sequence o))
   (typecase o (cons (to-vector o :type type))
               (vector o)
               (t (error "unable to coerce to vector: ~a" o))))
-
 
 (defun to-adjustable-vector (init &key (type t))
   (declare (sequence init))

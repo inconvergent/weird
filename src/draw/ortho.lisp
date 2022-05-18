@@ -29,13 +29,13 @@ view plane offset (xy) and scaling (s).
   (rayfx #'3identity :type function :read-only nil))
 
 
-(veq:fvdef -get-u-v (up* vpn* s)
+(veq:fvdef -get-u-v (up* vpn* &optional (s 1f0))
   (declare #.*opt* (veq:fvec up* vpn*) (veq:ff s))
   (veq:f3let ((up (veq:f3$ up*))
               (vpn (veq:f3$ vpn*)))
 
     (unless (< (abs (veq:f3. up vpn)) #.(- 1f0 veq:*eps*))
-            (error "ortho: gimbal lock. up: ~a vpn: ~a" up* vpn*))
+            (error "ortho: gimbal lock.~%up: ~a~%vpn: ~a" up* vpn*))
 
     (veq:f3let ((v (veq:f3norm (veq:f3neg (veq:f3from up vpn
                                             (- (veq:f3. up vpn))))))
@@ -118,17 +118,6 @@ view plane offset (xy) and scaling (s).
         res))))
 
 
-; (defun export-data (proj)
-;   (declare (ortho proj))
-;   (with-struct (ortho- up cam xy s vpn raylen) proj
-;     (list :ortho up cam xy s vpn raylen)))
-
-; (defun import-data (o)
-;   (declare (list o))
-;   (destructuring-bind (up cam xy s vpn raylen) (cdr o)
-;     (make :up up :cam cam :xy xy :s s :vpn vpn :raylen raylen)))
-
-
 (veq:fvdef update (proj &key s xy up cam vpn look)
   "
   update projection parameters.
@@ -164,6 +153,26 @@ view plane offset (xy) and scaling (s).
         (ortho-rayfx proj) (make-rayfx proj))
   proj)
 
+
+(veq:vdef around (c axis val &key (look (veq:f3$point (veq:f3rep 0f0))))
+  (declare (ortho c) (keyword axis) (veq:ff val) (veq:fvec look))
+  (unless (> (abs val) 0) (return-from around nil))
+  (macrolet ((_ (&rest rest) `(veq:f_ (veq:lst ,@rest)))
+             (rot (a b) `(veq:f3rots (veq:f3$s ortho- c ,a ,b val) (veq:f3$ look))))
+    (case axis
+      (:pitch (veq:f3let ((pos (rot :cam :u))
+                          (up (veq:f3norm (rot :up :u)))
+                          (vpn (veq:f3norm (veq:f3- pos (veq:f3$ look)))))
+                (update c :cam (_ pos) :vpn (_ vpn) :up (_ up))))
+      (:yaw (veq:f3let ((pos (rot :cam :v))
+                        (up (veq:f3norm (rot :up :v)))
+                        (vpn (veq:f3norm (veq:f3- pos (veq:f3$ look)))))
+                (update c :cam (_ pos) :vpn (_ vpn) :up (_ up))))
+      (:roll (update c :up (veq:f3$point
+                             (veq:f3rots (veq:f3$s ortho-
+                                            c :up :vpn val :cam))))))))
+
+
 (veq:fvdef* project (proj (:va 3 pt))
   (declare #.*opt* (ortho proj) (veq:ff pt))
   "project single point. returns (values x y d)"
@@ -187,4 +196,21 @@ view plane offset (xy) and scaling (s).
       :exs ((p k (proj path))
             (d k (dst path))))
       (values p d))))
+
+(defun export-data (p)
+  (declare (ortho p))
+  "export the neccessary values to recreate ortho"
+  (weird:with-struct (ortho- vpn cam up s xy raylen) p
+    `((:vpn . ,vpn) (:cam . ,cam) (:up . ,up)
+      (:s . ,s) (:xy . ,xy) (:raylen . ,raylen))))
+
+(defun import-data (p)
+  (declare (list p))
+  "recreate proj from an a list exported by ortho:export-data"
+  (labels ((as (i a) (cdr (assoc i a)))
+           (as-float (i a) (veq:ff (as i a)))
+           (as-arr (i a) (veq:f_ (coerce (as i a) 'list))))
+    (ortho:make :cam (as-arr :cam p) :vpn (as-arr :vpn p)
+                :up (as-arr :up p) :xy (as-arr :xy p)
+                :s (as-float :s p) :raylen (as-float :raylen p))))
 

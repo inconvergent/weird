@@ -77,7 +77,7 @@
                  (lambda (poly)
                    (declare #.*opt* (list poly))
                    (make-polyx ; TODO: find a better way for this
-                     (veq:f3$ (weir:3gvs wer poly) 0 1 2)))
+                     (veq:f3$ (3gvs wer poly) 0 1 2)))
                  :num num)))
       (setf (bvh:bvh-normals bvh) normals)
       bvh)))

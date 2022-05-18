@@ -60,9 +60,7 @@
    #:with-struct)
   (:import-from #:split-sequence #:split-sequence))
 
-(defpackage #:fn
-  (:use #:common-lisp)
-  (:export #:fn) )
+(defpackage #:fn (:use #:common-lisp) (:export #:fn #:seed))
 
 (defpackage #:parallel (:use #:common-lisp)
   (:export #:create-channel #:end #:info #:init))
@@ -193,8 +191,7 @@
   (:import-from #:weird
     #:*opt*
     #:make-adjustable-vector
-    #:to-list
-    #:to-vector
+    #:to-list #:to-vector
     #:vector-last
     #:vextend
     #:with-struct))
@@ -315,6 +312,7 @@
     #:get-alt-res
     #:get-alteration-result-list
     #:get-alteration-result-map
+    #:get-connected-verts
     #:get-edge-polygons
     #:get-edge-prop
     #:get-edge-props
@@ -359,6 +357,8 @@
     #:make
     #:mcopy-edge-props
     #:mcopy-vert-props
+    #:mesh-bisect
+    #:mesh-slice
     #:mset-edge-prop
     #:mset-poly-prop
     #:mset-vert-prop
@@ -378,18 +378,12 @@
     #:with-rnd-edge
     #:with-rnd-vert)
   (:import-from #:weird
-    #:*opt*
-    #:*eps*
-    #:awf
-    #:awg
-    #:dsb
+    #:*eps* #:*opt*
+    #:awf #:awg #:dsb #:mvb #:mvc
     #:filter-by-predicate
     #:make-adjustable-vector
     #:mkstr
-    #:mvb
-    #:mvc
-    #:to-list
-    #:to-vector
+    #:to-list #:to-vector
     #:tree-find
     #:vextend
     #:with-struct)
@@ -400,3 +394,6 @@
   (:export #:get-mesh #:getvoxel #:make #:setvoxel)
   (:import-from #:weird #:*opt* #:*eps* pos-int))
 
+(defpackage #:canvas
+  (:use #:common-lisp)
+  (:export #:canvas #:make #:save #:set-gray-pix #:set-pix))

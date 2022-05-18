@@ -110,7 +110,8 @@
 
 
 (defmacro add-grp? ((g) &rest rest)
-  (apply #'build-alt 'w `(g ,g) '(unless (grp-exists w :g g) (add-grp! w g)) rest))
+  (apply #'build-alt 'w `(g ,g)
+         '(unless (grp-exists w :g g) (add-grp! w g)) rest))
 
 
 (defmacro add-poly? ((poly &key g) &rest rest)

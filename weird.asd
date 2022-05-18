@@ -2,14 +2,14 @@
 
 (asdf:defsystem #:weird
   :description "A System for Making Generative Systems"
-  :version "6.1.0"
+  :version "6.1.1"
   :author "anders hoff/inconvergent"
   :licence "MIT"
   :in-order-to ((asdf:test-op (asdf:test-op #:weird/tests)))
   :pathname "src/"
   :serial nil
   :depends-on (#:alexandria #:cl-json #:cl-svg #:lparallel #:veq #:zpng
-               #:split-sequence #:parse-number #:prove)
+               #:split-sequence #:parse-number #:prove #:str)
   :components ((:file "packages")
                (:file "config" :depends-on ("packages"))
                (:file "utils" :depends-on ("config"))
@@ -36,31 +36,30 @@
                (:file "weir/main" :depends-on ("graph/paths" "graph/edge-set"))
                (:file "weir/macros" :depends-on ("weir/main"))
                (:file "weir/props" :depends-on ("weir/main"))
-               (:file "weir/vert-utils" :depends-on ("weir/main"))
-               (:file "weir/planar-cycles"
-                :depends-on ("weir/main" "graph/mst-cycle"))
-               (:file "weir/paths"
-                :depends-on ("weir/props" "draw/simplify-path"))
+               (:file "weir/vert-utils-init" :depends-on ("weir/main"))
+               (:file "weir/vert-utils" :depends-on ("weir/vert-utils-init"))
+               (:file "weir/planar-cycles" :depends-on ("weir/main" "graph/mst-cycle"))
+               (:file "weir/paths" :depends-on ("weir/props" "draw/simplify-path"))
                (:file "weir/alteration-utils" :depends-on ("weir/vert-utils"))
                (:file "weir/alterations" :depends-on ("weir/alteration-utils"))
                (:file "weir/with-macro" :depends-on ("weir/alteration-utils"))
                (:file "weir/kdtree" :depends-on ("weir/alteration-utils"))
                (:file "weir/relneigh" :depends-on ("weir/kdtree"))
                (:file "weir/poly" :depends-on ("weir/main"))
-               (:file "weir/bvh-util"
-                :depends-on ("weir/macros" "weir/props" "weir/paths"))
-               (:file "weir/3bvh"
-                :depends-on ("weir/macros" "weir/props" "weir/paths"))
-               (:file "weir/extra"
-                :depends-on ("weir/main" "weir/props" "weir/vert-utils"
-                             "weir/macros"))
+               (:file "weir/poly-isect" :depends-on ("weir/poly"))
+               (:file "weir/poly-modify" :depends-on ("weir/poly-isect" "draw/ortho"))
+               (:file "weir/bvh-util" :depends-on ("weir/macros" "weir/paths"))
+               (:file "weir/3bvh" :depends-on ("weir/bvh-util"))
+               (:file "weir/extra" :depends-on ("weir/props" "weir/vert-utils" "weir/macros"))
                (:file "voxel/init" :depends-on ("weir/extra"))
-               (:file "voxel/voxel" :depends-on ("voxel/init"))))
+               (:file "voxel/voxel" :depends-on ("voxel/init"))
+               (:file "draw/canvas" :depends-on ("utils"))))
 
 (asdf:defsystem #:weird/tests
   :depends-on (#:weird #:prove)
   :perform (asdf:test-op (o s) (uiop:symbol-call ':weird-tests '#:run-tests))
   :pathname "test/"
-  :serial nil
-  :components ((:file "packages") (:file "run" :depends-on ("packages"))))
+  :serial t
+  :components ((:file "packages")
+               (:file "run" :depends-on ("packages"))))
 

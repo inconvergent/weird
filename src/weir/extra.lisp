@@ -16,14 +16,6 @@
       (itr-edges (wer e) (ladd-edge! new e))
       new)))
 
-(defun clone-grp! (wer &key from to)
-  (declare #.*opt* (weir wer))
-  "will force gto into existence"
-  (reset-grp! wer :g to)
-  (itr-edges (wer e :g from)
-    (ladd-edge! wer e :g to)))
-
-
 (veq:vdef* 2cut-to-area! (wer &key g (top 0f0) (left 0f0)
                                      (bottom 1000f0) (right 1000f0))
   (declare (weir wer) (veq:ff top left bottom right))
@@ -61,7 +53,7 @@
 
   (with (wer %)
     (itr-edges (wer e :g g)
-      (weir:with-gs (ae?)
+      (with-gs (ae?)
         (mvb (state rev px py) (cutfx e)
           (declare (symbol state) (boolean rev) (veq:ff px py))
           (case state

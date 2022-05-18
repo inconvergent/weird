@@ -46,13 +46,13 @@
   (declare #.*opt* (weir wer) (veq:ff lim))
   ; TOOD: deal with paths that are closed
   (loop for (seg _) of-type (list boolean) in (get-segments wer :cycle-info t :g g)
-        do (weird:mvb (_ sind) (simplify:path (weir:2gvs wer seg) :lim lim)
+        do (weird:mvb (_ sind) (simplify:path (2gvs wer seg) :lim lim)
              (declare (ignore _) (vector sind))
              (when (not (= (length seg) (length sind)))
                    (let ((seg* (loop for i across sind collect (nth i seg))))
                      (declare (list seg*))
-                     (weir:del-path! wer seg)
-                     (weir:add-path-ind! wer seg*))))))
+                     (del-path! wer seg)
+                     (add-path-ind! wer seg*))))))
 
 ; INTERSECTS
 

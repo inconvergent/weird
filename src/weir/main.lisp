@@ -17,12 +17,6 @@
   (veq:mvb (v exists) (gethash key ht)
     (if exists v nil)))
 
-(declaim (inline -sort-list))
-(defun -sort-list (l)
-  (declare #.*opt* (list l))
-  (sort (copy-list l) #'<))
-
-
 
 (defstruct (weir (:constructor -make-weir))
   (name :main :type symbol :read-only t)
@@ -43,6 +37,18 @@
   (grph nil :type graph::graph)
   (polygons (make-ht #'equal) :type hash-table) ; (a b c) -> (() () ())
   (edges->poly (make-ht #'equal) :type hash-table))
+
+(defmacro with-grp ((wer g* g) &body body)
+  (declare (symbol wer))
+  "select grp g from weir instance. g will be available in this context as g*"
+  (alexandria:with-gensyms (grps exists gname wname)
+    `(let ((,wname ,wer)
+           (,gname ,g))
+      (let ((,grps (weir-grps ,wname)))
+        (multiple-value-bind (,g* ,exists)
+          (gethash ,gname ,grps)
+            (unless ,exists (error "weir: invalid group: ~a" ,gname))
+            (progn ,@body))))))
 
 (defun -init-grps (adj-size set-size)
   (declare #.*opt* (number adj-size set-size))
@@ -92,7 +98,7 @@
   "
   constructor for grp instances.
 
-  grps are edge graphs.
+  grps contain edge adjacency graphs as well as polygons.
 
   nil is the default grp. as such, nil is not an allowed grp name (there is
   always a default grp named nil). if name is nil, the name will be a gensym.
@@ -106,8 +112,6 @@
     - to get verts in a grp: (get-grp-verts wer :g g).
     - to get indices of verts (in a grp): (get-vert-inds wer :g g)
     - ...
-
-  the grp functionality is somewhat experimental.
   "
   (with-struct (weir- grps adj-size set-size) wer
     (multiple-value-bind (v exists) (gethash name* grps)
@@ -121,46 +125,69 @@
 
 (defun reset-grp! (wer &key g)
   (declare #.*opt* (weir wer))
+  "reset grp, g. if g does not exist it will be created."
   (setf (gethash g (weir-grps wer))
-          (-make-grp :name (if g g :main)
-                     :grph (graph:make :adj-size (weir-adj-size wer)
-                                       :set-size (weir-set-size wer)))))
+        (-make-grp :name (if g g :main)
+                   :grph (graph:make :adj-size (weir-adj-size wer)
+                                     :set-size (weir-set-size wer)))))
+
+(defun clone-grp! (wer &key from to)
+  (declare #.*opt* (weir wer))
+  "clone grp, g. if target grp does not exist it will be created."
+  ; it is possible to override item copy in copy ht using :key #'copy-item-fx
+  (with-grp (wer gfrom from)
+    (setf (gethash to (weir-grps wer))
+          (-make-grp :name to
+                     :grph (graph:copy (grp-grph gfrom))
+                     :polygons (alexandria:copy-hash-table
+                                 (grp-polygons gfrom))
+                     :edges->poly (alexandria:copy-hash-table
+                                    (grp-edges->poly gfrom))))))
 
 (defun del-grp! (wer &key g)
   (declare #.*opt* (symbol g))
   (remhash g (weir-grps wer)))
 
 
-(defmacro with-grp ((wer g* g) &body body)
-  (declare (symbol wer))
-  "select grp g from weir instance. g will be available in this context as g*"
-  (alexandria:with-gensyms (grps exists gname wname)
-    `(let ((,wname ,wer)
-           (,gname ,g))
-      (let ((,grps (weir-grps ,wname)))
-        (multiple-value-bind (,g* ,exists)
-          (gethash ,gname ,grps)
-            (unless ,exists (error "weir: invalid group: ~a" ,gname))
-            (progn ,@body))))))
-
-
 (defun get-all-grps (wer &key main)
   (declare #.*opt* (weir wer) (boolean main))
-  "returns all grps. use :main t to include main/nil grp"
+  "returns all grp names. use :main t to include main/nil grp."
   (loop for g being the hash-keys of (weir-grps wer)
         ; ignores main/nil grp, unless overridden with :main t
         if (or g main) collect g))
 
 (defun get-grp (wer &key g)
   (declare #.*opt* (weir wer))
-  "returns the grp g. if g is not provided, the main/nil grp will be returned"
+  "returns the grp g. defaults to the main/nil grp."
   (gethash g (weir-grps wer)))
 
 (defun grp-exists (wer &key g)
   (declare #.*opt* (weir wer))
   (mvb (g exists) (get-grp wer :g g)
-       (declare (ignore g))
-       exists))
+    (declare (ignore g))
+    exists))
+
+(defun get-num-verts (wer)
+  (declare #.*opt* (weir wer))
+  (weir-num-verts wer))
+
+(defun is-vert-in-grp (wer v &key g)
+  (declare #.*opt* (weir wer) (pos-int v))
+  "tests whether v is in grp g
+   note: verts only belong to a grp if they are part of an edge in grp."
+  (with-struct (weir- grps) wer
+    (mvb (g* exists) (gethash g grps)
+      (if exists (graph:vmem (grp-grph g*) v)
+                 (error "grp does not exist: ~a" g)))))
+
+(defun get-grp-num-verts (wer &key g)
+  (declare #.*opt* (weir wer))
+  (with-grp (wer g* g)
+    (graph:get-num-verts (grp-grph g*))))
+
+(defun reset-verts! (wer &optional (n 0) &aux (old (weir-num-verts wer)))
+  (setf (weir-num-verts wer) n)
+  (values n old))
 
 
 (defun get-num-edges (wer &key g)
@@ -169,8 +196,8 @@
 
 (defun get-num-grps (wer)
   (declare #.*opt* (weir wer))
-  "number of grps excluding main/nil grp"
-  (1- (hash-table-count (weir-grps wer))))
+  "number of grps."
+  (hash-table-count (weir-grps wer)))
 
 
 (defun get-edges (wer &key g)
@@ -179,23 +206,23 @@
 
 (defun get-connected-verts (wer &key g)
   (declare #.*opt* (weir wer))
-  "get verts in g with at least one connected edge"
+  "get verts in g with at least one connected edge."
   (with-grp (wer g* g) (graph:get-verts (grp-grph g*))))
 
 (defun get-grp-as-path (wer &key g)
   (declare #.*opt* (weir wer))
   "returns (values path cycle?)"
-  (graph:edge-set->path (weir:get-edges wer :g g)))
+  (graph:edge-set->path (get-edges wer :g g)))
 
 
 (defun get-incident-edges (wer v &key g)
   (declare #.*opt* (weir wer) (pos-int v))
-  "incident edges of v"
+  "get incident edges of v."
   (with-grp (wer g* g) (graph:get-incident-edges (grp-grph g*) v)))
 
 (defun get-incident-verts (wer v &key g)
   (declare #.*opt* (weir wer) (pos-int v))
-  "incident verts of v"
+  "get incident verts of v."
   (with-grp (wer g* g) (graph:get-incident-verts (grp-grph g*) v)))
 
 
@@ -214,7 +241,7 @@
 
 (defun edge-exists (wer ee &key g)
   (declare #.*opt* (weir wer) (list ee))
-  "t if edge exists"
+  "t if edge exists (in g)."
   (with-grp (wer g* g) (apply #'graph:mem (grp-grph g*) ee)))
 
 
@@ -244,7 +271,7 @@
 
 
 (defun add-edges! (wer ee &key g)
-  "adds multiple edges (see above). returns a list of the results"
+  "adds multiple edges (see above). returns a list of the results."
   (declare #.*opt* (weir wer) (list ee))
   (loop for e of-type list in ee collect (ladd-edge! wer e :g g)))
 
@@ -259,6 +286,12 @@
   (declare #.*opt* (weir wer) (list ee))
   (with-grp (wer g* g) (with-struct (grp- grph) g*
                          (apply #'graph:del grph ee))))
+
+
+(defun del-edges! (wer edges &key g)
+  (declare #.*opt* (weir wer) (list edges))
+  (loop for p of-type list in edges
+        collect (ldel-edge! wer p :g g)))
 
 
 (defun swap-edge! (wer a b &key g from)
@@ -331,6 +364,4 @@
 
 (weird:abbrev ae! add-edge!)
 (weird:abbrev de! del-edge!)
-
-;;;; -----------------------------------------------
 

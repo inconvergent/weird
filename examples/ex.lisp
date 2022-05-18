@@ -1,4 +1,4 @@
-#!/usr/bin/sbcl --script
+#!/usr/local/bin/sbcl --script
 
 (load "~/quicklisp/setup.lisp")
 (ql:quickload :weird)
