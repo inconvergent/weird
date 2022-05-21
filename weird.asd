@@ -15,6 +15,7 @@
                (:file "utils" :depends-on ("config"))
                (:file "parallel/main" :depends-on ("utils"))
                (:file "dat" :depends-on ("utils"))
+               (:file "docs" :depends-on ("dat"))
                (:file "state" :depends-on ("utils"))
                (:file "hset" :depends-on ("utils"))
                (:file "math" :depends-on ("utils"))

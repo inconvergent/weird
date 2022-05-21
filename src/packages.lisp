@@ -1,3 +1,4 @@
+
 (defpackage #:weird
   (:use #:common-lisp)
   (:export
@@ -221,7 +222,7 @@
 
 (defpackage #:dat
   (:use #:common-lisp)
-  (:export #:do-lines-as-buffer #:export-data #:import-data)
+  (:export #:do-lines-as-buffer #:export-data #:import-data #:import-all-data)
   (:import-from #:weird #:*opt* #:ensure-filename))
 
 (defpackage #:gridfont

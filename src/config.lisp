@@ -5,11 +5,11 @@
 
 (in-package #:weird)
 
-(setf *random-state* (make-random-state t))
-(setf *print-pretty* t)
+(setf *random-state* (make-random-state t)
+      *print-pretty* t )
 
 (declaim (single-float *eps*) (boolean *dev*) (cons *opt*))
-(defparameter *eps* 1f-7)
+(defparameter *eps* veq::*eps*)
 
 
 ; from: http://cl-cookbook.sourceforge.net/os.html

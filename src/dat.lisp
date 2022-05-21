@@ -227,11 +227,16 @@ START, END:     bounding index designators of SEQUENCE.
   (with-open-file (fstream (ensure-filename fn postfix)
                            :direction :output :if-exists :supersede)
     (declare (stream fstream))
-    (print o fstream)))
-
+    (let ((*print-pretty* nil)) (print o fstream))))
 
 (defun import-data (fn &optional (postfix ".dat"))
   (with-open-file (fstream (ensure-filename fn postfix) :direction :input)
     (declare (stream fstream))
     (read fstream)))
+
+(defun import-all-data (fn &optional (postfix ".dat"))
+  (with-open-file (fstream (ensure-filename fn postfix) :direction :input)
+    (declare (stream fstream))
+    (loop for o = (read fstream nil)
+          while o collect o)))
 

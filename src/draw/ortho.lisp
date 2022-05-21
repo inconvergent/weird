@@ -158,7 +158,7 @@ view plane offset (xy) and scaling (s).
   (declare (ortho c) (keyword axis) (veq:ff val) (veq:fvec look))
   (unless (> (abs val) 0) (return-from around nil))
   (macrolet ((_ (&rest rest) `(veq:f_ (veq:lst ,@rest)))
-             (rot (a b) `(veq:f3rots (veq:f3$s ortho- c ,a ,b val) (veq:f3$ look))))
+             (rot (a b) `(veq:f3rots (veq:f3$s ortho- c ,a ,b val) 0f0 0f0 0f0)))
     (case axis
       (:pitch (veq:f3let ((pos (rot :cam :u))
                           (up (veq:f3norm (rot :up :u)))
@@ -169,8 +169,7 @@ view plane offset (xy) and scaling (s).
                         (vpn (veq:f3norm (veq:f3- pos (veq:f3$ look)))))
                 (update c :cam (_ pos) :vpn (_ vpn) :up (_ up))))
       (:roll (update c :up (veq:f3$point
-                             (veq:f3rots (veq:f3$s ortho-
-                                            c :up :vpn val :cam))))))))
+                             (veq:f3rot (veq:f3$s ortho- c :up :vpn val))))))))
 
 
 (veq:fvdef* project (proj (:va 3 pt))
