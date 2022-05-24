@@ -6,12 +6,15 @@
 
 (defun cycle->edge-set (cycle)
   (declare (list cycle))
+  "return edge set from cycle.
+ex: (1 2 3 4 5 1) -> ((1 2) (2 3) (3 4) (4 5) (1 5))"
   (loop for a in cycle and b in (cdr cycle)
         collect (-sort-edge (list a b))))
 
 
 (defun edge-set->graph (es)
   (declare (list es))
+  "create a graph from edges in edge set."
   (loop with grph = (make)
         for (a b) in es do (add grph a b)
         finally (return grph)))
@@ -19,6 +22,9 @@
 
 (defun path->edge-set (path &key closed)
   (declare (list path) (boolean closed))
+  "return edge set from cycle.
+ex: (1 2 3 4 5) -> ((1 2) (2 3) (3 4) (4 5))
+if closed is t, (1 5) will be included in the above output."
   (loop for a in path
         and b in (if closed (cons (first (last path)) path) (cdr path))
         collect (sort (list a b) #'<)))
@@ -38,11 +44,9 @@
 
 (defun edge-set->path (es)
   (declare (list es))
-  "
-  convert edge set: ((3 4) (4 5) (5 6) (1 2) (6 1) (2 3))
-  into a path: (4 5 6 1 2 3)
-  second result is a boolean for whether it is a cycle.
-  "
+  "convert edge set: ((3 4) (4 5) (5 6) (1 2) (6 1) (2 3))
+into a path: (4 5 6 1 2 3)
+second result is a boolean for whether it is a cycle."
 
   (when (< (length es) 2)
         (return-from edge-set->path (values (car es) nil)))
@@ -78,21 +82,26 @@
             (values res nil)))))))
 
 
-(defun edge-set-symdiff (esa esb)
-  (declare (list esa esb))
-  (remove-if (lambda (e) (and (member e esa :test #'equal)
-                              (member e esb :test #'equal)))
-             (union esa esb :test #'equal)))
+(defun edge-set-symdiff (a b)
+  (declare (list a b))
+  "symmetric difference of edge set a and b. not very efficient." ; i think?
+  (remove-if (lambda (e) (and (member e a :test #'equal)
+                              (member e b :test #'equal)))
+             (union a b :test #'equal)))
 
 
 (defun cycle-basis->edge-sets (basis)
   (declare (list basis))
+  "return an edge set for every cycle in a cycle basis.
+it does not check if the cycle basis is correct. cycles must be closed.
+that is, they must begin and end on the same vertex."
   (loop for c of-type list in basis collect (cycle->edge-set c)))
 
+; TODO: edge-set->path will only return a cycle
+; if the edge set is a cycle. warn?
 (defun edge-sets->cycle-basis (es)
   (declare (list es))
-  ; TODO: edge-set->path will only return a cycle
-  ; if the edge set is a cycle. warn?
+  "the opposite of cycle-basis->edge-sets."
   (loop for e of-type list in es
         collect (math:close-path (edge-set->path e))))
 

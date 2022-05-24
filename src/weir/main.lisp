@@ -40,7 +40,7 @@
 
 (defmacro with-grp ((wer g* g) &body body)
   (declare (symbol wer))
-  "select grp g from weir instance. g will be available in this context as g*"
+  "select grp g from weir instance. g will be available in this context as g*."
   (alexandria:with-gensyms (grps exists gname wname)
     `(let ((,wname ,wer)
            (,gname ,g))
@@ -62,7 +62,7 @@
 
 (defun make (&key (max-verts 5000) (adj-size 4) (set-size 10) name (dim 2))
   "
-  make weir instances
+  make weir instance of dim.
 
   - max-verts is the maximum number of verts in weir (across all grps).
   - set-size is the initial size of edge adjacency sets.
@@ -111,7 +111,6 @@
 
     - to get verts in a grp: (get-grp-verts wer :g g).
     - to get indices of verts (in a grp): (get-vert-inds wer :g g)
-    - ...
   "
   (with-struct (weir- grps adj-size set-size) wer
     (multiple-value-bind (v exists) (gethash name* grps)
@@ -146,6 +145,7 @@
 
 (defun del-grp! (wer &key g)
   (declare #.*opt* (symbol g))
+  "delete grp g and all its content."
   (remhash g (weir-grps wer)))
 
 
@@ -163,12 +163,14 @@
 
 (defun grp-exists (wer &key g)
   (declare #.*opt* (weir wer))
+  "t if grp exists."
   (mvb (g exists) (get-grp wer :g g)
     (declare (ignore g))
     exists))
 
 (defun get-num-verts (wer)
   (declare #.*opt* (weir wer))
+  "get current number of verts"
   (weir-num-verts wer))
 
 (defun is-vert-in-grp (wer v &key g)
@@ -182,26 +184,33 @@
 
 (defun get-grp-num-verts (wer &key g)
   (declare #.*opt* (weir wer))
+  "get nuber of verts in grp g."
   (with-grp (wer g* g)
     (graph:get-num-verts (grp-grph g*))))
 
 (defun reset-verts! (wer &optional (n 0) &aux (old (weir-num-verts wer)))
   (setf (weir-num-verts wer) n)
-  (values n old))
+  "reset vert counter to n. returns old vert number.
+
+note: this may cause issues if there are remaining edges referencing
+non-existing vertices. these have to be deleted separately."
+  old)
 
 
 (defun get-num-edges (wer &key g)
   (declare #.*opt* (weir wer))
+  "returns number of edges in grp g."
   (with-grp (wer g* g) (graph:get-num-edges (grp-grph g*))))
 
 (defun get-num-grps (wer)
   (declare #.*opt* (weir wer))
-  "number of grps."
+  "returns number of grps."
   (hash-table-count (weir-grps wer)))
 
 
 (defun get-edges (wer &key g)
   (declare #.*opt* (weir wer))
+  "returns edges in grp g."
   (with-grp (wer g* g) (graph:get-edges (grp-grph g*))))
 
 (defun get-connected-verts (wer &key g)
@@ -265,6 +274,7 @@
 
 (defun ladd-edge! (wer ee &key g)
   (declare #.*opt* (weir wer) (list ee))
+  "add edge from list with two indices."
   (destructuring-bind (a b) ee
     (declare (pos-int a b))
     (add-edge! wer a b :g g)))
@@ -278,39 +288,43 @@
 
 (defun del-edge! (wer a b &key g)
   (declare #.*opt* (weir wer) (pos-int a b))
+  "delete edge a,b. returns t if edge existed."
   (with-grp (wer g* g) (with-struct (grp- grph) g*
                          (graph:del grph a b))))
 
 
 (defun ldel-edge! (wer ee &key g)
   (declare #.*opt* (weir wer) (list ee))
+  "delete edge ee. returns t if edge existed."
   (with-grp (wer g* g) (with-struct (grp- grph) g*
                          (apply #'graph:del grph ee))))
 
 
 (defun del-edges! (wer edges &key g)
   (declare #.*opt* (weir wer) (list edges))
+  "delete list of edges. returns list with boolean which is true if edge existed."
   (loop for p of-type list in edges
         collect (ldel-edge! wer p :g g)))
 
 
 (defun swap-edge! (wer a b &key g from)
   (declare #.*opt* (weir wer) (pos-int a b))
-  "move edge from grp from to g"
+  "move edge from grp from to grp g."
   (when (del-edge! wer a b :g from)
         (add-edge! wer a b :g g)))
 
 (defun lswap-edge! (wer ee &key g from)
   (declare #.*opt* (weir wer) (list ee))
-  "move edge from grp from to g"
+  "move edge from grp from to grp g."
   (when (eq g from) (return-from lswap-edge! nil))
   (when (ldel-edge! wer ee :g from)
         (ladd-edge! wer ee :g g)))
 
 
+; TODO: what does this return? is it ordered according to input?
 (defun del-path! (wer path &key g closed)
   (declare #.*opt* (weir wer) (list path) (boolean closed))
-  "del all edges in path"
+  "del all edges in path."
   (when closed (setf path (cons (last* path) path)))
   (with-grp (wer g* g)
     (with-struct (grp- grph) g*
@@ -327,9 +341,10 @@
 
 (defun lsplit-edge-ind! (wer ee &key via g force)
   (declare #.*opt* (weir wer) (list ee) (pos-int via) (boolean force))
-  (destructuring-bind (a b) ee
-    (declare (pos-int a b))
-    (split-edge-ind! wer a b :via via :g g :force force)))
+  "insert vertex at coordinate via, between edge ee=(u w)"
+  (destructuring-bind (u w) ee
+    (declare (pos-int u w))
+    (split-edge-ind! wer u w :via via :g g :force force)))
 
 
 (defun collapse-verts! (wer u v &key g)

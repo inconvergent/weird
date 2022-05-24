@@ -1,40 +1,41 @@
 #### WEIR:2$VERTS
 
 ```
-:missing:todo:
+get coordinates of vert i, j, ... as (values i1 i2 .. j1 j2 ..).
 
  ; WEIR:2$VERTS
  ;   [symbol]
  ; 
  ; 2$VERTS names a macro:
  ;   Lambda-list: (WER &REST REST)
+ ;   Documentation:
+ ;     get coordinates of vert i, j, ... as (values i1 i2 .. j1 j2 ..).
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:2ADD-PATH!
 
 ```
-:missing:todo:
+add edge path for these indices.
 
  ; WEIR:2ADD-PATH!
  ;   [symbol]
  ; 
  ; 2ADD-PATH! names a compiled function:
- ;   Lambda-list: (WER POINTS &KEY G CLOSED)
+ ;   Lambda-list: (WER PATH &KEY G CLOSED)
  ;   Derived type: (FUNCTION
  ;                  (WEIR::WEIR (SIMPLE-ARRAY SINGLE-FLOAT) &KEY (:G T)
  ;                   (:CLOSED T))
  ;                  *)
+ ;   Documentation:
+ ;     add edge path for these indices.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:2ADD-VERT!
 
 ```
-fx: %2ADD-VERT!
-macro wrapper: 2ADD-VERT!
-
-defined via veq:fvdef*
+adds a new vertex to weir. returns the new vert ind.
 
  ; WEIR:2ADD-VERT!
  ;   [symbol]
@@ -42,17 +43,15 @@ defined via veq:fvdef*
  ; 2ADD-VERT! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %2ADD-VERT!
- ;     macro wrapper: 2ADD-VERT!
- ;     
- ;     defined via veq:fvdef*
+ ;     docstring for %2ADD-VERT!
+ ;     adds a new vertex to weir. returns the new vert ind.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:2ADD-VERTS!
 
 ```
-adds new vertices to weir. returns the ids of the new vertices
+adds new vertices to weir. returns the ids of the new vertices.
 
  ; WEIR:2ADD-VERTS!
  ;   [symbol]
@@ -62,17 +61,14 @@ adds new vertices to weir. returns the ids of the new vertices
  ;   Derived type: (FUNCTION (WEIR::WEIR (SIMPLE-ARRAY SINGLE-FLOAT))
  ;                  (VALUES T (INTEGER 2 2) (UNSIGNED-BYTE 31) &OPTIONAL))
  ;   Documentation:
- ;     adds new vertices to weir. returns the ids of the new vertices
+ ;     adds new vertices to weir. returns the ids of the new vertices.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:2APPEND-EDGE!
 
 ```
-fx: %2APPEND-EDGE!
-macro wrapper: 2APPEND-EDGE!
-
-defined via veq:fvdef*
+add edge between vert v and new vert at xy.
 
  ; WEIR:2APPEND-EDGE!
  ;   [symbol]
@@ -80,17 +76,15 @@ defined via veq:fvdef*
  ; 2APPEND-EDGE! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %2APPEND-EDGE!
- ;     macro wrapper: 2APPEND-EDGE!
- ;     
- ;     defined via veq:fvdef*
+ ;     docstring for %2APPEND-EDGE!
+ ;     add edge between vert v and new vert at xy.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:2AV!
 
 ```
-:missing:todo:
+short for 2add-vert!.
 
  ; WEIR:2AV!
  ;   [symbol]
@@ -103,7 +97,7 @@ defined via veq:fvdef*
 #### WEIR:2AVS!
 
 ```
-:missing:todo:
+short for 2add-verts!.
 
  ; WEIR:2AVS!
  ;   [symbol]
@@ -116,10 +110,13 @@ defined via veq:fvdef*
 #### WEIR:2CUT-TO-AREA!
 
 ```
-fx: %2CUT-TO-AREA!
-macro wrapper: 2CUT-TO-AREA!
+docstring for %2CUT-TO-AREA!
 
-defined veq:vdef*
+  removes all edges (in g) outside envelope (ox oy), (w h).
+  all edges intersecting the envelope will be deleted, a new vert will be
+  inserted on the intersection. connected to the inside vert.
+  edges inside the envelope will be left as they are.
+  
 
  ; WEIR:2CUT-TO-AREA!
  ;   [symbol]
@@ -127,17 +124,20 @@ defined veq:vdef*
  ; 2CUT-TO-AREA! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %2CUT-TO-AREA!
- ;     macro wrapper: 2CUT-TO-AREA!
+ ;     docstring for %2CUT-TO-AREA!
  ;     
- ;     defined veq:vdef*
+ ;       removes all edges (in g) outside envelope (ox oy), (w h).
+ ;       all edges intersecting the envelope will be deleted, a new vert will be
+ ;       inserted on the intersection. connected to the inside vert.
+ ;       edges inside the envelope will be left as they are.
+ ; 
  ;   Source file: /data/x/weird/src/weir/extra.lisp
 ```
 
 #### WEIR:2EDGE-LENGTH
 
 ```
-returns the length of edge e=(u v). regardless of whether the edge exists
+returns the length of edge e=(u v). regardless of whether the edge exists.
 
  ; WEIR:2EDGE-LENGTH
  ;   [symbol]
@@ -148,14 +148,14 @@ returns the length of edge e=(u v). regardless of whether the edge exists
  ;                  (WEIR::WEIR (UNSIGNED-BYTE 31) (UNSIGNED-BYTE 31))
  ;                  (VALUES (SINGLE-FLOAT 0.0) &OPTIONAL))
  ;   Documentation:
- ;     returns the length of edge e=(u v). regardless of whether the edge exists
+ ;     returns the length of edge e=(u v). regardless of whether the edge exists.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:2GET-ALL-VERTS
 
 ```
-returns the coordinates of all vertices
+returns the coordinates of all vertices.
 
  ; WEIR:2GET-ALL-VERTS
  ;   [symbol]
@@ -166,7 +166,7 @@ returns the coordinates of all vertices
  ;                  (VALUES (SIMPLE-ARRAY SINGLE-FLOAT (*)) (INTEGER 2 2)
  ;                          (UNSIGNED-BYTE 31) &OPTIONAL))
  ;   Documentation:
- ;     returns the coordinates of all vertices
+ ;     returns the coordinates of all vertices.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -174,7 +174,7 @@ returns the coordinates of all vertices
 
 ```
 returns all vertices in grp g.
-     note: verts only belong to a grp if they are part of an edge in grp.
+note: verts only belong to a grp if they are part of an edge in grp.
 
  ; WEIR:2GET-GRP-VERTS
  ;   [symbol]
@@ -184,7 +184,7 @@ returns all vertices in grp g.
  ;   Derived type: (FUNCTION (WEIR::WEIR &KEY (:G T) (:ORDER BOOLEAN)) *)
  ;   Documentation:
  ;     returns all vertices in grp g.
- ;          note: verts only belong to a grp if they are part of an edge in grp.
+ ;     note: verts only belong to a grp if they are part of an edge in grp.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -206,7 +206,7 @@ returns all vertices in grp g.
 #### WEIR:2GET-VERT
 
 ```
-get the coordinate of vert v
+get the coordinate of vert v.
 
  ; WEIR:2GET-VERT
  ;   [symbol]
@@ -216,14 +216,14 @@ get the coordinate of vert v
  ;   Derived type: (FUNCTION (WEIR::WEIR (UNSIGNED-BYTE 31))
  ;                  (VALUES SINGLE-FLOAT SINGLE-FLOAT &OPTIONAL))
  ;   Documentation:
- ;     get the coordinate of vert v
+ ;     get the coordinate of vert v.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:2GET-VERTS
 
 ```
-get the coordinates (vec) of verts in inds
+get the coordinates (vec) of verts in inds.
 
  ; WEIR:2GET-VERTS
  ;   [symbol]
@@ -232,28 +232,30 @@ get the coordinates (vec) of verts in inds
  ;   Lambda-list: (WER INDS)
  ;   Derived type: (FUNCTION (WEIR::WEIR LIST) *)
  ;   Documentation:
- ;     get the coordinates (vec) of verts in inds
+ ;     get the coordinates (vec) of verts in inds.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:2GRP-TRANSFORM!
 
 ```
-:missing:todo:
+apply function, tfx, to coordinates of verts in grp, g.
 
  ; WEIR:2GRP-TRANSFORM!
  ;   [symbol]
  ; 
  ; 2GRP-TRANSFORM! names a compiled function:
- ;   Lambda-list: (WER TRANS &KEY G)
+ ;   Lambda-list: (WER TFX &KEY G)
  ;   Derived type: (FUNCTION (WEIR::WEIR FUNCTION &KEY (:G T)) *)
+ ;   Documentation:
+ ;     apply function, tfx, to coordinates of verts in grp, g.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:2GV
 
 ```
-:missing:todo:
+short for 2get-vert.
 
  ; WEIR:2GV
  ;   [symbol]
@@ -266,7 +268,7 @@ get the coordinates (vec) of verts in inds
 #### WEIR:2GVS
 
 ```
-:missing:todo:
+short for 2get-vert.
 
  ; WEIR:2GVS
  ;   [symbol]
@@ -279,7 +281,16 @@ get the coordinates (vec) of verts in inds
 #### WEIR:2INTERSECT-ALL!
 
 ```
-:missing:todo:
+creates intersections for all edges in g such that g becomes a planar graph.
+:prop can contain a symbol which will be used as a
+vert prop which contains one of the initial edges
+edge prop which contains one of the intial edges.
+a useful method for making plotter drawings is to do:
+
+(2simplify-segments! wer ...) ; optional
+(2intersect-all! wer ...)
+(loop for path in (2walk-graph wer ...)
+      do (wsvg:path wsvg (2gvs wer path)))
 
  ; WEIR:2INTERSECT-ALL!
  ;   [symbol]
@@ -288,13 +299,24 @@ get the coordinates (vec) of verts in inds
  ;   Lambda-list: (WER &KEY G PROP)
  ;   Derived type: (FUNCTION (WEIR::WEIR &KEY (:G T) (:PROP T))
  ;                  (VALUES NULL &OPTIONAL))
+ ;   Documentation:
+ ;     creates intersections for all edges in g such that g becomes a planar graph.
+ ;     :prop can contain a symbol which will be used as a
+ ;     vert prop which contains one of the initial edges
+ ;     edge prop which contains one of the intial edges.
+ ;     a useful method for making plotter drawings is to do:
+ ;     
+ ;     (2simplify-segments! wer ...) ; optional
+ ;     (2intersect-all! wer ...)
+ ;     (loop for path in (2walk-graph wer ...)
+ ;           do (wsvg:path wsvg (2gvs wer path)))
  ;   Source file: /data/x/weird/src/weir/paths.lisp
 ```
 
 #### WEIR:2LEDGE-LENGTH
 
 ```
-returns the length of edge e=(u v). regardless of whether the edge exists
+returns the length of edge e=(u v). regardless of whether the edge exists.
 
  ; WEIR:2LEDGE-LENGTH
  ;   [symbol]
@@ -304,17 +326,14 @@ returns the length of edge e=(u v). regardless of whether the edge exists
  ;   Derived type: (FUNCTION (WEIR::WEIR LIST)
  ;                  (VALUES (SINGLE-FLOAT 0.0) &OPTIONAL))
  ;   Documentation:
- ;     returns the length of edge e=(u v). regardless of whether the edge exists
+ ;     returns the length of edge e=(u v). regardless of whether the edge exists.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:2LSPLIT-EDGE!
 
 ```
-fx: %2LSPLIT-EDGE!
-macro wrapper: 2LSPLIT-EDGE!
-
-defined via veq:fvdef*
+introduce edge between ll=(u v) at coordinate x.
 
  ; WEIR:2LSPLIT-EDGE!
  ;   [symbol]
@@ -322,20 +341,15 @@ defined via veq:fvdef*
  ; 2LSPLIT-EDGE! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %2LSPLIT-EDGE!
- ;     macro wrapper: 2LSPLIT-EDGE!
- ;     
- ;     defined via veq:fvdef*
+ ;     docstring for %2LSPLIT-EDGE!
+ ;     introduce edge between ll=(u v) at coordinate x.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:2MOVE-VERT!
 
 ```
-fx: %2MOVE-VERT!
-macro wrapper: 2MOVE-VERT!
-
-defined via veq:fvdef*
+move vertex by x. use :rel nil to move to absolute position.
 
  ; WEIR:2MOVE-VERT!
  ;   [symbol]
@@ -343,10 +357,8 @@ defined via veq:fvdef*
  ; 2MOVE-VERT! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %2MOVE-VERT!
- ;     macro wrapper: 2MOVE-VERT!
- ;     
- ;     defined via veq:fvdef*
+ ;     docstring for %2MOVE-VERT!
+ ;     move vertex by x. use :rel nil to move to absolute position.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -355,7 +367,6 @@ defined via veq:fvdef*
 ```
 fx: %2NN
 macro wrapper: 2NN
-
 defined via veq:fvdef*
 
  ; WEIR:2NN
@@ -366,7 +377,6 @@ defined via veq:fvdef*
  ;   Documentation:
  ;     fx: %2NN
  ;     macro wrapper: 2NN
- ;     
  ;     defined via veq:fvdef*
  ;   Source file: /data/x/weird/src/weir/kdtree.lisp
 ```
@@ -374,7 +384,7 @@ defined via veq:fvdef*
 #### WEIR:2PRUNE-EDGES-BY-LEN!
 
 ```
-remove edges longer than lim, use fx #'< to remove edges shorter than lim
+remove edges longer than lim, use fx #'< to remove edges shorter than lim.
 
  ; WEIR:2PRUNE-EDGES-BY-LEN!
  ;   [symbol]
@@ -384,7 +394,7 @@ remove edges longer than lim, use fx #'< to remove edges shorter than lim
  ;   Derived type: (FUNCTION (WEIR::WEIR SINGLE-FLOAT &OPTIONAL FUNCTION)
  ;                  (VALUES NULL &OPTIONAL))
  ;   Documentation:
- ;     remove edges longer than lim, use fx #'< to remove edges shorter than lim
+ ;     remove edges longer than lim, use fx #'< to remove edges shorter than lim.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -393,7 +403,6 @@ remove edges longer than lim, use fx #'< to remove edges shorter than lim
 ```
 fx: %2RAD
 macro wrapper: 2RAD
-
 defined via veq:fvdef*
 
  ; WEIR:2RAD
@@ -404,7 +413,6 @@ defined via veq:fvdef*
  ;   Documentation:
  ;     fx: %2RAD
  ;     macro wrapper: 2RAD
- ;     
  ;     defined via veq:fvdef*
  ;   Source file: /data/x/weird/src/weir/kdtree.lisp
 ```
@@ -437,7 +445,8 @@ defined via veq:fvdef*
 #### WEIR:2SIMPLIFY-SEGMENTS!
 
 ```
-:missing:todo:
+calls (simplify:path ...) on all segments from (weird:get-segments ... :g g).
+as such the overall structure of the graph will remain the same.
 
  ; WEIR:2SIMPLIFY-SEGMENTS!
  ;   [symbol]
@@ -446,16 +455,16 @@ defined via veq:fvdef*
  ;   Lambda-list: (WER &KEY G (LIM 0.1))
  ;   Derived type: (FUNCTION (WEIR::WEIR &KEY (:G T) (:LIM SINGLE-FLOAT))
  ;                  (VALUES NULL &OPTIONAL))
+ ;   Documentation:
+ ;     calls (simplify:path ...) on all segments from (weird:get-segments ... :g g).
+ ;     as such the overall structure of the graph will remain the same.
  ;   Source file: /data/x/weird/src/weir/paths.lisp
 ```
 
 #### WEIR:2SPLIT-EDGE!
 
 ```
-fx: %2SPLIT-EDGE!
-macro wrapper: 2SPLIT-EDGE!
-
-defined via veq:fvdef*
+split edge (u v) at x. returns new vert ind (and new edges).
 
  ; WEIR:2SPLIT-EDGE!
  ;   [symbol]
@@ -463,17 +472,15 @@ defined via veq:fvdef*
  ; 2SPLIT-EDGE! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %2SPLIT-EDGE!
- ;     macro wrapper: 2SPLIT-EDGE!
- ;     
- ;     defined via veq:fvdef*
+ ;     docstring for %2SPLIT-EDGE!
+ ;     split edge (u v) at x. returns new vert ind (and new edges).
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:2TRANSFORM!
 
 ```
-:missing:todo:
+apply function, tfx, to coordinates of verts in inds.
 
  ; WEIR:2TRANSFORM!
  ;   [symbol]
@@ -488,10 +495,7 @@ defined via veq:fvdef*
 #### WEIR:2VADD-EDGE!
 
 ```
-fx: %2VADD-EDGE!
-macro wrapper: 2VADD-EDGE!
-
-defined via veq:fvdef*
+add edge from two coordinates.
 
  ; WEIR:2VADD-EDGE!
  ;   [symbol]
@@ -499,37 +503,47 @@ defined via veq:fvdef*
  ; 2VADD-EDGE! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %2VADD-EDGE!
- ;     macro wrapper: 2VADD-EDGE!
- ;     
- ;     defined via veq:fvdef*
+ ;     docstring for %2VADD-EDGE!
+ ;     add edge from two coordinates.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:2WALK-GRAPH
 
 ```
-:missing:todo:
+returns all segments of the graph in g.
+greedily attempts to connect segments such that the angle is minimal. useful
+for drawing the graph as a plotter drawing. call 2simplify-segments! first if
+you want to reduce the level of detail.
+cycles will begin and end with the same vert index.
 
  ; WEIR:2WALK-GRAPH
  ;   [symbol]
  ; 
  ; 2WALK-GRAPH names a compiled function:
  ;   Lambda-list: (WER &KEY G)
- ;   Derived type: (FUNCTION (T &KEY (:G T)) *)
+ ;   Derived type: (FUNCTION (WEIR::WEIR &KEY (:G T)) *)
+ ;   Documentation:
+ ;     returns all segments of the graph in g.
+ ;     greedily attempts to connect segments such that the angle is minimal. useful
+ ;     for drawing the graph as a plotter drawing. call 2simplify-segments! first if
+ ;     you want to reduce the level of detail.
+ ;     cycles will begin and end with the same vert index.
  ;   Source file: /data/x/weird/src/weir/paths.lisp
 ```
 
 #### WEIR:3$VERTS
 
 ```
-:missing:todo:
+get coordinates of vert i, j, ... as (values i1 i2 .. j1 j2 ..).
 
  ; WEIR:3$VERTS
  ;   [symbol]
  ; 
  ; 3$VERTS names a macro:
  ;   Lambda-list: (WER &REST REST)
+ ;   Documentation:
+ ;     get coordinates of vert i, j, ... as (values i1 i2 .. j1 j2 ..).
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -551,7 +565,7 @@ defined via veq:fvdef*
 #### WEIR:3ADD-BOX!
 
 ```
-add a box with size, s = (sx sy sz) at xy = (x y z)
+add a box with size, s = (sx sy sz) at xy = (x y z).
 
  ; WEIR:3ADD-BOX!
  ;   [symbol]
@@ -568,14 +582,14 @@ add a box with size, s = (sx sy sz) at xy = (x y z)
  ;   Derived type: (FUNCTION (WEIR::WEIR &KEY (:S LIST) (:XY LIST) (:G T))
  ;                  (VALUES LIST &OPTIONAL))
  ;   Documentation:
- ;     add a box with size, s = (sx sy sz) at xy = (x y z)
+ ;     add a box with size, s = (sx sy sz) at xy = (x y z).
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:3ADD-CUBE!
 
 ```
-:missing:todo:
+add edges for a cube of size, s, at xy in grp, g.
 
  ; WEIR:3ADD-CUBE!
  ;   [symbol]
@@ -589,33 +603,34 @@ add a box with size, s = (sx sy sz) at xy = (x y z)
  ;   Derived type: (FUNCTION
  ;                  (WEIR::WEIR &KEY (:S SINGLE-FLOAT) (:XY LIST) (:G T))
  ;                  *)
+ ;   Documentation:
+ ;     add edges for a cube of size, s, at xy in grp, g.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:3ADD-PATH!
 
 ```
-:missing:todo:
+add edge path for these indices.
 
  ; WEIR:3ADD-PATH!
  ;   [symbol]
  ; 
  ; 3ADD-PATH! names a compiled function:
- ;   Lambda-list: (WER POINTS &KEY G CLOSED)
+ ;   Lambda-list: (WER PATH &KEY G CLOSED)
  ;   Derived type: (FUNCTION
  ;                  (WEIR::WEIR (SIMPLE-ARRAY SINGLE-FLOAT) &KEY (:G T)
  ;                   (:CLOSED T))
  ;                  *)
+ ;   Documentation:
+ ;     add edge path for these indices.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:3ADD-VERT!
 
 ```
-fx: %3ADD-VERT!
-macro wrapper: 3ADD-VERT!
-
-defined via veq:fvdef*
+adds a new vertex to weir. returns the new vert ind.
 
  ; WEIR:3ADD-VERT!
  ;   [symbol]
@@ -623,17 +638,15 @@ defined via veq:fvdef*
  ; 3ADD-VERT! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %3ADD-VERT!
- ;     macro wrapper: 3ADD-VERT!
- ;     
- ;     defined via veq:fvdef*
+ ;     docstring for %3ADD-VERT!
+ ;     adds a new vertex to weir. returns the new vert ind.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:3ADD-VERTS!
 
 ```
-adds new vertices to weir. returns the ids of the new vertices
+adds new vertices to weir. returns the ids of the new vertices.
 
  ; WEIR:3ADD-VERTS!
  ;   [symbol]
@@ -643,17 +656,14 @@ adds new vertices to weir. returns the ids of the new vertices
  ;   Derived type: (FUNCTION (WEIR::WEIR (SIMPLE-ARRAY SINGLE-FLOAT))
  ;                  (VALUES T (INTEGER 3 3) (UNSIGNED-BYTE 31) &OPTIONAL))
  ;   Documentation:
- ;     adds new vertices to weir. returns the ids of the new vertices
+ ;     adds new vertices to weir. returns the ids of the new vertices.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:3APPEND-EDGE!
 
 ```
-fx: %3APPEND-EDGE!
-macro wrapper: 3APPEND-EDGE!
-
-defined via veq:fvdef*
+add edge between vert v and new vert at xy.
 
  ; WEIR:3APPEND-EDGE!
  ;   [symbol]
@@ -661,17 +671,15 @@ defined via veq:fvdef*
  ; 3APPEND-EDGE! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %3APPEND-EDGE!
- ;     macro wrapper: 3APPEND-EDGE!
- ;     
- ;     defined via veq:fvdef*
+ ;     docstring for %3APPEND-EDGE!
+ ;     add edge between vert v and new vert at xy.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:3AV!
 
 ```
-:missing:todo:
+short for 3add-vert!.
 
  ; WEIR:3AV!
  ;   [symbol]
@@ -684,7 +692,7 @@ defined via veq:fvdef*
 #### WEIR:3AVS!
 
 ```
-:missing:todo:
+short for 3add-verts!.
 
  ; WEIR:3AVS!
  ;   [symbol]
@@ -697,7 +705,7 @@ defined via veq:fvdef*
 #### WEIR:3EDGE-LENGTH
 
 ```
-returns the length of edge e=(u v). regardless of whether the edge exists
+returns the length of edge e=(u v). regardless of whether the edge exists.
 
  ; WEIR:3EDGE-LENGTH
  ;   [symbol]
@@ -708,14 +716,14 @@ returns the length of edge e=(u v). regardless of whether the edge exists
  ;                  (WEIR::WEIR (UNSIGNED-BYTE 31) (UNSIGNED-BYTE 31))
  ;                  (VALUES (SINGLE-FLOAT 0.0) &OPTIONAL))
  ;   Documentation:
- ;     returns the length of edge e=(u v). regardless of whether the edge exists
+ ;     returns the length of edge e=(u v). regardless of whether the edge exists.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:3GET-ALL-VERTS
 
 ```
-returns the coordinates of all vertices
+returns the coordinates of all vertices.
 
  ; WEIR:3GET-ALL-VERTS
  ;   [symbol]
@@ -726,7 +734,7 @@ returns the coordinates of all vertices
  ;                  (VALUES (SIMPLE-ARRAY SINGLE-FLOAT (*)) (INTEGER 3 3)
  ;                          (UNSIGNED-BYTE 31) &OPTIONAL))
  ;   Documentation:
- ;     returns the coordinates of all vertices
+ ;     returns the coordinates of all vertices.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -734,7 +742,7 @@ returns the coordinates of all vertices
 
 ```
 returns all vertices in grp g.
-     note: verts only belong to a grp if they are part of an edge in grp.
+note: verts only belong to a grp if they are part of an edge in grp.
 
  ; WEIR:3GET-GRP-VERTS
  ;   [symbol]
@@ -744,14 +752,14 @@ returns all vertices in grp g.
  ;   Derived type: (FUNCTION (WEIR::WEIR &KEY (:G T) (:ORDER BOOLEAN)) *)
  ;   Documentation:
  ;     returns all vertices in grp g.
- ;          note: verts only belong to a grp if they are part of an edge in grp.
+ ;     note: verts only belong to a grp if they are part of an edge in grp.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:3GET-VERT
 
 ```
-get the coordinate of vert v
+get the coordinate of vert v.
 
  ; WEIR:3GET-VERT
  ;   [symbol]
@@ -762,14 +770,14 @@ get the coordinate of vert v
  ;                  (VALUES SINGLE-FLOAT SINGLE-FLOAT SINGLE-FLOAT
  ;                          &OPTIONAL))
  ;   Documentation:
- ;     get the coordinate of vert v
+ ;     get the coordinate of vert v.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:3GET-VERTS
 
 ```
-get the coordinates (vec) of verts in inds
+get the coordinates (vec) of verts in inds.
 
  ; WEIR:3GET-VERTS
  ;   [symbol]
@@ -778,28 +786,30 @@ get the coordinates (vec) of verts in inds
  ;   Lambda-list: (WER INDS)
  ;   Derived type: (FUNCTION (WEIR::WEIR LIST) *)
  ;   Documentation:
- ;     get the coordinates (vec) of verts in inds
+ ;     get the coordinates (vec) of verts in inds.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:3GRP-TRANSFORM!
 
 ```
-:missing:todo:
+apply function, tfx, to coordinates of verts in grp, g.
 
  ; WEIR:3GRP-TRANSFORM!
  ;   [symbol]
  ; 
  ; 3GRP-TRANSFORM! names a compiled function:
- ;   Lambda-list: (WER TRANS &KEY G)
+ ;   Lambda-list: (WER TFX &KEY G)
  ;   Derived type: (FUNCTION (WEIR::WEIR FUNCTION &KEY (:G T)) *)
+ ;   Documentation:
+ ;     apply function, tfx, to coordinates of verts in grp, g.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:3GV
 
 ```
-:missing:todo:
+short for 3get-vert.
 
  ; WEIR:3GV
  ;   [symbol]
@@ -812,7 +822,7 @@ get the coordinates (vec) of verts in inds
 #### WEIR:3GVS
 
 ```
-:missing:todo:
+short for 3get-vert.
 
  ; WEIR:3GVS
  ;   [symbol]
@@ -825,7 +835,7 @@ get the coordinates (vec) of verts in inds
 #### WEIR:3LEDGE-LENGTH
 
 ```
-returns the length of edge e=(u v). regardless of whether the edge exists
+returns the length of edge e=(u v). regardless of whether the edge exists.
 
  ; WEIR:3LEDGE-LENGTH
  ;   [symbol]
@@ -835,17 +845,14 @@ returns the length of edge e=(u v). regardless of whether the edge exists
  ;   Derived type: (FUNCTION (WEIR::WEIR LIST)
  ;                  (VALUES (SINGLE-FLOAT 0.0) &OPTIONAL))
  ;   Documentation:
- ;     returns the length of edge e=(u v). regardless of whether the edge exists
+ ;     returns the length of edge e=(u v). regardless of whether the edge exists.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:3LSPLIT-EDGE!
 
 ```
-fx: %3LSPLIT-EDGE!
-macro wrapper: 3LSPLIT-EDGE!
-
-defined via veq:fvdef*
+introduce edge between ll=(u v) at coordinate x.
 
  ; WEIR:3LSPLIT-EDGE!
  ;   [symbol]
@@ -853,20 +860,15 @@ defined via veq:fvdef*
  ; 3LSPLIT-EDGE! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %3LSPLIT-EDGE!
- ;     macro wrapper: 3LSPLIT-EDGE!
- ;     
- ;     defined via veq:fvdef*
+ ;     docstring for %3LSPLIT-EDGE!
+ ;     introduce edge between ll=(u v) at coordinate x.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:3MOVE-VERT!
 
 ```
-fx: %3MOVE-VERT!
-macro wrapper: 3MOVE-VERT!
-
-defined via veq:fvdef*
+move vertex by x. use :rel nil to move to absolute position.
 
  ; WEIR:3MOVE-VERT!
  ;   [symbol]
@@ -874,17 +876,15 @@ defined via veq:fvdef*
  ; 3MOVE-VERT! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %3MOVE-VERT!
- ;     macro wrapper: 3MOVE-VERT!
- ;     
- ;     defined via veq:fvdef*
+ ;     docstring for %3MOVE-VERT!
+ ;     move vertex by x. use :rel nil to move to absolute position.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:3PRUNE-EDGES-BY-LEN!
 
 ```
-remove edges longer than lim, use fx #'< to remove edges shorter than lim
+remove edges longer than lim, use fx #'< to remove edges shorter than lim.
 
  ; WEIR:3PRUNE-EDGES-BY-LEN!
  ;   [symbol]
@@ -894,17 +894,14 @@ remove edges longer than lim, use fx #'< to remove edges shorter than lim
  ;   Derived type: (FUNCTION (WEIR::WEIR SINGLE-FLOAT &OPTIONAL FUNCTION)
  ;                  (VALUES NULL &OPTIONAL))
  ;   Documentation:
- ;     remove edges longer than lim, use fx #'< to remove edges shorter than lim
+ ;     remove edges longer than lim, use fx #'< to remove edges shorter than lim.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:3SPLIT-EDGE!
 
 ```
-fx: %3SPLIT-EDGE!
-macro wrapper: 3SPLIT-EDGE!
-
-defined via veq:fvdef*
+split edge (u v) at x. returns new vert ind (and new edges).
 
  ; WEIR:3SPLIT-EDGE!
  ;   [symbol]
@@ -912,17 +909,15 @@ defined via veq:fvdef*
  ; 3SPLIT-EDGE! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %3SPLIT-EDGE!
- ;     macro wrapper: 3SPLIT-EDGE!
- ;     
- ;     defined via veq:fvdef*
+ ;     docstring for %3SPLIT-EDGE!
+ ;     split edge (u v) at x. returns new vert ind (and new edges).
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
 #### WEIR:3TRANSFORM!
 
 ```
-:missing:todo:
+apply function, tfx, to coordinates of verts in inds.
 
  ; WEIR:3TRANSFORM!
  ;   [symbol]
@@ -946,10 +941,7 @@ defined via veq:fvdef*
 #### WEIR:3VADD-EDGE!
 
 ```
-fx: %3VADD-EDGE!
-macro wrapper: 3VADD-EDGE!
-
-defined via veq:fvdef*
+add edge from two coordinates.
 
  ; WEIR:3VADD-EDGE!
  ;   [symbol]
@@ -957,10 +949,8 @@ defined via veq:fvdef*
  ; 3VADD-EDGE! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %3VADD-EDGE!
- ;     macro wrapper: 3VADD-EDGE!
- ;     
- ;     defined via veq:fvdef*
+ ;     docstring for %3VADD-EDGE!
+ ;     add edge from two coordinates.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -1029,7 +1019,6 @@ adds multiple edges (see above). returns a list of the results.
 
     - to get verts in a grp: (get-grp-verts wer :g g).
     - to get indices of verts (in a grp): (get-vert-inds wer :g g)
-    - ...
   
 
  ; WEIR:ADD-GRP!
@@ -1060,7 +1049,6 @@ adds multiple edges (see above). returns a list of the results.
  ;     
  ;         - to get verts in a grp: (get-grp-verts wer :g g).
  ;         - to get indices of verts (in a grp): (get-vert-inds wer :g g)
- ;         - ...
  ; 
  ;   Source file: /data/x/weird/src/weir/main.lisp
 ```
@@ -1168,7 +1156,7 @@ copy all edges in all grps into main grp
 #### WEIR:CENTER!
 
 ```
-center the verts of wer on xy. returns the previous center
+center the verts of wer on xy. returns the previous center.
 
  ; WEIR:CENTER!
  ;   [symbol]
@@ -1180,7 +1168,7 @@ center the verts of wer on xy. returns the previous center
  ;                  (VALUES SINGLE-FLOAT SINGLE-FLOAT SINGLE-FLOAT
  ;                          SINGLE-FLOAT SINGLE-FLOAT &OPTIONAL))
  ;   Documentation:
- ;     center the verts of wer on xy. returns the previous center
+ ;     center the verts of wer on xy. returns the previous center.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -1337,7 +1325,7 @@ copy props from to. use clear to clear props from to first.
 #### WEIR:DEL-EDGE!
 
 ```
-:missing:todo:
+delete edge a,b. returns t if edge existed.
 
  ; WEIR:DEL-EDGE!
  ;   [symbol]
@@ -1348,13 +1336,15 @@ copy props from to. use clear to clear props from to first.
  ;                  (WEIR::WEIR (UNSIGNED-BYTE 31) (UNSIGNED-BYTE 31) &KEY
  ;                   (:G T))
  ;                  *)
+ ;   Documentation:
+ ;     delete edge a,b. returns t if edge existed.
  ;   Source file: /data/x/weird/src/weir/main.lisp
 ```
 
 #### WEIR:DEL-GRP!
 
 ```
-:missing:todo:
+delete grp g and all its content.
 
  ; WEIR:DEL-GRP!
  ;   [symbol]
@@ -1363,13 +1353,15 @@ copy props from to. use clear to clear props from to first.
  ;   Lambda-list: (WER &KEY G)
  ;   Derived type: (FUNCTION (T &KEY (:G SYMBOL))
  ;                  (VALUES BOOLEAN &OPTIONAL))
+ ;   Documentation:
+ ;     delete grp g and all its content.
  ;   Source file: /data/x/weird/src/weir/main.lisp
 ```
 
 #### WEIR:DEL-PATH!
 
 ```
-del all edges in path
+del all edges in path.
 
  ; WEIR:DEL-PATH!
  ;   [symbol]
@@ -1380,7 +1372,7 @@ del all edges in path
  ;                  (WEIR::WEIR LIST &KEY (:G T) (:CLOSED BOOLEAN))
  ;                  (VALUES LIST &OPTIONAL))
  ;   Documentation:
- ;     del all edges in path
+ ;     del all edges in path.
  ;   Source file: /data/x/weird/src/weir/main.lisp
 ```
 
@@ -1641,7 +1633,7 @@ get prop ov edge e
 #### WEIR:GET-EDGES
 
 ```
-:missing:todo:
+returns edges in grp g.
 
  ; WEIR:GET-EDGES
  ;   [symbol]
@@ -1649,6 +1641,8 @@ get prop ov edge e
  ; GET-EDGES names a compiled function:
  ;   Lambda-list: (WER &KEY G)
  ;   Derived type: (FUNCTION (WEIR::WEIR &KEY (:G T)) *)
+ ;   Documentation:
+ ;     returns edges in grp g.
  ;   Source file: /data/x/weird/src/weir/main.lisp
 ```
 
@@ -1705,7 +1699,7 @@ returns (values path cycle?)
 #### WEIR:GET-GRP-NUM-VERTS
 
 ```
-:missing:todo:
+get nuber of verts in grp g.
 
  ; WEIR:GET-GRP-NUM-VERTS
  ;   [symbol]
@@ -1713,6 +1707,8 @@ returns (values path cycle?)
  ; GET-GRP-NUM-VERTS names a compiled function:
  ;   Lambda-list: (WER &KEY G)
  ;   Derived type: (FUNCTION (WEIR::WEIR &KEY (:G T)) *)
+ ;   Documentation:
+ ;     get nuber of verts in grp g.
  ;   Source file: /data/x/weird/src/weir/main.lisp
 ```
 
@@ -1788,7 +1784,8 @@ get incident verts of v.
 #### WEIR:GET-MIN-SPANNING-TREE
 
 ```
-:missing:todo:
+returns a minimal spanning tree of g, which starts at start (optional).
+if edges is true, it returns the graph as an edge set.
 
  ; WEIR:GET-MIN-SPANNING-TREE
  ;   [symbol]
@@ -1796,13 +1793,16 @@ get incident verts of v.
  ; GET-MIN-SPANNING-TREE names a compiled function:
  ;   Lambda-list: (WER &KEY G EDGES START)
  ;   Derived type: (FUNCTION (T &KEY (:G T) (:EDGES T) (:START T)) *)
+ ;   Documentation:
+ ;     returns a minimal spanning tree of g, which starts at start (optional).
+ ;     if edges is true, it returns the graph as an edge set.
  ;   Source file: /data/x/weird/src/weir/paths.lisp
 ```
 
 #### WEIR:GET-NUM-EDGES
 
 ```
-:missing:todo:
+returns number of edges in grp g.
 
  ; WEIR:GET-NUM-EDGES
  ;   [symbol]
@@ -1810,13 +1810,15 @@ get incident verts of v.
  ; GET-NUM-EDGES names a compiled function:
  ;   Lambda-list: (WER &KEY G)
  ;   Derived type: (FUNCTION (WEIR::WEIR &KEY (:G T)) *)
+ ;   Documentation:
+ ;     returns number of edges in grp g.
  ;   Source file: /data/x/weird/src/weir/main.lisp
 ```
 
 #### WEIR:GET-NUM-GRPS
 
 ```
-number of grps.
+returns number of grps.
 
  ; WEIR:GET-NUM-GRPS
  ;   [symbol]
@@ -1826,7 +1828,7 @@ number of grps.
  ;   Derived type: (FUNCTION (WEIR::WEIR)
  ;                  (VALUES (MOD 4611686018427387901) &OPTIONAL))
  ;   Documentation:
- ;     number of grps.
+ ;     returns number of grps.
  ;   Source file: /data/x/weird/src/weir/main.lisp
 ```
 
@@ -1848,7 +1850,7 @@ number of grps.
 #### WEIR:GET-NUM-VERTS
 
 ```
-:missing:todo:
+get current number of verts
 
  ; WEIR:GET-NUM-VERTS
  ;   [symbol]
@@ -1857,6 +1859,8 @@ number of grps.
  ;   Lambda-list: (WER)
  ;   Derived type: (FUNCTION (WEIR::WEIR)
  ;                  (VALUES (UNSIGNED-BYTE 31) &OPTIONAL))
+ ;   Documentation:
+ ;     get current number of verts
  ;   Source file: /data/x/weird/src/weir/main.lisp
 ```
 
@@ -1895,7 +1899,8 @@ get prop ov poly e
 #### WEIR:GET-SEGMENTS
 
 ```
-:missing:todo:
+return all segments in g. use :cycle-info to return an additional boolean for
+whether the segment is a cycle.
 
  ; WEIR:GET-SEGMENTS
  ;   [symbol]
@@ -1903,13 +1908,17 @@ get prop ov poly e
  ; GET-SEGMENTS names a compiled function:
  ;   Lambda-list: (WER &KEY CYCLE-INFO G)
  ;   Derived type: (FUNCTION (T &KEY (:CYCLE-INFO T) (:G T)) *)
+ ;   Documentation:
+ ;     return all segments in g. use :cycle-info to return an additional boolean for
+ ;     whether the segment is a cycle.
  ;   Source file: /data/x/weird/src/weir/paths.lisp
 ```
 
 #### WEIR:GET-SPANNING-TREE
 
 ```
-:missing:todo:
+returns a spanning tree of g. optionally start at vertex start.
+if edges is t, returns the result as an edge set.
 
  ; WEIR:GET-SPANNING-TREE
  ;   [symbol]
@@ -1917,6 +1926,9 @@ get prop ov poly e
  ; GET-SPANNING-TREE names a compiled function:
  ;   Lambda-list: (WER &KEY G EDGES START)
  ;   Derived type: (FUNCTION (T &KEY (:G T) (:EDGES T) (:START T)) *)
+ ;   Documentation:
+ ;     returns a spanning tree of g. optionally start at vertex start.
+ ;     if edges is t, returns the result as an edge set.
  ;   Source file: /data/x/weird/src/weir/paths.lisp
 ```
 
@@ -2005,7 +2017,7 @@ find verts with prop (and val)
 #### WEIR:GRP-EXISTS
 
 ```
-:missing:todo:
+t if grp exists.
 
  ; WEIR:GRP-EXISTS
  ;   [symbol]
@@ -2013,6 +2025,8 @@ find verts with prop (and val)
  ; GRP-EXISTS names a compiled function:
  ;   Lambda-list: (WER &KEY G)
  ;   Derived type: (FUNCTION (WEIR::WEIR &KEY (:G T)) (VALUES T &OPTIONAL))
+ ;   Documentation:
+ ;     t if grp exists.
  ;   Source file: /data/x/weird/src/weir/main.lisp
 ```
 
@@ -2128,7 +2142,7 @@ iterates over ALL verts in wer as i
 #### WEIR:LADD-EDGE!
 
 ```
-:missing:todo:
+add edge from list with two indices.
 
  ; WEIR:LADD-EDGE!
  ;   [symbol]
@@ -2136,6 +2150,8 @@ iterates over ALL verts in wer as i
  ; LADD-EDGE! names a compiled function:
  ;   Lambda-list: (WER EE &KEY G)
  ;   Derived type: (FUNCTION (WEIR::WEIR LIST &KEY (:G T)) *)
+ ;   Documentation:
+ ;     add edge from list with two indices.
  ;   Source file: /data/x/weird/src/weir/main.lisp
 ```
 
@@ -2159,7 +2175,7 @@ move all incident edges of v1, v2, ... to u. assuming uv = (u v1 v2 ...)
 #### WEIR:LDEL-EDGE!
 
 ```
-:missing:todo:
+delete edge ee. returns t if edge existed.
 
  ; WEIR:LDEL-EDGE!
  ;   [symbol]
@@ -2167,6 +2183,8 @@ move all incident edges of v1, v2, ... to u. assuming uv = (u v1 v2 ...)
  ; LDEL-EDGE! names a compiled function:
  ;   Lambda-list: (WER EE &KEY G)
  ;   Derived type: (FUNCTION (WEIR::WEIR LIST &KEY (:G T)) *)
+ ;   Documentation:
+ ;     delete edge ee. returns t if edge existed.
  ;   Source file: /data/x/weird/src/weir/main.lisp
 ```
 
@@ -2196,7 +2214,7 @@ move all incident edges of v1, v2, ... to u. assuming uv = (u v1 v2 ...)
 #### WEIR:LSPLIT-EDGE-IND!
 
 ```
-:missing:todo:
+insert vertex at coordinate via, between edge ee=(u w)
 
  ; WEIR:LSPLIT-EDGE-IND!
  ;   [symbol]
@@ -2207,13 +2225,15 @@ move all incident edges of v1, v2, ... to u. assuming uv = (u v1 v2 ...)
  ;                  (WEIR::WEIR LIST &KEY (:VIA (UNSIGNED-BYTE 31)) (:G T)
  ;                   (:FORCE BOOLEAN))
  ;                  *)
+ ;   Documentation:
+ ;     insert vertex at coordinate via, between edge ee=(u w)
  ;   Source file: /data/x/weird/src/weir/main.lisp
 ```
 
 #### WEIR:LSWAP-EDGE!
 
 ```
-move edge from grp from to g
+move edge from grp from to grp g.
 
  ; WEIR:LSWAP-EDGE!
  ;   [symbol]
@@ -2222,7 +2242,7 @@ move edge from grp from to g
  ;   Lambda-list: (WER EE &KEY G FROM)
  ;   Derived type: (FUNCTION (WEIR::WEIR LIST &KEY (:G T) (:FROM T)) *)
  ;   Documentation:
- ;     move edge from grp from to g
+ ;     move edge from grp from to grp g.
  ;   Source file: /data/x/weird/src/weir/main.lisp
 ```
 
@@ -2230,7 +2250,7 @@ move edge from grp from to g
 
 ```
 
-  make weir instances
+  make weir instance of dim.
 
   - max-verts is the maximum number of verts in weir (across all grps).
   - set-size is the initial size of edge adjacency sets.
@@ -2254,7 +2274,7 @@ move edge from grp from to g
  ;                  (VALUES WEIR::WEIR &OPTIONAL))
  ;   Documentation:
  ;     
- ;       make weir instances
+ ;       make weir instance of dim.
  ;     
  ;       - max-verts is the maximum number of verts in weir (across all grps).
  ;       - set-size is the initial size of edge adjacency sets.
@@ -2303,10 +2323,16 @@ copy props from, from, into edges, to*
 #### WEIR:MESH-BISECT
 
 ```
-fx: %MESH-BISECT
-macro wrapper: MESH-BISECT
-
-defined via veq:fvdef*
+docstring for %MESH-BISECT
+cut-pt: cut plane pt
+   cut-n: cut plane normal
+   vfx: classify vertex to either side of the cut plane
+   pfx: fx that projects verts into projection plane pt, n
+   vert->side: hash table to contain the result of vfx
+   mat: material assigned to intersection surface
+   mat-prop: property used to set material
+   cut-prop: material used to indicate cut verts
+  
 
  ; WEIR:MESH-BISECT
  ;   [symbol]
@@ -2314,10 +2340,16 @@ defined via veq:fvdef*
  ; MESH-BISECT names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %MESH-BISECT
- ;     macro wrapper: MESH-BISECT
- ;     
- ;     defined via veq:fvdef*
+ ;     docstring for %MESH-BISECT
+ ;     cut-pt: cut plane pt
+ ;        cut-n: cut plane normal
+ ;        vfx: classify vertex to either side of the cut plane
+ ;        pfx: fx that projects verts into projection plane pt, n
+ ;        vert->side: hash table to contain the result of vfx
+ ;        mat: material assigned to intersection surface
+ ;        mat-prop: property used to set material
+ ;        cut-prop: material used to indicate cut verts
+ ; 
  ;   Source file: /data/x/weird/src/weir/poly-modify.lisp
 ```
 
@@ -2326,7 +2358,6 @@ defined via veq:fvdef*
 ```
 fx: %MESH-SLICE
 macro wrapper: MESH-SLICE
-
 defined via veq:fvdef*
 
  ; WEIR:MESH-SLICE
@@ -2337,7 +2368,6 @@ defined via veq:fvdef*
  ;   Documentation:
  ;     fx: %MESH-SLICE
  ;     macro wrapper: MESH-SLICE
- ;     
  ;     defined via veq:fvdef*
  ;   Source file: /data/x/weird/src/weir/poly-modify.lisp
 ```
@@ -2526,7 +2556,7 @@ add delete edge (a b) and add edges (a via b)
 #### WEIR:SWAP-EDGE!
 
 ```
-move edge from grp from to g
+move edge from grp from to grp g.
 
  ; WEIR:SWAP-EDGE!
  ;   [symbol]
@@ -2538,7 +2568,7 @@ move edge from grp from to g
  ;                   (:G T) (:FROM T))
  ;                  *)
  ;   Documentation:
- ;     move edge from grp from to g
+ ;     move edge from grp from to grp g.
  ;   Source file: /data/x/weird/src/weir/main.lisp
 ```
 
@@ -2562,7 +2592,7 @@ t if vert v has prop (and val)
 #### WEIR:VERTS
 
 ```
-:missing:todo:
+get vertex array.
 
  ; WEIR:VERTS
  ;   [symbol]
@@ -2571,6 +2601,8 @@ t if vert v has prop (and val)
  ;   Lambda-list: (WER)
  ;   Derived type: (FUNCTION (WEIR::WEIR)
  ;                  (VALUES (SIMPLE-ARRAY SINGLE-FLOAT) &OPTIONAL))
+ ;   Documentation:
+ ;     get vertex array.
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 

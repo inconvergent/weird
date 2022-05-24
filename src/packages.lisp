@@ -75,7 +75,7 @@
 
 (defpackage #:math
   (:use #:common-lisp)
-  (:export #:add #:argmax #:argmin #:clamp #:close-path #:close-path*
+  (:export #:add #:argmax #:argmin #:close-path #:close-path*
            #:copy-sort #:imod #:integer-search #:last* #:lerp #:lget #:linspace
            #:list>than #:ll-transpose #:lpos #:mod2 #:mult #:nrep #:range
            #:range-search #:sub)
@@ -148,10 +148,10 @@
 
 (defpackage #:pigment
   (:use #:common-lisp)
-  (:export #:as-hsv #:black #:blood #:blue #:cmyk #:copy #:cyan #:dark
-           #:from-list #:gray #:green #:hsv #:magenta #:mdark #:orange
-           #:red #:rgb #:rgba #:scale #:scale! #:to-hex #:to-list
-           #:to-list* #:transparent #:vdark #:white #:with)
+  (:export #:as-hsv #:black #:cmyk #:copy #:cyan #:dark
+           #:gray #:green #:hsv #:magenta #:mdark #:red #:rgb #:scale
+           #:scale! #:to-hex #:to-list #:to-list* #:transparent #:vdark #:white
+           #:with)
   (:import-from #:weird #:*opt* #:pos-int #:ensure-vector))
 
 (defpackage #:hset
@@ -241,17 +241,6 @@
 
 (defpackage #:bvh
   (:use #:common-lisp)
-  (:export
-    #:bvh
-    #:bvh-normals
-    #:bvh-root
-    #:make-line-bbox-test
-    #:make-result
-    #:node #:node-l
-    #:node-leaves
-    #:node-ma
-    #:node-mi
-    #:node-r)
   (:import-from #:weird #:*opt* *eps*))
 
 (defpackage #:weir

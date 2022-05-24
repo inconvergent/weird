@@ -2,22 +2,21 @@
 (in-package :math)
 
 
-(defun clamp (v mi ma) (declare #.*opt* (veq:ff v mi ma)) (max (min v ma) mi))
 (defun last* (l) (declare #.*opt* (list l)) (first (last l)))
 
 (defun close-path (p)
   (declare #.*opt* (list p))
-  "append first element of p to end of p"
+  "append first element of p to end of p."
   (append p (subseq p 0 1)))
 
 (defun close-path* (p)
   (declare #.*opt* (list p))
-  "append last element of p to front of p"
+  "append last element of p to front of p."
   (cons (last* p) p))
 
 
 (defmacro nrep (n &body body)
-  "returns list with body repeated n times"
+  "returns list with body :evaluated: n times."
   `(the list (loop repeat (the weird:pos-int ,n) collect (progn ,@body))))
 
 (defun range (a &optional (b nil))
@@ -30,13 +29,14 @@
 ; this is kind of silly
 (defun lpos (ll &key (fx #'first))
   (declare #.*opt* (list ll) (function fx))
-  " apply fx to every element in ll. "
+  "apply fx to every element in ll. "
   (mapcar fx ll))
 
 ; TODO pretty sure there is a better way to do this
 (defun ll-transpose (l)
   (declare #.*opt* (list l))
-  "transpose list of lists"
+  "transpose list of lists.
+assumes all initial lists in l have the same length."
   (labels ((-reduce (acc v) (loop for a in acc and b in v collect (cons b a))))
     (mapcar #'reverse (reduce #'-reduce l
                               :initial-value (loop repeat (length (the list (first l)))
@@ -63,6 +63,7 @@
 (defmacro lop (name type &body body)
   `(defun ,name (aa bb)
      (declare #.*opt* (list aa bb))
+     ,(format nil "element wise ~a for two lists of ~a" (car body) type)
      (loop for a of-type ,type in aa and b of-type ,type in bb
            collect (,@body (the ,type a) (the ,type b)) of-type ,type)))
 
@@ -70,9 +71,13 @@
 (lop sub fixnum -)
 (lop mult fixnum *)
 
-(defun mod2 (i) (declare #.*opt* (fixnum i)) (mod i 2))
+(defun mod2 (i)
+  (declare #.*opt* (fixnum i))
+  "(mod i 2). for fixnum."
+  (mod i 2))
 (defun imod (i inc m)
   (declare #.*opt* (fixnum i inc m))
+  "(mod (+ i inc) m). for fixnums"
   (the fixnum (mod (the fixnum (+ i inc)) m)))
 
 
@@ -80,6 +85,7 @@
 
 (defun copy-sort (a fx &key (key #'identity))
   (declare #.*opt* (sequence a))
+  "sort a without side effects to a. not very efficent."
   (sort (copy-seq a) fx :key key))
 
 
@@ -114,6 +120,8 @@
 
 (defun argmax (ll &optional (key #'identity))
   (declare (list ll) (function key))
+  "returns (values iv v).
+where iv is the index of v and v is the highest value in ll."
   (loop with iv = 0
         with v = (funcall key (first ll))
         for l in (cdr ll)
@@ -124,6 +132,8 @@
 
 (defun argmin (ll &optional (key #'identity))
   (declare (list ll) (function key))
+  "returns (values iv v).
+where iv is the index of v and v is the smallest value in ll."
   (loop with iv = 0
         with v = (funcall key (first ll))
         for l in (cdr ll)

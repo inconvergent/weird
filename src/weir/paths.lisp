@@ -3,6 +3,8 @@
 ; SPANNING TREE
 
 (defun get-spanning-tree (wer &key g edges start)
+  "returns a spanning tree of g. optionally start at vertex start.
+if edges is t, returns the result as an edge set."
   (with-grp (wer grp g)
     (if edges (graph:get-edges
                 (graph:get-spanning-tree (grp-grph grp) :start start))
@@ -10,6 +12,8 @@
 
 
 (defun get-min-spanning-tree (wer &key g edges start)
+  "returns a minimal spanning tree of g, which starts at start (optional).
+if edges is true, it returns the graph as an edge set."
   (with-grp (wer grp g)
     (let ((grph (grp-grph grp))
           (weigthfx (lambda (a b) (2edge-length wer a b))))
@@ -22,11 +26,19 @@
 
 ; TODO: include perfect loops
 (defun get-segments (wer &key cycle-info g)
+  "return all segments in g. use :cycle-info to return an additional boolean for
+whether the segment is a cycle."
   (with-grp (wer grp g)
     (graph:get-segments (grp-grph grp) :cycle-info cycle-info)))
 
 
 (veq:vdef 2walk-graph (wer &key g)
+  (declare (weir wer))
+  "returns all segments of the graph in g.
+greedily attempts to connect segments such that the angle is minimal. useful
+for drawing the graph as a plotter drawing. call 2simplify-segments! first if
+you want to reduce the level of detail.
+cycles will begin and end with the same vert index."
   (let ((verts (weir-verts wer)))
     (declare (veq:fvec verts))
     (labels ((diff (a b)
@@ -44,6 +56,8 @@
 
 (defun 2simplify-segments! (wer &key g (lim 0.1))
   (declare #.*opt* (weir wer) (veq:ff lim))
+  "calls (simplify:path ...) on all segments from (weird:get-segments ... :g g).
+as such the overall structure of the graph will remain the same."
   ; TOOD: deal with paths that are closed
   (loop for (seg _) of-type (list boolean) in (get-segments wer :cycle-info t :g g)
         do (weird:mvb (_ sind) (simplify:path (2gvs wer seg) :lim lim)
@@ -60,6 +74,16 @@
 
 (veq:vdef 2intersect-all! (wer &key g prop)
   (declare #.*opt* (weir wer))
+  "creates intersections for all edges in g such that g becomes a planar graph.
+:prop can contain a symbol which will be used as a
+vert prop which contains one of the initial edges
+edge prop which contains one of the intial edges.
+a useful method for making plotter drawings is to do:
+
+(2simplify-segments! wer ...) ; optional
+(2intersect-all! wer ...)
+(loop for path in (2walk-graph wer ...)
+      do (wsvg:path wsvg (2gvs wer path)))"
   (unless (= 2 (weir-dim wer))
           (error "2intersect-all! error. incorrect dimension."))
 
@@ -147,6 +171,8 @@
 ; TODO: clean this up and rename
 (veq:vdef 3intersect-all! (wer fx &key g prop)
   (declare #.*opt* (weir wer) (function fx))
+  "does the same as 2intersect-all!
+assuming that fx is a function (values x y z) -> (values x1 y1)."
 
   (unless (= 3 (weir-dim wer))
           (error "3intersect-all! error. incorrect dimension."))

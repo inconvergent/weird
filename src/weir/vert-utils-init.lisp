@@ -11,16 +11,19 @@
           (t (cons (dim-placeholder (car root) dim)
                    (dim-placeholder (cdr root) dim))))))
 
-(defmacro dimtemplate ((name)  &body body)
+(defmacro dimtemplate ((name &optional docs) &body body)
   (declare (symbol name))
-  (labels ((sub (en dim)
+  (labels ((docs (exportname) (when docs `(weird::map-docstring ',exportname ,docs)))
+           (sub (en dim)
             (subst dim 'dim
                (subst en 'fx
-                 (dim-placeholder body (digit-char dim)))))
+                 (subst docs 'docs
+                   (dim-placeholder body (digit-char dim))))))
            (sy (dim) (intern (weird:mkstr dim name) 'weir)))
     (let ((res (loop for dim in '(2 3)
                    collect (let ((exportname (sy dim)))
-                             `(progn (export ',exportname)
+                             `(progn ,(docs exportname)
+                                     (export ',exportname)
                                      ,@(sub exportname dim))))))
      `(progn ,@res))))
 

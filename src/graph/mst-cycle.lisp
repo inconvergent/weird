@@ -1,6 +1,7 @@
 
 (in-package :graph)
 
+(declaim (veq:ff *inf*))
 (defvar *inf* 1f8)
 
 
@@ -24,10 +25,8 @@
   st)
 
 (defun get-spanning-tree (grph &key start)
-  "
-  return all spanning trees (if the graph is disjoint) of grph in a new graph.
-  if start is provided, it will return a spanning tree starting at start.
-  "
+  "return all spanning trees (if the graph is disjoint) of grph in a new graph.
+if start is provided, it will return a spanning tree starting at start."
   (declare (graph grph))
   (let ((visited (hset:make))
         (st (make))
@@ -93,10 +92,8 @@
 (defun get-min-spanning-tree (grph &key (weightfx (lambda (a b)
                                                     (declare (ignore a b)) 1f0))
                                         (start 0))
-  "
-  return all minimal spanning trees of grph in a new graph.
-  if start is provided, it will return a spanning tree starting at start.
-  "
+  "return all minimal spanning trees of grph in a new graph.
+if start is provided, it will return a spanning tree starting at start."
   ; TODO: what happens if grph is disjoint?
   (declare (graph grph) (fixnum start) (function weightfx))
   (let* ((verts (get-verts grph))

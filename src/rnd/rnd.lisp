@@ -5,6 +5,7 @@
 
 (defun set-rnd-state (i)
   (declare (number i))
+  "use this random seed. only implemented for SBCL."
    #+SBCL ; this is called feature expressions
    (setf *random-state* (sb-ext:seed-random-state i))
 
@@ -12,29 +13,35 @@
    (warn "rnd:state is only implemented for SBCL. see src/rnd.lisp
           to implement state for your environment."))
 
-(defun make-rnd-state () (setf *random-state* (make-random-state t)))
+(defun make-rnd-state ()
+  "generate a new random state"
+  (setf *random-state* (make-random-state t)))
 
 ; NUMBERS AND RANGES
 
 (declaim (inline rndi))
 (defun rndi (a)
   (declare #.*opt* (fixnum a))
+  "random fixnum in range (0 a]."
   (the fixnum (random a)))
 
 (declaim (inline nrndi))
 (defun nrndi (n a)
   (declare #.*opt* (weird:pos-int n a))
+  "n random fixnums in range: (0 a]."
   (loop repeat n collect (rndi a) of-type fixnum))
 
 
 (declaim (inline rndrngi))
 (defun rndrngi (a b)
   (declare #.*opt* (fixnum a b))
+  "random fixnum in range (a b]."
   (+ a (rndi (- b a))))
 
 (declaim (inline nrndrngi))
 (defun nrndrngi (n a b)
   (declare #.*opt* (weird:pos-int n) (fixnum a b))
+  "n fixnums in range [a b)"
   (let ((d (- b a)))
     (declare (fixnum d))
     (loop repeat n collect (+ a (rndi d)) of-type fixnum)))
@@ -43,33 +50,39 @@
 (declaim (inline rnd))
 (defun rnd (&optional (x 1f0))
   (declare #.*opt* (veq:ff x))
+  "random float below x."
   (random x))
 
 (declaim (inline nrnd))
 (defun nrnd (n &optional (x 1f0))
   (declare #.*opt* (weird:pos-int n) (veq:ff x))
+  "n random floates below x."
   (loop repeat n collect (rnd x) of-type veq:ff))
 
 
 (declaim (inline rnd*))
 (defun rnd* (&optional (x 1f0))
   (declare #.*opt* (veq:ff x))
+  "random float in range (-x x)."
   (- x (rnd (* 2f0 x))))
 
 (declaim (inline nrnd*))
 (defun nrnd* (n &optional (x 1f0))
   (declare #.*opt* (weird:pos-int n) (veq:ff x))
+  "n random floats in range (x -x)."
   (loop repeat n collect (rnd* x) of-type veq:ff))
 
 
 (declaim (inline rndrng))
 (defun rndrng (a b)
   (declare #.*opt* (veq:ff a b))
+  "random float in range (a b)."
   (+ a (rnd (- b a))))
 
 (declaim (inline nrndrng))
 (defun nrndrng (n a b)
   (declare #.*opt* (weird:pos-int n) (veq:ff a b))
+  "n random floats in range (a b)."
   (loop repeat n collect (rndrng a b) of-type veq:ff))
 
 
@@ -77,7 +90,8 @@
 (declaim (inline norm))
 (defun norm (&key (mu 0f0) (sigma 1f0))
   (declare #.*opt* (veq:ff mu sigma))
-  "box-muller transform"
+  "two random numbers from normal distribution with (mu 0f0) and (sigma 1f0).
+generated using the box-muller transform."
   (let ((s (* sigma (the veq:ff
                          (sqrt (the pos-single
                                     (* -2f0 (log (rnd))))))))
@@ -90,11 +104,13 @@
 ; MACROS
 
 (defmacro prob (p a &optional b)
-  "executes body with probability p"
+  "evaluate first form in body with probability p.
+second form (optional) is executed with probability 1-p.
+ex: (prob 0.1 (print :a) (print :b))"
   `(if (< (rnd) (the veq:ff ,p)) ,a ,b))
 
 (defmacro either (a &optional b)
-  "excecutes either a or b, with a probablility of 0.5"
+  "excecutes either a or b, with a probablility of 0.5. b is optional."
   `(prob 0.5f0 ,a ,b))
 
 
@@ -118,7 +134,7 @@
 
 
 (defmacro rep (a &optional b &body body)
-  "repeat body at most a times, or between a and b times"
+  "repeat body at most a times, or between a and b times."
   `(loop repeat ,(if (and a b) `(rndrngi ,a ,b) `(rndi ,a))
          do (progn ,@body)))
 
@@ -126,6 +142,7 @@
 
 (defun rndget (l)
   (declare #.*opt* (sequence l))
+  "get random item from sequence l."
   (typecase l (cons (nth (rndi (length (the list l))) l))
               (vector (aref l (rndi (length l))))
               (t (error "incorrect type in rndget: ~a" l))))
@@ -133,25 +150,28 @@
 
 (defun rndspace (n a b &key order &aux (d (- b a)))
   (declare #.*opt* (weird:pos-int n) (veq:ff a b d))
+  "n random numbers in range (a b). use :order t to sort result."
   (if order (sort (loop repeat n collect (+ a (rnd d)) of-type veq:ff) #'<)
             (loop repeat n collect (+ a (rnd d)) of-type veq:ff)))
 
 
 (defun rndspacei (n a b &key order &aux (d (- b a)))
   (declare #.*opt* (weird:pos-int n) (fixnum a b d))
+  "n random fixnums in range [a b). use order to sort result."
   (if order (sort (loop repeat n collect (+ a (rndi d)) of-type fixnum) #'<)
             (loop repeat n collect (+ a (rndi d)) of-type fixnum)))
 
 
 (defun bernoulli (n p)
   (declare #.*opt* (weird:pos-int n) (veq:ff p))
+  "n random numbers from bernoulli distribution with mean p."
   (loop repeat n collect (prob p 1f0 0f0) of-type veq:ff))
 
 
 ; https://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle
 (defun shuffle (a* &aux (n (length a*)))
   (declare #.*opt* (weird:pos-int n) (simple-array a*))
-  "shuffle a with fisher yates algorithm"
+  "shuffle a with fisher yates algorithm."
   (loop for i of-type weird:pos-int from 0 to (- n 2)
         do (rotatef (aref a* i) (aref a* (rndrngi i n))))
   a*)
@@ -164,7 +184,7 @@
 
 (defun nrnd-from* (n a)
   (declare #.*opt* (weird:pos-int n) (vector a))
-  "n random distinct elements from a. assumes no dupes in a"
+  "n random distinct elements from a. assumes no dupes in a."
   (let* ((a* (ensure-vector a))
          (resind nil)
          (anum (length (the simple-array a*))))

@@ -1,6 +1,7 @@
 (in-package :weir)
 
 (defmacro dimtest (wer dim fx)
+  "used internally to check that weir instance has correct dimension."
   (declare (symbol wer) (pos-int dim))
   `(when (not (= (weir-dim ,wer) ,dim))
          (error "weir error: incorrect use of: ~a. ~%
@@ -8,17 +9,21 @@
 
 (defun verts (wer)
   (declare #.*opt* (weir wer))
+  "get vertex array."
   (weir-verts wer))
 
 
-(dimtemplate ($verts)
+(dimtemplate ($verts
+  "get coordinates of vert i, j, ... as (values i1 i2 .. j1 j2 ..).")
   (defmacro fx (wer &rest rest)
+    docs
     `(veq:fvprogn (veq::f@$ (weir-verts ,wer) ,@rest))))
 
-(dimtemplate (get-verts)
+(dimtemplate (get-verts
+  "get the coordinates (vec) of verts in inds.")
   (veq:fvdef fx (wer inds)
     (declare #.*opt* (weir wer) (list inds))
-    "get the coordinates (vec) of verts in inds"
+    docs
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts) wer
       (declare (veq:fvec verts) (pos-int num-verts))
@@ -28,18 +33,20 @@
                      'fx inds num-verts))
       (veq::f@$take verts inds))))
 
-(dimtemplate (get-grp-verts)
+(dimtemplate (get-grp-verts
+  "returns all vertices in grp g.
+note: verts only belong to a grp if they are part of an edge in grp.")
   (defun fx (wer &key g order)
     (declare #.*opt* (weir wer) (boolean order))
-    "returns all vertices in grp g.
-     note: verts only belong to a grp if they are part of an edge in grp."
+    docs
     (@get-verts wer (get-vert-inds wer :g g :order order))))
 
 
-(dimtemplate (add-vert!)
+(dimtemplate (add-vert!
+  "adds a new vertex to weir. returns the new vert ind.")
   (veq:fvdef* fx (wer (:varg dim x))
     (declare #.*opt* (weir wer) (veq:ff x))
-    "adds a new vertex to weir. returns the new vert ind"
+    docs
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts max-verts) wer
       (declare (veq:fvec verts) (pos-int num-verts max-verts))
@@ -49,17 +56,20 @@
       (incf (weir-num-verts wer))
       num-verts)))
 
-(dimtemplate (vadd-edge!)
+(dimtemplate (vadd-edge!
+  "add edge from two coordinates.")
   (veq:fvdef* fx (wer (:varg dim a b) &key g)
     (declare #.*opt* (weir wer) (veq:ff a b))
+    docs
     (dimtest wer dim fx)
     (add-edge! wer (@add-vert! wer a) (@add-vert! wer b) :g g)))
 
 
-(dimtemplate (add-verts!)
+(dimtemplate (add-verts!
+  "adds new vertices to weir. returns the ids of the new vertices.")
   (veq:fvdef fx (wer vv)
     (declare #.*opt* (weir wer) (veq:fvec vv))
-    "adds new vertices to weir. returns the ids of the new vertices"
+    docs
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts max-verts) wer
       (declare (veq:fvec verts) (pos-int num-verts))
@@ -77,10 +87,11 @@
           (values (math:range num-verts new-num) dim n))))))
 
 
-(dimtemplate (get-vert)
+(dimtemplate (get-vert
+  "get the coordinate of vert v.")
   (veq:fvdef fx (wer v)
     (declare #.*opt* (weir wer) (pos-int v))
-    "get the coordinate of vert v"
+    docs
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts) wer
       (declare (veq:fvec verts) (pos-int num-verts))
@@ -90,10 +101,11 @@
       (veq::f@$ verts v))))
 
 
-(dimtemplate (get-all-verts)
+(dimtemplate (get-all-verts
+  "returns the coordinates of all vertices.")
   (veq:fvdef fx (wer)
     (declare #.*opt* (weir wer))
-    "returns the coordinates of all vertices"
+    docs
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts) wer
       (declare (veq:fvec verts) (pos-int num-verts))
@@ -107,9 +119,11 @@
         (values res dim num-verts)))))
 
 
-(dimtemplate (move-vert!)
+(dimtemplate (move-vert!
+  "move vertex by x. use :rel nil to move to absolute position.")
   (veq:fvdef* fx (wer i (:varg dim x) &key (rel t))
     (declare #.*opt* (weir wer) (pos-int i) (veq:ff x) (boolean rel))
+    docs
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts) wer
       (declare (veq:fvec verts) (pos-int num-verts))
@@ -121,10 +135,12 @@
         (values res)))))
 
 
-(dimtemplate (transform!)
+(dimtemplate (transform!
+  "apply function, tfx, to coordinates of verts in inds.")
   (veq:fvdef fx (wer inds tfx)
     (declare #.*opt* (weir wer) (list inds) (function tfx))
     (dimtest wer dim fx)
+    docs
     (with-struct (weir- verts num-verts) wer
       (declare (veq:fvec verts) (pos-int num-verts))
       (unless (every (lambda (v) (declare (optimize speed) (pos-int v))
@@ -139,16 +155,19 @@
         :exs ((verts k (trans verts))))))))
 
 
-(dimtemplate (grp-transform!)
-  (defun fx (wer trans &key g)
-    (declare (weir wer) (function trans))
-    (@transform! wer (get-vert-inds wer :g g) trans)))
+(dimtemplate (grp-transform!
+  "apply function, tfx, to coordinates of verts in grp, g.")
+  (defun fx (wer tfx &key g)
+    (declare (weir wer) (function tfx))
+    docs
+    (@transform! wer (get-vert-inds wer :g g) tfx)))
 
 
-(dimtemplate (split-edge!)
+(dimtemplate (split-edge!
+  "split edge (u v) at x. returns new vert ind (and new edges).")
   (veq:fvdef* fx (wer u v (:varg dim x) &key g force)
   (declare #.*opt* (weir wer) (pos-int u v) (veq:ff x) (boolean force))
-  "split edge (u v) at x. returns new vert ind (and new edges)."
+  docs
   (dimtest wer dim fx)
   (if (or (del-edge! wer u v :g g) force)
       (let ((c (@add-vert! wer x)))
@@ -156,27 +175,31 @@
         (values c (list (add-edge! wer c u :g g) (add-edge! wer c v :g g))))
       (values nil nil))))
 
-(dimtemplate (lsplit-edge!)
-  (veq:fvdef* fx (wer ll (:varg dim x) &key g force)
-    (declare #.*opt* (weir wer) (list ll) (veq:ff x) (boolean))
-    (destructuring-bind (u v) ll
+(dimtemplate (lsplit-edge!
+  "introduce edge between ll=(u v) at coordinate x.")
+  (veq:fvdef* fx (wer ee (:varg dim x) &key g force)
+    (declare #.*opt* (weir wer) (list ee) (veq:ff x) (boolean))
+    docs
+    (destructuring-bind (u v) ee
       (declare (pos-int u v))
       (@split-edge! wer u v x :g g :force force))))
 
-(dimtemplate (append-edge!)
+(dimtemplate (append-edge!
+  "add edge between vert v and new vert at xy.")
   (veq:fvdef* fx (wer v (:varg dim x) &key (rel t) g)
-    "add edge between vert v and new vert at xy"
     (declare (weir wer) (pos-int v) (veq:ff x) (boolean rel))
+    docs
     (dimtest wer dim fx)
     (add-edge! wer v (if rel (@add-vert! wer (veq::f@+ x (@get-vert wer v)))
                              (@add-vert! wer x))
                :g g)))
 
 
-(dimtemplate (edge-length)
+(dimtemplate (edge-length
+  "returns the length of edge e=(u v). regardless of whether the edge exists.")
   (veq:fvdef fx (wer u v)
     (declare #.*opt* (weir wer) (pos-int u v))
-    "returns the length of edge e=(u v). regardless of whether the edge exists"
+    docs
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts) wer
       (declare (veq:fvec verts) (pos-int num-verts))
@@ -185,28 +208,32 @@
                      'fx u v num-verts))
       (veq::f@dst (veq::f@$ verts u v)))))
 
-(dimtemplate (ledge-length)
+(dimtemplate (ledge-length
+  "returns the length of edge e=(u v). regardless of whether the edge exists.")
   (defun fx (wer e)
     (declare #.*opt* (weir wer) (list e))
-    "returns the length of edge e=(u v). regardless of whether the edge exists"
+    docs
     (dimtest wer dim fx)
     (apply #'@edge-length wer e)))
 
 
-(dimtemplate (prune-edges-by-len!)
+(dimtemplate (prune-edges-by-len!
+  "remove edges longer than lim, use fx #'< to remove edges shorter than lim.")
   (defun fx (wer lim &optional (pfx #'>))
     (declare #.*opt* (weir wer) (veq:ff lim) (function pfx))
-    "remove edges longer than lim, use fx #'< to remove edges shorter than lim"
+    docs
     (dimtest wer dim fx)
     (itr-edges (wer e)
       (when (funcall (the function pfx) (@ledge-length wer e) lim)
             (ldel-edge! wer e)))))
 
 
-(dimtemplate (add-path!)
-  (defun fx (wer points &key g closed)
-    (declare #.*opt* (weir wer) (veq:fvec points))
-    (add-path-ind! wer (@add-verts! wer points) :g g :closed closed)))
+(dimtemplate (add-path!
+  "add edge path for these indices.")
+  (defun fx (wer path &key g closed)
+    (declare #.*opt* (weir wer) (veq:fvec path))
+    docs
+    (add-path-ind! wer (@add-verts! wer path) :g g :closed closed)))
 
 ; TODO: implement new export/import
 ; (defun export-verts-grp (wer &key g)
@@ -226,21 +253,25 @@
 ;     (add-verts! wer verts)
 ;     (loop for e of-type list in edges do (ladd-edge! wer e :g g))))
 
-
-(weird:abbrev 2av! 2add-vert!)
-(weird:abbrev 2avs! 2add-verts!)
-(weird:abbrev 2gvs 2get-verts)
-(weird:abbrev 2gv 2get-vert)
-
-(weird:abbrev 3av! 3add-vert!)
-(weird:abbrev 3avs! 3add-verts!)
-(weird:abbrev 3gvs 3get-verts)
-(weird:abbrev 3gv 3get-vert)
+(defmacro define-abbrev ()
+  `(progn (weird::map-docstring '2av! "short for 2add-vert!.")
+          (weird::map-docstring '2avs! "short for 2add-verts!.")
+          (weird::map-docstring '2gvs "short for 2get-vert.")
+          (weird::map-docstring '2gv "short for 2get-vert.")
+          (weird::map-docstring '3av! "short for 3add-vert!.")
+          (weird::map-docstring '3avs! "short for 3add-verts!.")
+          (weird::map-docstring '3gvs "short for 3get-vert.")
+          (weird::map-docstring '3gv "short for 3get-vert.")
+          (weird:abbrev 2av! 2add-vert!) (weird:abbrev 2avs! 2add-verts!)
+          (weird:abbrev 2gvs 2get-verts) (weird:abbrev 2gv 2get-vert)
+          (weird:abbrev 3av! 3add-vert!) (weird:abbrev 3avs! 3add-verts!)
+          (weird:abbrev 3gvs 3get-verts) (weird:abbrev 3gv 3get-vert)))
+(define-abbrev)
 
 
 (veq:fvdef center! (wer &key max-side non-edge g)
   (declare #.*opt* (weir wer))
-  "center the verts of wer on xy. returns the previous center"
+  "center the verts of wer on xy. returns the previous center."
   (dimtest wer 2 '2center!)
   (labels ((scale-by (ms w h)
              (declare (veq:ff ms w h))
@@ -288,14 +319,15 @@
 
 ; SHAPES ----------------------
 
-(veq:fvdef* 2is-intersection (wer a b)
-  (declare (weir wer) (pos-int a b))
-  (veq:f2segx (2gv wer a) (2gv wer b)))
+(veq:fvdef* 2is-intersection (wer a b c d)
+  (declare (weir wer) (pos-int aa bb))
+  "check if edge ab intersect edge bc. does not check if edges exist."
+  (veq:f2segx (2$verts wer a b c d)))
 
 
 (defun 3add-box! (wer &key (s (math:nrep 3 100f0)) (xy (math:nrep 3 0f0)) g)
   (declare (weir wer) (list s xy))
-  "add a box with size, s = (sx sy sz) at xy = (x y z)"
+  "add a box with size, s = (sx sy sz) at xy = (x y z)."
   (dimtest wer 3 3add-box!)
   (labels ((pos (pos) (declare (list pos))
                       (mapcar (lambda (a s x) (declare (fixnum a))
@@ -312,5 +344,6 @@
 
 (defun 3add-cube! (wer &key (s 1f0) (xy (math:nrep 3 0f0)) g)
   (declare (weir wer) (veq:ff s) (list xy))
+  "add edges for a cube of size, s, at xy in grp, g."
   (3add-box! wer :s (math:nrep 3 s) :xy xy :g g))
 

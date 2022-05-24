@@ -53,7 +53,10 @@
 #### WSVG:BZSPL
 
 ```
-quadratic bezier
+draw quadratic bezier from 2d vector array (veq:fvec) or list of lists.
+use fill, stroke, sw, so, fo, as described in wsvg:make to override.
+if closed is t, the path will join back to the initial coordinate.
+must provide at least three points.
 
  ; WSVG:BZSPL
  ;   [symbol]
@@ -66,7 +69,10 @@ quadratic bezier
  ;                   (:FILL T) (:SO T) (:FO T))
  ;                  (VALUES T &OPTIONAL))
  ;   Documentation:
- ;     quadratic bezier
+ ;     draw quadratic bezier from 2d vector array (veq:fvec) or list of lists.
+ ;     use fill, stroke, sw, so, fo, as described in wsvg:make to override.
+ ;     if closed is t, the path will join back to the initial coordinate.
+ ;     must provide at least three points.
  ;   Source file: /data/x/weird/src/draw/svg.lisp
 ```
 
@@ -82,7 +88,7 @@ quadratic bezier
 #### WSVG:CIRC
 
 ```
-:missing:todo:
+draw a circle of radius rad at xy. defaults to origin.
 
  ; WSVG:CIRC
  ;   [symbol]
@@ -93,6 +99,8 @@ quadratic bezier
  ;                  (WSVG::WSVG NUMBER &KEY (:XY LIST) (:FILL T) (:SW T)
  ;                   (:STROKE T) (:SO T) (:FO T))
  ;                  (VALUES T &OPTIONAL))
+ ;   Documentation:
+ ;     draw a circle of radius rad at xy. defaults to origin.
  ;   Source file: /data/x/weird/src/draw/svg.lisp
 ```
 
@@ -116,7 +124,8 @@ quadratic bezier
 #### WSVG:DRAW
 
 ```
-draw any svg dpath
+draw any svg dpath from string d
+ex: M20,230 Q40,205 50,230 T90,230
 
  ; WSVG:DRAW
  ;   [symbol]
@@ -128,7 +137,8 @@ draw any svg dpath
  ;                   (:SO T) (:FO T))
  ;                  (VALUES T &OPTIONAL))
  ;   Documentation:
- ;     draw any svg dpath
+ ;     draw any svg dpath from string d
+ ;     ex: M20,230 Q40,205 50,230 T90,230
  ;   Source file: /data/x/weird/src/draw/svg.lisp
 ```
 
@@ -144,7 +154,11 @@ draw any svg dpath
 #### WSVG:JPATH
 
 ```
-:missing:todo:
+draw jpath from 2d vector array (veq:fvec) or list of lists.
+a jpath is a wide line emulation useful for drawing wide lines in plotter drawings.
+- ns: sets the number of parallel lines used to fill
+- rs: set fill repetiton scale. you must set either rs or ns.
+- width: width of emulated path.
 
  ; WSVG:JPATH
  ;   [symbol]
@@ -157,13 +171,26 @@ draw any svg dpath
  ;                   (:STROKE T) (:SW T) (:SO T) (:RS T) (:NS T)
  ;                   (:LIMITS T))
  ;                  *)
+ ;   Documentation:
+ ;     draw jpath from 2d vector array (veq:fvec) or list of lists.
+ ;     a jpath is a wide line emulation useful for drawing wide lines in plotter drawings.
+ ;     - ns: sets the number of parallel lines used to fill
+ ;     - rs: set fill repetiton scale. you must set either rs or ns.
+ ;     - width: width of emulated path.
  ;   Source file: /data/x/weird/src/draw/svg.lisp
 ```
 
 #### WSVG:MAKE
 
 ```
-:missing:todo:
+make wsvg instance for drawing svgs.
+- layout: :a4-landscape, :a4-portrait or corresponding values for a3 and a2
+- stroke sets default stroke color. default is black
+- stroke-width (sw) sets default width. default is 1.1
+- rep-scale (rs) sets the default repetition density for functions that perform any
+  kind of hatching or wide line emulation.
+- stroke-opacity (so) sets default opacity. default is 1.0
+- fill-opacity (fo) sets default fill opacity. default is 1.0
 
  ; WSVG:MAKE
  ;   [symbol]
@@ -176,13 +203,25 @@ draw any svg dpath
  ;                   (:REP-SCALE T) (:FILL-OPACITY T) (:STROKE-OPACITY T)
  ;                   (:SO T) (:RS T) (:FO T) (:SW T))
  ;                  (VALUES WSVG::WSVG &OPTIONAL))
+ ;   Documentation:
+ ;     make wsvg instance for drawing svgs.
+ ;     - layout: :a4-landscape, :a4-portrait or corresponding values for a3 and a2
+ ;     - stroke sets default stroke color. default is black
+ ;     - stroke-width (sw) sets default width. default is 1.1
+ ;     - rep-scale (rs) sets the default repetition density for functions that perform any
+ ;       kind of hatching or wide line emulation.
+ ;     - stroke-opacity (so) sets default opacity. default is 1.0
+ ;     - fill-opacity (fo) sets default fill opacity. default is 1.0
  ;   Source file: /data/x/weird/src/draw/svg.lisp
 ```
 
 #### WSVG:MAKE\*
 
 ```
-:missing:todo:
+make wsvg instance for drawing svgs.
+- height: default 1000.0
+- width: default 1000.0
+remaining arguments are identical to wsvg:make.
 
  ; WSVG:MAKE*
  ;   [symbol]
@@ -195,13 +234,21 @@ draw any svg dpath
  ;                   (:STROKE-WIDTH T) (:REP-SCALE T) (:FILL-OPACITY T)
  ;                   (:STROKE-OPACITY T) (:SO T) (:RS T) (:FO T) (:SW T))
  ;                  (VALUES WSVG::WSVG &OPTIONAL))
+ ;   Documentation:
+ ;     make wsvg instance for drawing svgs.
+ ;     - height: default 1000.0
+ ;     - width: default 1000.0
+ ;     remaining arguments are identical to wsvg:make.
  ;   Source file: /data/x/weird/src/draw/svg.lisp
 ```
 
 #### WSVG:PATH
 
 ```
-:missing:todo:
+draw path from 2d vector array (veq:fvec) or list of lists
+such as ((1f0 2f0) (3f0 4f0)).
+use fill, stroke, sw, so, fo, as described in wsvg:make
+if closed is t, the path will join back to the initial coordinate.
 
  ; WSVG:PATH
  ;   [symbol]
@@ -213,13 +260,18 @@ draw any svg dpath
  ;                  (WSVG::WSVG T &KEY (:SW T) (:FILL T) (:STROKE T)
  ;                   (:SO T) (:FO T) (:CLOSED T) (:LJ T))
  ;                  (VALUES T &OPTIONAL))
+ ;   Documentation:
+ ;     draw path from 2d vector array (veq:fvec) or list of lists
+ ;     such as ((1f0 2f0) (3f0 4f0)).
+ ;     use fill, stroke, sw, so, fo, as described in wsvg:make
+ ;     if closed is t, the path will join back to the initial coordinate.
  ;   Source file: /data/x/weird/src/draw/svg.lisp
 ```
 
 #### WSVG:RECT
 
 ```
-:missing:todo:
+draw a rectangle of size w,h at xy. defaults to origin.
 
  ; WSVG:RECT
  ;   [symbol]
@@ -230,13 +282,15 @@ draw any svg dpath
  ;                  (WSVG::WSVG NUMBER NUMBER &KEY (:XY LIST) (:FILL T)
  ;                   (:SW T) (:STROKE T) (:SO T) (:FO T))
  ;                  (VALUES T &OPTIONAL))
+ ;   Documentation:
+ ;     draw a rectangle of size w,h at xy. defaults to origin.
  ;   Source file: /data/x/weird/src/draw/svg.lisp
 ```
 
 #### WSVG:SAVE
 
 ```
-:missing:todo:
+save wsvg as fn
 
  ; WSVG:SAVE
  ;   [symbol]
@@ -244,13 +298,15 @@ draw any svg dpath
  ; SAVE names a compiled function:
  ;   Lambda-list: (WSVG FN)
  ;   Derived type: (FUNCTION (WSVG::WSVG T) *)
+ ;   Documentation:
+ ;     save wsvg as fn
  ;   Source file: /data/x/weird/src/draw/svg.lisp
 ```
 
 #### WSVG:SQUARE
 
 ```
-:missing:todo:
+draw a square of size s at xy. defaults to origin.
 
  ; WSVG:SQUARE
  ;   [symbol]
@@ -261,6 +317,8 @@ draw any svg dpath
  ;                  (WSVG::WSVG SINGLE-FLOAT &KEY (:XY T) (:FILL T)
  ;                   (:SW T) (:STROKE T) (:SO T) (:FO T))
  ;                  *)
+ ;   Documentation:
+ ;     draw a square of size s at xy. defaults to origin.
  ;   Source file: /data/x/weird/src/draw/svg.lisp
 ```
 
@@ -284,7 +342,7 @@ draw any svg dpath
 #### WSVG:WCIRC
 
 ```
-:missing:todo:
+draw a circled filled with concentric circles. use rs to set density.
 
  ; WSVG:WCIRC
  ;   [symbol]
@@ -295,6 +353,8 @@ draw any svg dpath
  ;                  (WSVG::WSVG NUMBER &KEY (:XY LIST) (:OUTER-RAD T)
  ;                   (:SW T) (:RS T) (:STROKE T) (:SO T))
  ;                  (VALUES NULL &OPTIONAL))
+ ;   Documentation:
+ ;     draw a circled filled with concentric circles. use rs to set density.
  ;   Source file: /data/x/weird/src/draw/svg.lisp
 ```
 

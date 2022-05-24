@@ -37,13 +37,12 @@
 
 ; this is a rewrite of macro draw from
 ; https://github.com/wmannis/cl-svg/blob/master/svg.lisp#L269
-; that filters out nil elements in parms/opts
+; that filters out nil elements in params/opts
 (defmacro draw% (scene (shape &rest params) &rest opts)
   (let ((element (gensym)))
-    `(let ((,element
-             (funcall #'cl-svg::make-svg-element
-                      ,shape (-filter-nils (append (list ,@params)
-                                                   (list ,@opts))))))
+    `(let ((,element (funcall #'cl-svg::make-svg-element
+                       ,shape (-filter-nils
+                                (append (list ,@params) (list ,@opts))))))
        (cl-svg::add-element ,scene ,element)
        ,element)))
 
@@ -103,6 +102,14 @@
 
 (defun make (&key (layout :a4-landscape) stroke stroke-width rep-scale
                   fill-opacity stroke-opacity so rs fo sw)
+  "make wsvg instance for drawing svgs.
+- layout: :a4-landscape, :a4-portrait or corresponding values for a3 and a2
+- stroke sets default stroke color. default is black
+- stroke-width (sw) sets default width. default is 1.1
+- rep-scale (rs) sets the default repetition density for functions that perform any
+  kind of hatching or wide line emulation.
+- stroke-opacity (so) sets default opacity. default is 1.0
+- fill-opacity (fo) sets default fill opacity. default is 1.0"
   (dsb (width height) (cdr (assoc layout *layouts*))
     (make-wsvg :layout layout
                    :height height :width width
@@ -116,6 +123,10 @@
 
 (defun make* (&key (height 1000f0) (width 1000f0) stroke stroke-width
                    rep-scale fill-opacity stroke-opacity so rs fo sw)
+  "make wsvg instance for drawing svgs.
+- height: default 1000.0
+- width: default 1000.0
+remaining arguments are identical to wsvg:make."
   (make-wsvg :layout :custom
                  :height height :width width
                  :stroke (-hex (if stroke stroke "black"))
@@ -188,6 +199,10 @@
 (defun path (wsvg pts* &key sw fill stroke so fo closed lj
                        &aux (pts (ensure-list pts*)))
   (declare (wsvg wsvg))
+  "draw path from 2d vector array (veq:fvec) or list of lists
+such as ((1f0 2f0) (3f0 4f0)).
+use fill, stroke, sw, so, fo, as described in wsvg:make
+if closed is t, the path will join back to the initial coordinate."
   (draw% (wsvg-scene wsvg)
     (:path :d (loop with pth = (cl-svg:make-path)
                     for p of-type list in pts
@@ -261,7 +276,10 @@
 (defun bzspl (wsvg pts* &key closed sw stroke fill so fo
                         &aux (pts (ensure-list pts*)))
   (declare (wsvg wsvg))
-  "quadratic bezier"
+  "draw quadratic bezier from 2d vector array (veq:fvec) or list of lists.
+use fill, stroke, sw, so, fo, as described in wsvg:make to override.
+if closed is t, the path will join back to the initial coordinate.
+must provide at least three points."
   (when (< (length pts) 3) (error "needs at least 3 pts."))
   (with-struct (wsvg- scene) wsvg
     (let ((pth (cl-svg:make-path)))
@@ -278,6 +296,11 @@
 (defun jpath (wsvg pts &key (width 1f0) closed stroke sw so rs ns
                             (limits jpath::*limits*))
   (declare (wsvg wsvg) (sequence pts))
+  "draw jpath from 2d vector array (veq:fvec) or list of lists.
+a jpath is a wide line emulation useful for drawing wide lines in plotter drawings.
+- ns: sets the number of parallel lines used to fill
+- rs: set fill repetiton scale. you must set either rs or ns.
+- width: width of emulated path."
   (when (and ns rs) (error "jpath error: either rs or ns must be nil"))
   (let ((rep (if ns ns (ceiling (* (-select-rep-scale wsvg rs) (veq:ff width))))))
     (when (< rep 2) (return-from jpath (path wsvg pts :stroke stroke
@@ -302,6 +325,7 @@
 
 (defun rect (wsvg w h &key (xy *zero*) fill sw stroke so fo)
   (declare (wsvg wsvg) (list xy) (number w h))
+  "draw a rectangle of size w,h at xy. defaults to origin."
   (dsb (x y &rest rest) xy
     (declare (ignore rest))
     (draw% (wsvg-scene wsvg)
@@ -315,11 +339,13 @@
 
 (defun square (wsvg s &key (xy *zero*) fill sw stroke so fo)
   (declare (wsvg wsvg) (veq:ff s))
+  "draw a square of size s at xy. defaults to origin."
   (rect wsvg s s :fill fill :xy xy :fo fo :so so :sw sw :stroke stroke))
 
 
 (defun circ (wsvg rad &key (xy *zero*) fill sw stroke so fo)
   (declare (wsvg wsvg) (list xy) (number rad))
+  "draw a circle of radius rad at xy. defaults to origin."
   (dsb (x y &rest rest) xy
     (declare (ignore rest))
     (draw% (wsvg-scene wsvg) (:circle :cx x :cy y :r rad)
@@ -332,6 +358,7 @@
 
 (defun wcirc (wsvg rad* &key (xy *zero*) outer-rad sw rs stroke so)
   (declare (wsvg wsvg) (list xy) (number rad*))
+  "draw a circled filled with concentric circles. use rs to set density."
   (let* ((rad (veq:ff rad*))
          (inner (max 0.1f0 (if outer-rad rad 0.1f0)))
          (outer (if outer-rad outer-rad rad))
@@ -343,7 +370,8 @@
 
 (defun draw (wsvg d &key sw stroke fill so fo)
   (declare (wsvg wsvg) (vector d))
-  "draw any svg dpath"
+  "draw any svg dpath from string d
+ex: M20,230 Q40,205 50,230 T90,230"
   (draw% (wsvg-scene wsvg) (:path :d d)
          :fill (-select-fill fill)
          :stroke (-select-stroke wsvg stroke)
@@ -367,6 +395,7 @@
 
 (defun save (wsvg fn)
   (declare (wsvg wsvg))
+  "save wsvg as fn"
   (with-open-file (fstream (ensure-filename fn ".svg")
                      :direction :output :if-exists :supersede)
     (declare (stream fstream))

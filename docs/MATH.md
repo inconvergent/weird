@@ -1,7 +1,7 @@
 #### MATH:ADD
 
 ```
-:missing:todo:
+element wise + for two lists of FIXNUM
 
  ; MATH:ADD
  ;   [symbol]
@@ -9,13 +9,16 @@
  ; ADD names a compiled function:
  ;   Lambda-list: (AA BB)
  ;   Derived type: (FUNCTION (LIST LIST) (VALUES LIST &OPTIONAL))
+ ;   Documentation:
+ ;     element wise + for two lists of FIXNUM
  ;   Source file: /data/x/weird/src/math.lisp
 ```
 
 #### MATH:ARGMAX
 
 ```
-:missing:todo:
+returns (values iv v).
+where iv is the index of v and v is the highest value in ll.
 
  ; MATH:ARGMAX
  ;   [symbol]
@@ -24,13 +27,17 @@
  ;   Lambda-list: (LL &OPTIONAL (KEY (FUNCTION IDENTITY)))
  ;   Derived type: (FUNCTION (LIST &OPTIONAL FUNCTION)
  ;                  (VALUES UNSIGNED-BYTE T &OPTIONAL))
+ ;   Documentation:
+ ;     returns (values iv v).
+ ;     where iv is the index of v and v is the highest value in ll.
  ;   Source file: /data/x/weird/src/math.lisp
 ```
 
 #### MATH:ARGMIN
 
 ```
-:missing:todo:
+returns (values iv v).
+where iv is the index of v and v is the smallest value in ll.
 
  ; MATH:ARGMIN
  ;   [symbol]
@@ -39,28 +46,16 @@
  ;   Lambda-list: (LL &OPTIONAL (KEY (FUNCTION IDENTITY)))
  ;   Derived type: (FUNCTION (LIST &OPTIONAL FUNCTION)
  ;                  (VALUES UNSIGNED-BYTE T &OPTIONAL))
- ;   Source file: /data/x/weird/src/math.lisp
-```
-
-#### MATH:CLAMP
-
-```
-:missing:todo:
-
- ; MATH:CLAMP
- ;   [symbol]
- ; 
- ; CLAMP names a compiled function:
- ;   Lambda-list: (V MI MA)
- ;   Derived type: (FUNCTION (SINGLE-FLOAT SINGLE-FLOAT SINGLE-FLOAT)
- ;                  (VALUES SINGLE-FLOAT &OPTIONAL))
+ ;   Documentation:
+ ;     returns (values iv v).
+ ;     where iv is the index of v and v is the smallest value in ll.
  ;   Source file: /data/x/weird/src/math.lisp
 ```
 
 #### MATH:CLOSE-PATH
 
 ```
-append first element of p to end of p
+append first element of p to end of p.
 
  ; MATH:CLOSE-PATH
  ;   [symbol]
@@ -69,14 +64,14 @@ append first element of p to end of p
  ;   Lambda-list: (P)
  ;   Derived type: (FUNCTION (LIST) (VALUES CONS &OPTIONAL))
  ;   Documentation:
- ;     append first element of p to end of p
+ ;     append first element of p to end of p.
  ;   Source file: /data/x/weird/src/math.lisp
 ```
 
 #### MATH:CLOSE-PATH\*
 
 ```
-append last element of p to front of p
+append last element of p to front of p.
 
  ; MATH:CLOSE-PATH*
  ;   [symbol]
@@ -85,14 +80,14 @@ append last element of p to front of p
  ;   Lambda-list: (P)
  ;   Derived type: (FUNCTION (LIST) (VALUES CONS &OPTIONAL))
  ;   Documentation:
- ;     append last element of p to front of p
+ ;     append last element of p to front of p.
  ;   Source file: /data/x/weird/src/math.lisp
 ```
 
 #### MATH:COPY-SORT
 
 ```
-:missing:todo:
+sort a without side effects to a. not very efficent.
 
  ; MATH:COPY-SORT
  ;   [symbol]
@@ -104,13 +99,15 @@ append last element of p to front of p
  ;                   (OR LIST (SIMPLE-ARRAY * (*))
  ;                       SB-KERNEL:EXTENDED-SEQUENCE)
  ;                   &OPTIONAL))
+ ;   Documentation:
+ ;     sort a without side effects to a. not very efficent.
  ;   Source file: /data/x/weird/src/math.lisp
 ```
 
 #### MATH:IMOD
 
 ```
-:missing:todo:
+(mod (+ i inc) m). for fixnums
 
  ; MATH:IMOD
  ;   [symbol]
@@ -121,6 +118,8 @@ append last element of p to front of p
  ;                  (VALUES
  ;                   (INTEGER -4611686018427387903 4611686018427387903)
  ;                   &OPTIONAL))
+ ;   Documentation:
+ ;     (mod (+ i inc) m). for fixnums
  ;   Source file: /data/x/weird/src/math.lisp
 ```
 
@@ -212,7 +211,8 @@ list is longer than n?
 #### MATH:LL-TRANSPOSE
 
 ```
-transpose list of lists
+transpose list of lists.
+assumes all initial lists in l have the same length.
 
  ; MATH:LL-TRANSPOSE
  ;   [symbol]
@@ -221,14 +221,15 @@ transpose list of lists
  ;   Lambda-list: (L)
  ;   Derived type: (FUNCTION (LIST) (VALUES LIST &OPTIONAL))
  ;   Documentation:
- ;     transpose list of lists
+ ;     transpose list of lists.
+ ;     assumes all initial lists in l have the same length.
  ;   Source file: /data/x/weird/src/math.lisp
 ```
 
 #### MATH:LPOS
 
 ```
- apply fx to every element in ll. 
+apply fx to every element in ll. 
 
  ; MATH:LPOS
  ;   [symbol]
@@ -238,14 +239,14 @@ transpose list of lists
  ;   Derived type: (FUNCTION (LIST &KEY (:FX FUNCTION))
  ;                  (VALUES LIST &OPTIONAL))
  ;   Documentation:
- ;      apply fx to every element in ll.
+ ;     apply fx to every element in ll.
  ;   Source file: /data/x/weird/src/math.lisp
 ```
 
 #### MATH:MOD2
 
 ```
-:missing:todo:
+(mod i 2). for fixnum.
 
  ; MATH:MOD2
  ;   [symbol]
@@ -253,13 +254,15 @@ transpose list of lists
  ; MOD2 names a compiled function:
  ;   Lambda-list: (I)
  ;   Derived type: (FUNCTION (FIXNUM) (VALUES BIT &OPTIONAL))
+ ;   Documentation:
+ ;     (mod i 2). for fixnum.
  ;   Source file: /data/x/weird/src/math.lisp
 ```
 
 #### MATH:MULT
 
 ```
-:missing:todo:
+element wise * for two lists of FIXNUM
 
  ; MATH:MULT
  ;   [symbol]
@@ -267,13 +270,15 @@ transpose list of lists
  ; MULT names a compiled function:
  ;   Lambda-list: (AA BB)
  ;   Derived type: (FUNCTION (LIST LIST) (VALUES LIST &OPTIONAL))
+ ;   Documentation:
+ ;     element wise * for two lists of FIXNUM
  ;   Source file: /data/x/weird/src/math.lisp
 ```
 
 #### MATH:NREP
 
 ```
-returns list with body repeated n times
+returns list with body :evaluated: n times.
 
  ; MATH:NREP
  ;   [symbol]
@@ -281,7 +286,7 @@ returns list with body repeated n times
  ; NREP names a macro:
  ;   Lambda-list: (N &BODY BODY)
  ;   Documentation:
- ;     returns list with body repeated n times
+ ;     returns list with body :evaluated: n times.
  ;   Source file: /data/x/weird/src/math.lisp
 ```
 
@@ -324,7 +329,7 @@ binary range search.  range must be sorted in ascending order. f is a value
 #### MATH:SUB
 
 ```
-:missing:todo:
+element wise - for two lists of FIXNUM
 
  ; MATH:SUB
  ;   [symbol]
@@ -332,6 +337,8 @@ binary range search.  range must be sorted in ascending order. f is a value
  ; SUB names a compiled function:
  ;   Lambda-list: (AA BB)
  ;   Derived type: (FUNCTION (LIST LIST) (VALUES LIST &OPTIONAL))
+ ;   Documentation:
+ ;     element wise - for two lists of FIXNUM
  ;   Source file: /data/x/weird/src/math.lisp
 ```
 

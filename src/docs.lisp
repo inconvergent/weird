@@ -56,11 +56,11 @@
                      collect (list ,str (select-docs ,sym))))
       (otherwise `(loop for (,str ,sym) in (pckgs ,pkg) collect ,str)))))
 
-; (defun map-docstring (&rest rest)
-;   (declare #.*opt* (list rest))
-;   "register docs info associated with symbol (car rest)."
-;   (setf *docstring-map* (remove-if (lambda (cand) (eq (car cand) (car rest)))
-;                                    *docstring-map*))
-;   (push rest *docstring-map*))
+(defun map-docstring (&rest rest)
+  (declare #.*opt* (list rest))
+  "register docs info associated with symbol (car rest)."
+  (setf *docstring-map* (remove-if (lambda (cand) (eq (car cand) (car rest)))
+                                   *docstring-map*))
+  (push rest *docstring-map*))
 
 

@@ -53,6 +53,7 @@
 (declaim (inline set-pix))
 (defun set-pix (canv i j r g b)
   (declare (pos-int i j) (single-float r g b))
+  "set (i j) to value (r g b) where 0.0 =< r,g,b =< 1.0."
   (-do-op (canv size vals indfx)
     (let ((ind (funcall indfx i j)))
       (declare (pos-int ind))
@@ -64,6 +65,7 @@
 (declaim (inline set-gray-pix))
 (defun set-gray-pix (canv i j c)
   (declare (pos-int i j) (single-float c))
+  "set (i j) to value c where 0.0 =< c =< 1.0."
   (-do-op (canv size vals indfx)
     (let ((ind (funcall indfx i j))
           (c* (max 0f0 (min 1f0 c))))
@@ -102,12 +104,12 @@
 
 
 (defun make (&key (size 1000))
+  "make square PNG canvas instance of size to."
   (make-canvas
     :size size :vals (make-rgb-array size) :indfx (-get-indfx size)))
 
 
 (defun -save8 (canv fn &key gamma)
-  " save as 8 bits."
   (-do-op (canv size vals indfx)
     (let ((png (make-instance 'zpng::pixel-streamed-png
                               :color-type :truecolor
@@ -128,5 +130,6 @@
 
 (defun save (canv fn &key (gamma 1f0))
   (declare (canvas canv) (single-float gamma))
+  "save as 8 bit PNG file fn with gamma."
   (-save8 canv fn :gamma gamma))
 

@@ -12,7 +12,9 @@
 
 (defun del-simple-filaments (grph)
   (declare (graph grph))
-  "recursively remove all simple filament edges until there are none left"
+  "recursively remove all simple filament edges until there are none left.
+
+"
   (loop until (notany #'identity
                       (loop for v in (get-verts grph)
                             collect (-del-filament grph v))))
@@ -23,8 +25,7 @@
 ;note: this can possibly be improved if k is an array
 (defun -cycle-info (k)
   (declare (list k))
-  (if (= (first k) (first (last k))) (list (cdr k) t)
-                                     (list k nil)))
+  (if (= (first k) (first (last k))) (list (cdr k) t) (list k nil)))
 
 (defun -find-segment (grph start curr)
   (declare (graph grph) (pos-int start curr))
@@ -55,15 +56,13 @@
 (defun -add-visited-verts (visited path)
   (loop for v in path do (setf (gethash v visited) t)))
 
+; TODO: rewrite this to avoid cheching everything multiple times.
 (defun get-segments (grph &key cycle-info)
   (declare (graph grph))
-  "
-  greedily finds segments between multi-intersection points.  TODO: rewrite
-  this to avoid cheching everything multiple times.  i'm sorry.
+  "greedily finds segments :between: multi-intersection points.
 
-  note: by definition this will not return parts of the graph that have no
-  multi-intersections. consider walk-graph instead.
-  "
+note: by definition this will not return parts of the graph that have no
+multi-intersections. consider walk-graph instead."
   (let ((all-paths (make-hash-table :test #'equal))
         (visited (make-hash-table :test #'equal)))
 
@@ -112,6 +111,9 @@
 
 (defun walk-graph (grph &key (angle #'-angle-fx))
   (declare (graph grph))
+  "greedily walks the graph so that every edge is returned exactly once.
+in multi-intersectinons the walker selects the smallest available angle.
+this is useful for exporting a graph as a plotter drawing."
 
   (let ((all-edges (loop with res = (make-hash-table :test #'equal)
                          for e in (get-edges grph)
