@@ -3,6 +3,10 @@
 
 (deftype index-array () `(simple-array fixnum))
 
+
+(defmacro -ind (a dim i leap)
+  `(the fixnum (+ (the fixnum (* ,dim (the fixnum (aref ,a ,i)))) ,leap)))
+
 (defstruct (node (:constructor node (leap ind left right)))
   (left nil :read-only t)
   (right nil :read-only t)
@@ -10,10 +14,8 @@
   (ind -1 :type fixnum :read-only t))
 
 (veq:fvdef -qsort-kdtree (argsort a &key dim (leap 0) (lo 0) hi)
-  "
-  construct a kd tree of dim using quicksort for partitioning.
-  argsort will contain the index into the spatial data in a
-  "
+  "construct a kd tree of dim using quicksort for partitioning.
+argsort will contain the index into the spatial data in a."
   (declare (index-array argsort) (veq:fvec a) (fixnum dim leap lo hi))
 
   (cond ((= hi lo) (return-from -qsort-kdtree (node leap hi nil nil)))
@@ -21,7 +23,7 @@
 
   (labels ((leapget (i)
              (declare (fixnum i))
-             (aref a (+ (* dim (aref argsort i)) leap)))
+             (aref a (-ind argsort dim i leap)))
 
            (partition (lo hi)
              (declare (fixnum lo hi))
@@ -73,7 +75,7 @@
       (labels
         ((leapget (leap ind)
            (declare #.*opt* (fixnum leap ind))
-           (aref verts (+ (* dim (aref argsort ind)) leap)))
+           (aref verts (-ind argsort dim ind leap)))
 
          (xdst2 (ind)
            (declare #.*opt* (fixnum ind))
@@ -99,7 +101,7 @@
       res))))
 
 (veq:fvdef* 2nn (wer (:varg 2 x) &aux (res -1) (resdst2 0f0))
-  "get index of nearest neighbour of x"
+  "get index of nearest neighbour of x."
   (declare #.*opt* (weir wer) (veq:ff x resdst2) (fixnum res))
 
   (with-struct (weir- kdtree verts dim) wer
@@ -109,7 +111,7 @@
       (labels
         ((leapget (leap ind)
            (declare #.*opt* (fixnum leap ind))
-           (aref verts (+ (* dim (aref argsort ind)) leap)))
+           (aref verts (-ind argsort dim ind leap)))
 
          (xdst2 (ind)
            (declare #.*opt* (fixnum ind))
@@ -141,7 +143,7 @@
 
 
 (veq:fvdef* 3nn (wer (:varg 3 x) &aux (res -1) (resdst2 0f0))
-  "get index of nearest neighbour of x"
+  "get index of nearest neighbour of x."
   (declare #.*opt* (weir wer) (veq:ff x resdst2) (fixnum res))
 
   (with-struct (weir- kdtree verts dim) wer
@@ -151,7 +153,7 @@
       (labels
         ((leapget (leap ind)
            (declare #.*opt* (fixnum leap ind))
-           (aref verts (+ (the fixnum (* dim (the fixnum (aref argsort ind)))) leap)))
+           (aref verts (-ind argsort dim ind leap)))
 
          (xdst2 (ind)
            (declare #.*opt* (fixnum ind))

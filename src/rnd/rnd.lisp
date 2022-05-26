@@ -49,7 +49,7 @@
 
 (declaim (inline rnd))
 (defun rnd (&optional (x 1f0))
-  (declare #.*opt* (veq:ff x))
+  (declare (optimize speed (safety 0)) (veq:ff x))
   "random float below x."
   (random x))
 
@@ -62,7 +62,7 @@
 
 (declaim (inline rnd*))
 (defun rnd* (&optional (x 1f0))
-  (declare #.*opt* (veq:ff x))
+  (declare (optimize speed (safety 0)) (veq:ff x))
   "random float in range (-x x)."
   (- x (rnd (* 2f0 x))))
 
@@ -75,7 +75,7 @@
 
 (declaim (inline rndrng))
 (defun rndrng (a b)
-  (declare #.*opt* (veq:ff a b))
+  (declare (optimize speed (safety 0)) (veq:ff a b))
   "random float in range (a b)."
   (+ a (rnd (- b a))))
 
@@ -116,12 +116,9 @@ ex: (prob 0.1 (print :a) (print :b))"
 
 ; TODO: sum to 1?
 (defmacro rcond (&rest clauses)
-  "
-  executes the forms in clauses according to the weighted sum of
-  all p1, p2 ...
-  clauses should be on this form:
-    ((p1 form) (p2 form) ...)
-  "
+  "executes the forms in clauses according to the probability of the weighted sum
+ex: (rcond (0.1 (print :a)) (0.3 (print :b)) ...)
+will print :a 1 times out of 4."
   (weird:awg (val)
     (let* ((tot 0f0)
            (clauses (loop for (p . body) in clauses

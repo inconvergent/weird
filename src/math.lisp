@@ -65,7 +65,8 @@ assumes all initial lists in l have the same length."
      (declare #.*opt* (list aa bb))
      ,(format nil "element wise ~a for two lists of ~a" (car body) type)
      (loop for a of-type ,type in aa and b of-type ,type in bb
-           collect (,@body (the ,type a) (the ,type b)) of-type ,type)))
+           collect (the ,type (,@body (the ,type a) (the ,type b)))
+             of-type ,type)))
 
 (lop add fixnum +)
 (lop sub fixnum -)
@@ -73,11 +74,11 @@ assumes all initial lists in l have the same length."
 
 (defun mod2 (i)
   (declare #.*opt* (fixnum i))
-  "(mod i 2). for fixnum."
+  "(mod i 2) for fixnums."
   (mod i 2))
 (defun imod (i inc m)
   (declare #.*opt* (fixnum i inc m))
-  "(mod (+ i inc) m). for fixnums"
+  "(mod (+ i inc) m) for fixnums"
   (the fixnum (mod (the fixnum (+ i inc)) m)))
 
 
@@ -92,7 +93,7 @@ assumes all initial lists in l have the same length."
 (defun range-search (ranges f &aux (n (1- (length ranges)))
                                    (ranges* (ensure-vector ranges)))
   "binary range search.  range must be sorted in ascending order. f is a value
-   inside the range you are looking for."
+inside the range you are looking for."
   (if (or (< f (aref ranges* 0)) (> f (aref ranges* n)))
     (error "querying position outside range: ~a" f))
 

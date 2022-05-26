@@ -107,7 +107,7 @@ sort a without side effects to a. not very efficent.
 #### MATH:IMOD
 
 ```
-(mod (+ i inc) m). for fixnums
+(mod (+ i inc) m) for fixnums
 
  ; MATH:IMOD
  ;   [symbol]
@@ -119,7 +119,7 @@ sort a without side effects to a. not very efficent.
  ;                   (INTEGER -4611686018427387903 4611686018427387903)
  ;                   &OPTIONAL))
  ;   Documentation:
- ;     (mod (+ i inc) m). for fixnums
+ ;     (mod (+ i inc) m) for fixnums
  ;   Source file: /data/x/weird/src/math.lisp
 ```
 
@@ -246,7 +246,7 @@ apply fx to every element in ll.
 #### MATH:MOD2
 
 ```
-(mod i 2). for fixnum.
+(mod i 2) for fixnums.
 
  ; MATH:MOD2
  ;   [symbol]
@@ -255,7 +255,7 @@ apply fx to every element in ll.
  ;   Lambda-list: (I)
  ;   Derived type: (FUNCTION (FIXNUM) (VALUES BIT &OPTIONAL))
  ;   Documentation:
- ;     (mod i 2). for fixnum.
+ ;     (mod i 2) for fixnums.
  ;   Source file: /data/x/weird/src/math.lisp
 ```
 
@@ -310,7 +310,7 @@ fixnums from 0 to a, or a to b.
 
 ```
 binary range search.  range must be sorted in ascending order. f is a value
-   inside the range you are looking for.
+inside the range you are looking for.
 
  ; MATH:RANGE-SEARCH
  ;   [symbol]
@@ -322,7 +322,7 @@ binary range search.  range must be sorted in ascending order. f is a value
  ;                  (VALUES (MOD 4611686018427387901) &OPTIONAL))
  ;   Documentation:
  ;     binary range search.  range must be sorted in ascending order. f is a value
- ;        inside the range you are looking for.
+ ;     inside the range you are looking for.
  ;   Source file: /data/x/weird/src/math.lisp
 ```
 

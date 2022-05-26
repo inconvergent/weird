@@ -156,7 +156,7 @@
          (m (- v c)))
     (declare (veq:ff c x m))
     (weird:mvb (r g b)
-      (case (floor (mod (* h 6f0) 6f0))
+      (case (the fixnum (floor (mod (* h 6f0) 6f0)))
         (0 (values (+ c m) (+ x m) m))
         (1 (values (+ x m) (+ c m) m))
         (2 (values m (+ c m) (+ x m)))

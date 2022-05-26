@@ -65,7 +65,7 @@
 
 (declaim (inline 3on-sphere))
 (defun 3on-sphere (&optional (r 1f0))
-  (declare #.*opt* (veq:ff r))
+  (declare (optimize speed (safety 0)) (veq:ff r))
   "random point on sphere with rad r. centered at origin."
   (let* ((th (* veq:fpii (rnd:rnd)))
          (la (- (acos (- (* 2.0 (rnd:rnd)) 1f0)) veq:fpi5))
@@ -75,7 +75,7 @@
 
 (declaim (inline 3in-sphere))
 (defun 3in-sphere (&optional (r 1f0))
-  (declare #.*opt* (veq:ff r))
+  (declare (optimize speed (safety 0)) (veq:ff r))
   "random point in sphere with rad r. centered at origin."
   (veq:f3let ((cand (values 0f0 0f0 0f0)))
     (loop while t

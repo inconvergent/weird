@@ -612,12 +612,9 @@ ex: (prob 0.1 (print :a) (print :b))
 #### RND:RCOND
 
 ```
-
-  executes the forms in clauses according to the weighted sum of
-  all p1, p2 ...
-  clauses should be on this form:
-    ((p1 form) (p2 form) ...)
-  
+executes the forms in clauses according to the probability of the weighted sum
+ex: (rcond (0.1 (print :a)) (0.3 (print :b)) ...)
+will print :a 1 times out of 4.
 
  ; RND:RCOND
  ;   [symbol]
@@ -625,12 +622,9 @@ ex: (prob 0.1 (print :a) (print :b))
  ; RCOND names a macro:
  ;   Lambda-list: (&REST CLAUSES)
  ;   Documentation:
- ;     
- ;       executes the forms in clauses according to the weighted sum of
- ;       all p1, p2 ...
- ;       clauses should be on this form:
- ;         ((p1 form) (p2 form) ...)
- ; 
+ ;     executes the forms in clauses according to the probability of the weighted sum
+ ;     ex: (rcond (0.1 (print :a)) (0.3 (print :b)) ...)
+ ;     will print :a 1 times out of 4.
  ;   Source file: /data/x/weird/src/rnd/rnd.lisp
 ```
 

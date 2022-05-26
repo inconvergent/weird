@@ -11,7 +11,8 @@
   :depends-on (#:alexandria #:cl-json #:cl-svg #:lparallel #:veq #:zpng
                #:split-sequence #:parse-number #:prove #:str)
   :components ((:file "packages")
-               (:file "config" :depends-on ("packages"))
+               (:file "init" :depends-on ("packages"))
+               (:file "config" :depends-on ("init"))
                (:file "utils" :depends-on ("config"))
                (:file "parallel/main" :depends-on ("utils"))
                (:file "dat" :depends-on ("utils"))

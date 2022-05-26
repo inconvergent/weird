@@ -21,7 +21,7 @@
  ; 
  ; *OPT* names a special variable:
  ;   Declared type: CONS
- ;   Value: (OPTIMIZE (SAFETY 1) SPEED (DEBUG 2) SPACE)
+ ;   Value: (OPTIMIZE (SAFETY 1) (SPEED 3) DEBUG SPACE)
 ```
 
 #### WEIRD:ABBREV
