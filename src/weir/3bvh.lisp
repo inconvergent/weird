@@ -76,8 +76,8 @@
 
 
 ; ;https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
-(declaim (inline -polyx*))
-(veq:fvdef -polyx* (fx (:va 3 org l))
+(declaim (inline -polyx))
+(veq:fvdef -polyx (fx (:va 3 org l))
   (declare (optimize speed (safety 0))
            (veq:fvec fx) (veq:ff org l))
   (veq:fvlet ((h 3 (veq:f3cross l (veq:f3$ fx 2)))
@@ -85,18 +85,18 @@
     (declare (veq:ff h a))
   ; e1,e2 are parallel
   (when (< (abs a) (the veq:ff #.*eps*)) ; miss!
-        (return-from -polyx* -1f0))
+        (return-from -polyx -1f0))
   (veq:fvlet ((f (/ a))
               (s 3 (veq:f3- org (veq:f3$ fx 0)))
               (u (the veq:ff (* f (veq:f3. s h)))))
     (declare (veq:ff f s u))
     (when (or (> u 1f0) (< u 0f0)) ; miss!
-          (return-from -polyx* -1f0))
+          (return-from -polyx -1f0))
     (veq:fvlet ((q 3 (veq:f3cross s (veq:f3$ fx 1)))
                 (v (the veq:ff (* f (veq:f3. l q)))))
       (declare (veq:ff q v))
       (when (or (< v 0f0) (> (the veq:ff (+ u v)) 1f0)) ; miss!
-            (return-from -polyx* -1f0))
+            (return-from -polyx -1f0))
       ; technically we should do this:
       ; (max (the veq:ff (* f (veq:f3. (veq:f3$ fx 2) q))) ; hit!
       ;      (the veq:ff #.(- *eps*))))
@@ -105,39 +105,39 @@
       (the veq:ff (* f (veq:f3. (veq:f3$ fx 2) q))))))) ; hit/miss!
 
 
-(veq:fvdef make-raycaster (bvh &aux (res (make-bvhres)) (p (bvhres-pt res)))
+(veq:fvdef make-raycaster (bvh &aux (res (make-bvhres)) (p (bvhres-pt res))
+                                    (root (bvh::bvh-root bvh)))
   (declare (optimize speed (safety 0))
-           (bvh::bvh bvh) (bvhres res) (veq:fvec p))
+           (bvh::bvh bvh) (bvhres res) (veq:fvec p) (bvh::node root))
+  (macrolet
+    ((leaf- ((res i) &body body)
+       `(let ((s ,@body))
+          (declare (veq:ff s))
+          (when (and (< (the veq:ff *eps*) s) (< s (bvhres-s ,res)))
+                (setf (bvhres-s ,res) s (bvhres-i ,res) (the list ,i)))))
+     (for-leaves- ((res node fx) &body body)
+       `(loop for (i ,fx) of-type (list veq:fvec)
+              in (bvh::node-leaves ,node) do (leaf- (,res i) ,@body)))
+     (rec-if- (&rest rest) `(typecase (,@rest) (bvh::node (rec (,@rest))))))
 
-  (macrolet ((leaf ((res i) &body body)
-               `(let ((s ,@body))
-                 (declare (veq:ff s))
-                 (when (and (< (the veq:ff *eps*) s) (< s (bvhres-s ,res)))
-                       (setf (bvhres-s ,res) s (bvhres-i ,res) (the list ,i)))))
-             (for-leaves- ((res node fx) &body body)
-               `(loop for (i ,fx) of-type (list veq:fvec)
-                      in (bvh::node-leaves ,node) do (leaf (,res i) ,@body))))
-
-    (labels ((raycast ((:va 3 org b))
-               (declare (veq:ff org b))
-
-               (veq:f3let ((ll (veq:f3- b org))
-                           (inv (bvh::-eps-div* ll)))
-                 (veq:mvb ((:va 3 sig)) (bvh::-sig inv)
-                   (declare (boolean sig))
-                   (labels ((rec (node)
-                              (declare (optimize speed (safety 0)))
-                              (unless (and node
-                                           (bvh::-bbox-test
-                                             (bvh::node-mima (the bvh::node node))
-                                             sig inv org))
-                                      (return-from rec))
-                              (for-leaves- (res node fx) (-polyx* fx org ll))
-                              (rec (bvh::node-l node))
-                              (rec (bvh::node-r node))))
-                     (setf (bvhres-i res) nil (bvhres-s res) 900000f0)
-                     (rec (bvh::bvh-root bvh))
-                     (veq:3$vset (p 0) (veq:f3from org ll (bvhres-s res)))
-                     res)))))
+    (labels
+      ((raycast ((:va 3 org b))
+         (declare (veq:ff org b))
+         (veq:f3let ((ll (veq:f3- b org))
+                     (inv (bvh::-eps-div* ll)))
+           (veq:mvb ((:va 3 sig)) (bvh::-sig inv)
+             (declare (boolean sig))
+             (labels
+               ((rec (node)
+                  (declare (optimize speed (safety 0)) (bvh::node node))
+                  (unless (bvh::-bbox-test (bvh::node-mima node) sig inv org)
+                          (return-from rec))
+                  (for-leaves- (res node fx) (-polyx fx org ll))
+                  (rec-if- bvh::node-l node)
+                  (rec-if- bvh::node-r node)))
+               (setf (bvhres-i res) nil (bvhres-s res) 900000f0)
+               (rec root)
+               (veq:3$vset (p 0) (veq:f3from org ll (bvhres-s res)))
+               res)))))
     #'raycast)))
 

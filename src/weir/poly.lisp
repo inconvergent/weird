@@ -162,7 +162,7 @@
   (let ((path (weird:tv (graph:edge-set->path edge-set)))
         (res (list)))
     (declare (vector path))
-    (labels ((gv (i) (declare (pos-int i)) (veq:vgrp-mvc (3 fx) (3gv wer i)))
+    (labels ((gv (i) (declare (pos-int i)) (veq:mvcgrp (3 fx) (3gv wer i)))
              (ypos (v) (declare (pos-int v)) (veq:fy (gv v)))
              (ind-rotate (path ymost)
                (declare (vector path) (pos-int ymost))
@@ -181,7 +181,7 @@
                         do ; weird precision issue. override veq eps
                            ; TODO: can we fix this somehow?
                            (let ((veq::*eps* (* 1000f0 veq::*eps*)))
-                             (when (veq:f2segx a b (veq:vgrp-mvc (3 fx)
+                             (when (veq:f2segx a b (veq:mvcgrp (3 fx)
                                                      (3$verts wer (aref path i)
                                                        (aref path (mod (1+ i) n)))))
                                (return-from cross t)))))
@@ -193,12 +193,12 @@
                      if ; TODO: this feels very sketchy
                        (let ((veq::*eps* (* 1000f0 veq::*eps*)))
                           (veq:f2in-triangle
-                            (veq:vgrp-mvc (3 fx)
+                            (veq:mvcgrp (3 fx)
                               (3$verts wer (aref path 0) (aref path 1)
                                (weird:vl path) (aref path i)))))
 
                      do (let ((d (veq:f2segdst
-                                   (veq:vgrp-mvc (3 fx)
+                                   (veq:mvcgrp (3 fx)
                                      (3$verts wer (aref path 1) (weird:vl path)
                                                   (aref path i))))))
                           (when (or (= curr -1) (> d dst))
