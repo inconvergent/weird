@@ -4,22 +4,22 @@
 ; https://www.reddit.com/r/VoxelGameDev/comments/6md7zp/anyone_got_lookup_tables_for_marching_cubes/
 ; tables from: https://pastebin.com/DQ4Xjn7t
 
-(deftype pos-vec () `(simple-array pos-int))
-(declaim (veq:ff *shift*) (pos-int *max-voxels*)
+(deftype pos-vec () `(simple-array veq:pn))
+(declaim (veq:ff *shift*) (veq:pn *max-voxels*)
          (pos-vec *offsets* *cubeind* *edges* *triangles*))
 (defparameter *shift* -1f0)
 (defparameter *max-voxels* 1024)
 
 (defvar *offsets*
-  (make-array 24 :element-type 'pos-int :adjustable nil
+  (make-array 24 :element-type 'veq:pn :adjustable nil
                  :initial-contents '(0 0 0 1 0 0 1 0 1 0 0 1 0 1 0 1 1 0 1 1 1 0 1 1)))
 
 (defvar *cubeind*
-  (make-array 24 :element-type 'pos-int :adjustable nil
+  (make-array 24 :element-type 'veq:pn :adjustable nil
                  :initial-contents '(0 1 1 2 2 3 3 0 4 5 5 6 6 7 7 4 0 4 1 5 2 6 3 7)))
 
 (defvar *edges*
-  (make-array 256 :element-type 'pos-int :adjustable nil
+  (make-array 256 :element-type 'veq:pn :adjustable nil
     :initial-contents
       '(#x0 #x109 #x203 #x30a #x406 #x50f #x605 #x70c #x80c #x905 #xa0f
         #xb06 #xc0a #xd03 #xe09 #xf00 #x190 #x99 #x393 #x29a #x596 #x49f #x795 #x69c #x99c #x895
@@ -41,7 +41,7 @@
         #x406 #x30a #x203 #x109 #x0)))
 
 (defvar *triangles*
-  (make-array '(256 16) :element-type 'pos-int :adjustable nil
+  (make-array '(256 16) :element-type 'veq:pn :adjustable nil
     :initial-contents
       '((99 99 99 99 99 99 99 99 99 99 99 99 99 99 99 99) (0 8 3 99 99 99 99 99 99 99 99 99 99 99 99 99) (0 1 9 99 99 99 99 99 99 99 99 99 99 99 99 99) (1 8 3 9 8 1 99 99 99 99 99 99 99 99 99 99)
         (1 2 10 99 99 99 99 99 99 99 99 99 99 99 99 99) (0 8 3 1 2 10 99 99 99 99 99 99 99 99 99 99) (9 2 10 0 2 9 99 99 99 99 99 99 99 99 99 99) (2 8 3 2 10 8 10 9 8 99 99 99 99 99 99 99)
@@ -109,12 +109,20 @@
         (1 3 8 9 1 8 99 99 99 99 99 99 99 99 99 99) (0 9 1 99 99 99 99 99 99 99 99 99 99 99 99 99) (0 3 8 99 99 99 99 99 99 99 99 99 99 99 99 99) (99 99 99 99 99 99 99 99 99 99 99 99 99 99 99 99))))
 
 
+(defun -print-voxels (o s)
+  (declare (notinline voxels-nx voxels-ny voxels-nz
+                      voxels-minv voxels-maxv))
+  (weird:with-struct (voxels- nx ny nz minv maxv) o
+    (format s "~&@voxels: (~a ~a ~a, minv: ~a, maxv: ~a)~&"
+            nx ny nz minv maxv)))
+
 ; (declaim (inline voxels-a voxels-nx voxels-ny voxels-nz))
-(defstruct (voxels (:constructor -make-voxels))
+(defstruct (voxels (:constructor -make-voxels)
+                   (:print-object -print-voxels))
   (a nil :type veq:fvec :read-only t)
-  (nx 0 :type pos-int :read-only t)
-  (ny 0 :type pos-int :read-only t)
-  (nz 0 :type pos-int :read-only t)
+  (nx 0 :type veq:pn :read-only t)
+  (ny 0 :type veq:pn :read-only t)
+  (nz 0 :type veq:pn :read-only t)
   (maxv 0f0 :type veq:ff :read-only nil)
   (minv 0f0 :type veq:ff :read-only nil))
 
@@ -122,25 +130,25 @@
   (declare (list dim))
   (unless (= (length dim) 3) (error "must have 3 dimensions"))
   (destructuring-bind (nx ny nz) dim
-    (declare (pos-int nx ny nz))
+    (declare (veq:pn nx ny nz))
     (-make-voxels :a (make-array (list (+ nx 2) (+ ny 2) (+ nz 2))
                        :initial-element -9999999f0 :element-type 'veq:ff)
                   :nx nx :ny ny :nz nz)))
 
 ; (declaim (inline getvoxel))
 (defun getvoxel (voxs ix iy iz)
-  (declare #.*opt* (voxels voxs) (pos-int ix iy iz))
+  (declare #.*opt* (voxels voxs) (veq:pn ix iy iz))
   (aref (the veq:fvec (voxels-a voxs)) (1+ ix) (1+ iy) (1+ iz)))
 
 ; (declaim (inline setvoxel))
 (defun setvoxel (voxs ix iy iz &optional (v 1f0))
-  (declare #.*opt* (voxels voxs) (pos-int ix iy iz) (veq:ff v))
+  (declare #.*opt* (voxels voxs) (veq:pn ix iy iz) (veq:ff v))
   (setf (aref (the veq:fvec (voxels-a voxs)) (1+ ix) (1+ iy) (1+ iz)) v))
 
 
 ; (declaim (inline -make-pos-vec))
 (defun -make-pos-vec (n)
-  (declare #.*opt* (pos-int n))
-  (make-array n :element-type 'pos-int :initial-element 0 :adjustable nil))
+  (declare #.*opt* (veq:pn n))
+  (make-array n :element-type 'veq:pn :initial-element 0 :adjustable nil))
 
 

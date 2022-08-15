@@ -85,7 +85,7 @@ argsort will contain the index into the spatial data in a."
            (declare #.*opt*)
            (when (not node) (return-from -rad))
            (with-struct (node- ind leap left right) node
-             (declare (pos-int ind leap))
+             (declare (veq:pn ind leap))
              (let* ((xv (case leap (0 (:vref x 0)) (otherwise (:vref x 1))))
                     (nv (leapget leap ind))
                     (axdst2 (expt (- xv nv) 2f0))
@@ -121,7 +121,7 @@ argsort will contain the index into the spatial data in a."
            (declare #.*opt*)
            (when (not node) (return-from -nn))
            (with-struct (node- ind leap left right) node
-             (declare (pos-int ind leap))
+             (declare (veq:pn ind leap))
              (let* ((xv (case leap (0 (:vref x 0)) (otherwise (:vref x 1))))
                     (nv (leapget leap ind))
                     (axdst2 (expt (- xv nv) 2f0))
@@ -163,7 +163,7 @@ argsort will contain the index into the spatial data in a."
            (declare #.*opt*)
            (when (not node) (return-from -nn))
            (with-struct (node- ind leap left right) node
-             (declare (pos-int ind leap))
+             (declare (veq:pn ind leap))
              (let* ((xv (case leap (0 (:vref x 0))
                                    (1 (:vref x 1))
                                    (otherwise (:vref x 2))))

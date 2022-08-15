@@ -95,10 +95,7 @@ sort a without side effects to a. not very efficent.
  ; COPY-SORT names a compiled function:
  ;   Lambda-list: (A FX &KEY (KEY (FUNCTION IDENTITY)))
  ;   Derived type: (FUNCTION (SEQUENCE T &KEY (:KEY T))
- ;                  (VALUES
- ;                   (OR LIST (SIMPLE-ARRAY * (*))
- ;                       SB-KERNEL:EXTENDED-SEQUENCE)
- ;                   &OPTIONAL))
+ ;                  (VALUES SEQUENCE &OPTIONAL))
  ;   Documentation:
  ;     sort a without side effects to a. not very efficent.
  ;   Source file: /data/x/weird/src/math.lisp

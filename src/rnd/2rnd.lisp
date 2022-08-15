@@ -9,7 +9,7 @@
   (veq:f2from a (veq:f2- b a) (rnd)))
 
 (veq:def* 2non-line (n (:varg 2 a b))
-  (declare #.*opt* (weird:pos-int n) (veq:ff a b))
+  (declare #.*opt* (veq:pn n) (veq:ff a b))
   "n random points between a,b."
   (veq:fwith-arrays (:n n :itr k
     :arr ((arr 2))
@@ -29,7 +29,7 @@
   (2in-rect s s))
 
 (veq:def* 2nin-rect (n (:varg 2 s))
-  (declare #.*opt* (weird:pos-int n) (veq:ff s))
+  (declare #.*opt* (veq:pn n) (veq:ff s))
   "n random points in rectangle of size sx,sy. centered at origin."
   (veq:fwith-arrays (:n n :itr k
     :arr ((a 2))
@@ -38,8 +38,8 @@
     a))
 
 (veq:def* 2nin-square (n &optional (s 1f0))
-  (declare #.*opt* (weird:pos-int n) (veq:ff s))
-  "n random points in square of size s. centered at origin"
+  (declare #.*opt* (veq:pn n) (veq:ff s))
+  "n random points in square of size s. centered at origin."
   (veq:fwith-arrays (:n n :itr k
     :arr ((a 2))
     :fxs ((f () (2in-square s)))
@@ -54,7 +54,7 @@
 
 (veq:def* 2non-circ (n &optional (r 1f0))
   (declare #.*opt* (veq:ff r))
-  "n random points on circle with rad r. centered at origin"
+  "n random points on circle with rad r. centered at origin."
   (veq:fwith-arrays (:n n :itr k
     :arr ((a 2))
     :fxs ((f () (2on-circ r)))
@@ -72,7 +72,7 @@
 
 (veq:def* 2nin-circ (n &optional (r 1f0))
   (declare #.*opt* (veq:ff r))
-  "n random points in circle with rad r. centered at origin"
+  "n random points in circle with rad r. centered at origin."
   (veq:fwith-arrays (:n n :itr k
     :arr ((a 2))
     :fxs ((f () (2in-circ r)))

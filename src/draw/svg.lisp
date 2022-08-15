@@ -145,7 +145,7 @@ remaining arguments are identical to wsvg:make."
 ;   (declare (vec:vec p))
 ;   (cl-svg:line-to (first p) (second p)))
 
-(veq:vdef -mid (a b)
+(veq:fvdef -mid (a b)
   (dsb (ax ay &rest rest) a
     (declare (ignore rest))
     (dsb (bx by &rest rest) b

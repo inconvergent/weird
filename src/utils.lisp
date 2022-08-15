@@ -2,7 +2,7 @@
 (in-package #:weird)
 
 
-(deftype pos-int (&optional (bits 31)) `(unsigned-byte ,bits))
+(deftype small-ind (&optional (size 30000)) `(integer 0 ,size))
 
 (defun v? (&optional (silent t))
   (let ((v (slot-value (asdf:find-system 'weird) 'asdf:version)))
@@ -62,7 +62,7 @@
 
 (declaim (inline lst>n))
 (defun lst>n (l n)
-  (declare (list l) (pos-int n))
+  (declare (list l) (veq:pn n))
   "is list, l, longer than n?"
   (consp (nthcdr n l)))
 
@@ -130,6 +130,13 @@
                      fields)
          ,@body))))
 
+(defun -gensyms (name n)
+  (declare (symbol name) (fixnum n))
+  (loop with name = (string-upcase (string name))
+        repeat n
+        for x across "XYZWUVPQR"
+        collect (gensym (format nil "~a-~a-" name x))))
+
 
 (defmacro make-animation ((ani) &body body)
   `(push (lambda () (progn ,@body)) ,ani))
@@ -141,9 +148,16 @@
 (defun split (s c)
   (declare (string s))
   "split s at c"
-  (split-sequence (typecase c (string (char c 0)) (character c)
+  (veq::split-string (typecase c (string (char c 0)) (character c)
                     (t (error "split must be string or char, got ~a" c)))
                   s))
+
+(defun -docs-sanitize (d)
+  (let ((sp (veq::split-string #\~ d)))
+    (apply #'veq::mkstr
+      (concatenate 'list (mapcar (lambda (s)
+                                  (veq::mkstr s #\~ #\~)) (butlast sp))
+                   (last sp)))))
 
 
 (defun append-postfix (fn postfix)
@@ -254,4 +268,27 @@
                                   (cons (case (length ind)
                                           (1 `(list (aref ,a ,@ind)))
                                           (2 `(subseq ,a ,@ind))))))))
+
+(defmacro with-fast-stack ((sym &key (type 'fixnum) (n 1000) (v 0) (safe-z 100))
+                                &rest body)
+  (weird:awg (mem ind)
+    `(let ((,ind ,safe-z)
+           (,mem (make-array ,(+ n (* 2 safe-z))
+                   :element-type ',type :initial-element ,v)))
+       (declare (type (simple-array ,type) ,mem) (small-ind ,ind))
+       (macrolet ((,(weird:symb 'push- sym) (val)
+                    `(progn (setf (aref ,',mem ,',ind) ,val)
+                            (setf ,',ind (the small-ind (1+ ,',ind)))))
+                  (,(weird:symb 'pop- sym) ()
+                    `(progn (setf ,',ind (the small-ind (1- ,',ind)))
+                            (aref ,',mem ,',ind)))
+                  (,(weird:symb 'nil- sym) ()
+                    `(progn (setf ,',ind (the small-ind ,,safe-z))))
+                  (,(weird:symb 'con- sym) () `(< (the small-ind ,,safe-z) ,',ind))
+                  (,(weird:symb 'stack- sym) ()
+                    `(progn (when (<= ,',ind (the small-ind ,,safe-z))
+                                  (error "stack underflow in: ~a" ',',sym))
+                            (when (<= ,,(the small-ind (- n safe-z)) ,',ind)
+                                  (error "stack overflow in: ~a" ',',sym)))))
+         ,@body))))
 

@@ -14,6 +14,12 @@
   (with-open-stream (*standard-output* (make-broadcast-stream))
     (compile-file f)))
 
+; TODO: get this to work
+; (defmacro fvsubtest (name &body body)
+;   `(subtest ,name (veq:fvprogn ,@body)))
+
+; (defmacro fvis (a &rest rest) `(is (veq:fvprogn ,a) ,@rest))
+
 (defun run-tests ()
   (loop with fails = 0
         for f in *files*

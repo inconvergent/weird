@@ -16,8 +16,9 @@ it will be?
 
 (defun make (&key init (size 100) (inc 2f0))
   (declare #.*opt* (fixnum size))
-  "create fixnum set. init (optional) is a list of integers"
-  (let ((s (make-hash-table :test #'eql :size size :rehash-size inc)))
+  "create fixnum set. init (optional) is a list of integers."
+  (let ((s (make-hash-table :test #'eql :size size :rehash-size inc
+                            :rehash-threshold 0.9)))
     (when init (add* s init))
     s))
 

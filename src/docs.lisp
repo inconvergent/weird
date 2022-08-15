@@ -10,7 +10,7 @@
   (let ((d (with-output-to-string (*standard-output*)
              (describe sym))))
     (apply #'mkstr (mapcar (lambda (s) (mkstr " ; " s #\Newline))
-                           (butlast (str:split #\Newline d))))))
+                           (butlast (veq::split-string #\Newline d))))))
 
 (defun docstrings (sym)
   (apply #'mkstr
@@ -40,9 +40,17 @@
                  collect (list (mkstr ,sym) ,sym))
            #'string-lessp :key #'car)))
 
+
+(defun -md-sanitize (d)
+  (let ((sp (veq::split-string #\* d)))
+    (apply #'veq::mkstr
+      (concatenate 'list (mapcar (lambda (s)
+                                  (veq::mkstr s #\\ #\*)) (butlast sp))
+                   (last sp)))))
+
 (defmacro ext-symbols? (pkg &optional mode)
-  "list all external symbols in pkg. use :verbose to inlcude docstring.  use
-  :pretty to print verbose output to stdout in a readable form."
+  "list all external symbols in pkg. use :verbose to inlcude docstring.
+use :pretty to print verbose output to stdout in a readable form."
   (awg (str sym doc skip)
     (case mode
       (:pretty
@@ -50,7 +58,7 @@
                do (mvb (,doc ,skip) (select-docs ,sym)
                        (unless ,skip (format t "~&#### ~a:~a~%~%~a~&~%"
                                              (weird:mkstr ,pkg)
-                                             (str:replace-all "\*" "\\*" ,str)
+                                             (-md-sanitize ,str)
                                              ,doc)))))
       (:pairs `(loop for (,str ,sym) in (pckgs ,pkg)
                      collect (list ,str (select-docs ,sym))))
@@ -62,5 +70,4 @@
   (setf *docstring-map* (remove-if (lambda (cand) (eq (car cand) (car rest)))
                                    *docstring-map*))
   (push rest *docstring-map*))
-
 

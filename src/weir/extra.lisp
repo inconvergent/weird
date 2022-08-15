@@ -2,7 +2,7 @@
 
 ; TODO: copy properties?
 ; TODO: copy grps?
-(veq:vdef 3->2 (wer fx &key new)
+(veq:fvdef 3->2 (wer fx &key new)
   (declare (weir wer) (function fx))
   (weird:with-struct (weir- verts max-verts num-verts) wer
     (let* ((new (if new new (make :max-verts max-verts)))
@@ -11,12 +11,12 @@
       (setf (weir-num-verts new) num-verts)
       (veq:f3$with-rows (num-verts verts)
         (lambda (i (veq:varg 3 x))
-          (declare (pos-int i) (veq:ff x))
+          (declare (veq:pn i) (veq:ff x))
           (veq:2$vset (new-verts i) (funcall fx x))))
       (itr-edges (wer e) (ladd-edge! new e))
       new)))
 
-(veq:vdef* 2cut-to-area! (wer &key g (top 0f0) (left 0f0)
+(veq:fvdef* 2cut-to-area! (wer &key g (top 0f0) (left 0f0)
                                      (bottom 1000f0) (right 1000f0))
   (declare (weir wer) (veq:ff top left bottom right))
   "
@@ -27,13 +27,13 @@
   "
   (labels
     ((inside (i)
-      (declare (pos-int i))
+      (declare (veq:pn i))
       (veq:f2let ((p (2$verts wer i)))
         (and (> (:vref p 0) left) (> (:vref p 1) top)
              (< (:vref p 0) right) (< (:vref p 1) bottom))))
 
      (split-line (ai bi &aux (rev nil))
-       (declare (pos-int ai bi) (boolean rev))
+       (declare (veq:pn ai bi) (boolean rev))
        (unless (inside ai) (rotatef ai bi) (setf rev t)) ; swap indices
        (veq:f2let ((a (2$verts wer ai))
                    (b (2$verts wer bi))

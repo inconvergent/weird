@@ -1,7 +1,7 @@
 #### RND:2IN-CIRC
 
 ```
-docstring for %2IN-CIRC
+DOCSTRING for %2IN-CIRC;
 random point in circle with rad r. centered at origin.
 
  ; RND:2IN-CIRC
@@ -10,7 +10,7 @@ random point in circle with rad r. centered at origin.
  ; 2IN-CIRC names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %2IN-CIRC
+ ;     DOCSTRING for %2IN-CIRC;
  ;     random point in circle with rad r. centered at origin.
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
@@ -18,7 +18,7 @@ random point in circle with rad r. centered at origin.
 #### RND:2IN-RECT
 
 ```
-docstring for %2IN-RECT
+DOCSTRING for %2IN-RECT;
 random point in rectangle of size sx,sy. centered at origin.
 
  ; RND:2IN-RECT
@@ -27,7 +27,7 @@ random point in rectangle of size sx,sy. centered at origin.
  ; 2IN-RECT names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %2IN-RECT
+ ;     DOCSTRING for %2IN-RECT;
  ;     random point in rectangle of size sx,sy. centered at origin.
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
@@ -35,7 +35,7 @@ random point in rectangle of size sx,sy. centered at origin.
 #### RND:2IN-SQUARE
 
 ```
-docstring for %2IN-SQUARE
+DOCSTRING for %2IN-SQUARE;
 random point in square of size s. centered at origin.
 
  ; RND:2IN-SQUARE
@@ -44,7 +44,7 @@ random point in square of size s. centered at origin.
  ; 2IN-SQUARE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %2IN-SQUARE
+ ;     DOCSTRING for %2IN-SQUARE;
  ;     random point in square of size s. centered at origin.
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
@@ -52,8 +52,8 @@ random point in square of size s. centered at origin.
 #### RND:2NIN-CIRC
 
 ```
-docstring for %2NIN-CIRC
-n random points in circle with rad r. centered at origin
+DOCSTRING for %2NIN-CIRC;
+n random points in circle with rad r. centered at origin.
 
  ; RND:2NIN-CIRC
  ;   [symbol]
@@ -61,15 +61,15 @@ n random points in circle with rad r. centered at origin
  ; 2NIN-CIRC names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %2NIN-CIRC
- ;     n random points in circle with rad r. centered at origin
+ ;     DOCSTRING for %2NIN-CIRC;
+ ;     n random points in circle with rad r. centered at origin.
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
 
 #### RND:2NIN-RECT
 
 ```
-docstring for %2NIN-RECT
+DOCSTRING for %2NIN-RECT;
 n random points in rectangle of size sx,sy. centered at origin.
 
  ; RND:2NIN-RECT
@@ -78,7 +78,7 @@ n random points in rectangle of size sx,sy. centered at origin.
  ; 2NIN-RECT names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %2NIN-RECT
+ ;     DOCSTRING for %2NIN-RECT;
  ;     n random points in rectangle of size sx,sy. centered at origin.
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
@@ -86,8 +86,8 @@ n random points in rectangle of size sx,sy. centered at origin.
 #### RND:2NIN-SQUARE
 
 ```
-docstring for %2NIN-SQUARE
-n random points in square of size s. centered at origin
+DOCSTRING for %2NIN-SQUARE;
+n random points in square of size s. centered at origin.
 
  ; RND:2NIN-SQUARE
  ;   [symbol]
@@ -95,16 +95,16 @@ n random points in square of size s. centered at origin
  ; 2NIN-SQUARE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %2NIN-SQUARE
- ;     n random points in square of size s. centered at origin
+ ;     DOCSTRING for %2NIN-SQUARE;
+ ;     n random points in square of size s. centered at origin.
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
 
 #### RND:2NON-CIRC
 
 ```
-docstring for %2NON-CIRC
-n random points on circle with rad r. centered at origin
+DOCSTRING for %2NON-CIRC;
+n random points on circle with rad r. centered at origin.
 
  ; RND:2NON-CIRC
  ;   [symbol]
@@ -112,15 +112,15 @@ n random points on circle with rad r. centered at origin
  ; 2NON-CIRC names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %2NON-CIRC
- ;     n random points on circle with rad r. centered at origin
+ ;     DOCSTRING for %2NON-CIRC;
+ ;     n random points on circle with rad r. centered at origin.
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
 
 #### RND:2NON-LINE
 
 ```
-docstring for %2NON-LINE
+DOCSTRING for %2NON-LINE;
 n random points between a,b.
 
  ; RND:2NON-LINE
@@ -129,7 +129,7 @@ n random points between a,b.
  ; 2NON-LINE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %2NON-LINE
+ ;     DOCSTRING for %2NON-LINE;
  ;     n random points between a,b.
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
@@ -146,7 +146,7 @@ n random points between a,b.
 #### RND:2ON-CIRC
 
 ```
-docstring for %2ON-CIRC
+DOCSTRING for %2ON-CIRC;
 random point on circle with rad r. centered at origin.
 
  ; RND:2ON-CIRC
@@ -155,7 +155,7 @@ random point on circle with rad r. centered at origin.
  ; 2ON-CIRC names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %2ON-CIRC
+ ;     DOCSTRING for %2ON-CIRC;
  ;     random point on circle with rad r. centered at origin.
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
@@ -163,7 +163,7 @@ random point on circle with rad r. centered at origin.
 #### RND:2ON-LINE
 
 ```
-docstring for %2ON-LINE
+DOCSTRING for %2ON-LINE;
 random point between a,b.
 
  ; RND:2ON-LINE
@@ -172,7 +172,7 @@ random point between a,b.
  ; 2ON-LINE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %2ON-LINE
+ ;     DOCSTRING for %2ON-LINE;
  ;     random point between a,b.
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
@@ -186,10 +186,44 @@ random point between a,b.
  ;   [symbol]
 ```
 
+#### RND:2WALKER
+
+```
+DOCSTRING for %2WALKER;
+random 2d walker.
+
+ ; RND:2WALKER
+ ;   [symbol]
+ ; 
+ ; 2WALKER names a macro:
+ ;   Lambda-list: (&REST REST)
+ ;   Documentation:
+ ;     DOCSTRING for %2WALKER;
+ ;     random 2d walker.
+ ;   Source file: /data/x/weird/src/rnd/walkers.lisp
+```
+
+#### RND:2WALKER-ACC
+
+```
+DOCSTRING for %2WALKER-ACC;
+accelerated random 2d walker.
+
+ ; RND:2WALKER-ACC
+ ;   [symbol]
+ ; 
+ ; 2WALKER-ACC names a macro:
+ ;   Lambda-list: (&REST REST)
+ ;   Documentation:
+ ;     DOCSTRING for %2WALKER-ACC;
+ ;     accelerated random 2d walker.
+ ;   Source file: /data/x/weird/src/rnd/walkers.lisp
+```
+
 #### RND:3IN-BOX
 
 ```
-docstring for %3IN-BOX
+DOCSTRING for %3IN-BOX;
 random point in box of size sx,sy,sz. centered at origin.
 
  ; RND:3IN-BOX
@@ -198,7 +232,7 @@ random point in box of size sx,sy,sz. centered at origin.
  ; 3IN-BOX names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %3IN-BOX
+ ;     DOCSTRING for %3IN-BOX;
  ;     random point in box of size sx,sy,sz. centered at origin.
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
 ```
@@ -206,7 +240,7 @@ random point in box of size sx,sy,sz. centered at origin.
 #### RND:3IN-CUBE
 
 ```
-docstring for %3IN-CUBE
+DOCSTRING for %3IN-CUBE;
 random point in cube of size s. centered at origin.
 
  ; RND:3IN-CUBE
@@ -215,7 +249,7 @@ random point in cube of size s. centered at origin.
  ; 3IN-CUBE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %3IN-CUBE
+ ;     DOCSTRING for %3IN-CUBE;
  ;     random point in cube of size s. centered at origin.
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
 ```
@@ -242,7 +276,7 @@ random point in sphere with rad r. centered at origin.
 #### RND:3NIN-BOX
 
 ```
-docstring for %3NIN-BOX
+DOCSTRING for %3NIN-BOX;
 n random points in box of size sx,sy,sz. centered at origin.
 
  ; RND:3NIN-BOX
@@ -251,7 +285,7 @@ n random points in box of size sx,sy,sz. centered at origin.
  ; 3NIN-BOX names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %3NIN-BOX
+ ;     DOCSTRING for %3NIN-BOX;
  ;     n random points in box of size sx,sy,sz. centered at origin.
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
 ```
@@ -276,8 +310,8 @@ n random points in cube of size sx. centered at origin.
 #### RND:3NIN-SPHERE
 
 ```
-docstring for %3NIN-SPHERE
-n random points in sphere with rad r. centered at origin
+DOCSTRING for %3NIN-SPHERE;
+n random points in sphere with rad r. centered at origin.
 
  ; RND:3NIN-SPHERE
  ;   [symbol]
@@ -285,15 +319,15 @@ n random points in sphere with rad r. centered at origin
  ; 3NIN-SPHERE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %3NIN-SPHERE
- ;     n random points in sphere with rad r. centered at origin
+ ;     DOCSTRING for %3NIN-SPHERE;
+ ;     n random points in sphere with rad r. centered at origin.
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
 ```
 
 #### RND:3NON-LINE
 
 ```
-docstring for %3NON-LINE
+DOCSTRING for %3NON-LINE;
 n random points between a,b.
 
  ; RND:3NON-LINE
@@ -302,7 +336,7 @@ n random points between a,b.
  ; 3NON-LINE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %3NON-LINE
+ ;     DOCSTRING for %3NON-LINE;
  ;     n random points between a,b.
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
 ```
@@ -319,7 +353,7 @@ n random points between a,b.
 #### RND:3NON-SPHERE
 
 ```
-n random points on sphere with rad r. centered at origin
+n random points on sphere with rad r. centered at origin.
 
  ; RND:3NON-SPHERE
  ;   [symbol]
@@ -329,14 +363,14 @@ n random points on sphere with rad r. centered at origin
  ;   Derived type: (FUNCTION (T &OPTIONAL SINGLE-FLOAT)
  ;                  (VALUES (SIMPLE-ARRAY SINGLE-FLOAT (*)) &OPTIONAL))
  ;   Documentation:
- ;     n random points on sphere with rad r. centered at origin
+ ;     n random points on sphere with rad r. centered at origin.
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
 ```
 
 #### RND:3ON-LINE
 
 ```
-docstring for %3ON-LINE
+DOCSTRING for %3ON-LINE;
 random point between a,b.
 
  ; RND:3ON-LINE
@@ -345,7 +379,7 @@ random point between a,b.
  ; 3ON-LINE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %3ON-LINE
+ ;     DOCSTRING for %3ON-LINE;
  ;     random point between a,b.
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
 ```
@@ -376,6 +410,40 @@ random point on sphere with rad r. centered at origin.
  ;     random point on sphere with rad r. centered at origin.
  ;   Inline proclamation: INLINE (inline expansion available)
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
+```
+
+#### RND:3WALKER
+
+```
+DOCSTRING for %3WALKER;
+random 3d walker.
+
+ ; RND:3WALKER
+ ;   [symbol]
+ ; 
+ ; 3WALKER names a macro:
+ ;   Lambda-list: (&REST REST)
+ ;   Documentation:
+ ;     DOCSTRING for %3WALKER;
+ ;     random 3d walker.
+ ;   Source file: /data/x/weird/src/rnd/walkers.lisp
+```
+
+#### RND:3WALKER-ACC
+
+```
+DOCSTRING for %3WALKER-ACC;
+accelerated random 3d walker.
+
+ ; RND:3WALKER-ACC
+ ;   [symbol]
+ ; 
+ ; 3WALKER-ACC names a macro:
+ ;   Lambda-list: (&REST REST)
+ ;   Documentation:
+ ;     DOCSTRING for %3WALKER-ACC;
+ ;     accelerated random 3d walker.
+ ;   Source file: /data/x/weird/src/rnd/walkers.lisp
 ```
 
 #### RND:ARRAY-SPLIT
@@ -416,13 +484,13 @@ excecutes either a or b, with a probablility of 0.5. b is optional.
  ;   Lambda-list: (A &OPTIONAL B)
  ;   Documentation:
  ;     excecutes either a or b, with a probablility of 0.5. b is optional.
- ;   Source file: /data/x/weird/src/rnd/rnd.lisp
+ ;   Source file: /data/x/weird/src/rnd/macros.lisp
 ```
 
 #### RND:MAKE-RND-STATE
 
 ```
-generate a new random state
+generate a new random state.
 
  ; RND:MAKE-RND-STATE
  ;   [symbol]
@@ -431,7 +499,7 @@ generate a new random state
  ;   Lambda-list: ()
  ;   Derived type: (FUNCTION NIL (VALUES RANDOM-STATE &OPTIONAL))
  ;   Documentation:
- ;     generate a new random state
+ ;     generate a new random state.
  ;   Source file: /data/x/weird/src/rnd/rnd.lisp
 ```
 
@@ -575,7 +643,7 @@ n random floats in range (a b).
 #### RND:NRNDRNGI
 
 ```
-n fixnums in range [a b)
+n fixnums in range [a b).
 
  ; RND:NRNDRNGI
  ;   [symbol]
@@ -585,7 +653,7 @@ n fixnums in range [a b)
  ;   Derived type: (FUNCTION ((UNSIGNED-BYTE 31) FIXNUM FIXNUM)
  ;                  (VALUES LIST &OPTIONAL))
  ;   Documentation:
- ;     n fixnums in range [a b)
+ ;     n fixnums in range [a b).
  ;   Inline proclamation: INLINE (inline expansion available)
  ;   Source file: /data/x/weird/src/rnd/rnd.lisp
 ```
@@ -595,7 +663,7 @@ n fixnums in range [a b)
 ```
 evaluate first form in body with probability p.
 second form (optional) is executed with probability 1-p.
-ex: (prob 0.1 (print :a) (print :b))
+ex: (prob 0.1 (print :a) (print :b)) ; returns :a or :b
 
  ; RND:PROB
  ;   [symbol]
@@ -605,8 +673,25 @@ ex: (prob 0.1 (print :a) (print :b))
  ;   Documentation:
  ;     evaluate first form in body with probability p.
  ;     second form (optional) is executed with probability 1-p.
- ;     ex: (prob 0.1 (print :a) (print :b))
- ;   Source file: /data/x/weird/src/rnd/rnd.lisp
+ ;     ex: (prob 0.1 (print :a) (print :b)) ; returns :a or :b
+ ;   Source file: /data/x/weird/src/rnd/macros.lisp
+```
+
+#### RND:PROB\*
+
+```
+evaluate body with probability p. returns the last form as if in a progn.
+ex: (prob 0.1 (print :a) (print :b)) ; returns :b
+
+ ; RND:PROB*
+ ;   [symbol]
+ ; 
+ ; PROB* names a macro:
+ ;   Lambda-list: (P &BODY BODY)
+ ;   Documentation:
+ ;     evaluate body with probability p. returns the last form as if in a progn.
+ ;     ex: (prob 0.1 (print :a) (print :b)) ; returns :b
+ ;   Source file: /data/x/weird/src/rnd/macros.lisp
 ```
 
 #### RND:RCOND
@@ -625,7 +710,7 @@ will print :a 1 times out of 4.
  ;     executes the forms in clauses according to the probability of the weighted sum
  ;     ex: (rcond (0.1 (print :a)) (0.3 (print :b)) ...)
  ;     will print :a 1 times out of 4.
- ;   Source file: /data/x/weird/src/rnd/rnd.lisp
+ ;   Source file: /data/x/weird/src/rnd/macros.lisp
 ```
 
 #### RND:REP
@@ -640,7 +725,7 @@ repeat body at most a times, or between a and b times.
  ;   Lambda-list: (A &OPTIONAL B &BODY BODY)
  ;   Documentation:
  ;     repeat body at most a times, or between a and b times.
- ;   Source file: /data/x/weird/src/rnd/rnd.lisp
+ ;   Source file: /data/x/weird/src/rnd/macros.lisp
 ```
 
 #### RND:RND
@@ -819,5 +904,39 @@ shuffle a with fisher yates algorithm.
  ;   Documentation:
  ;     shuffle a with fisher yates algorithm.
  ;   Source file: /data/x/weird/src/rnd/rnd.lisp
+```
+
+#### RND:WALKER
+
+```
+random walker.
+
+ ; RND:WALKER
+ ;   [symbol]
+ ; 
+ ; WALKER names a compiled function:
+ ;   Lambda-list: (&OPTIONAL (X 0.0))
+ ;   Derived type: (FUNCTION (&OPTIONAL SINGLE-FLOAT)
+ ;                  (VALUES FUNCTION &OPTIONAL))
+ ;   Documentation:
+ ;     random walker.
+ ;   Source file: /data/x/weird/src/rnd/walkers.lisp
+```
+
+#### RND:WALKER-ACC
+
+```
+accelerated random walker.
+
+ ; RND:WALKER-ACC
+ ;   [symbol]
+ ; 
+ ; WALKER-ACC names a compiled function:
+ ;   Lambda-list: (&OPTIONAL (X 0.0) (A 0.0))
+ ;   Derived type: (FUNCTION (&OPTIONAL SINGLE-FLOAT SINGLE-FLOAT)
+ ;                  (VALUES FUNCTION &OPTIONAL))
+ ;   Documentation:
+ ;     accelerated random walker.
+ ;   Source file: /data/x/weird/src/rnd/walkers.lisp
 ```
 

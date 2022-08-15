@@ -154,11 +154,11 @@ view plane offset (xy) and scaling (s).
   proj)
 
 
-(veq:vdef around (c axis val &key (look (veq:f3$point (veq:f3rep 0f0))))
+(veq:fvdef around (c axis val &key (look (veq:f3$point (veq:f3rep 0f0))))
   (declare (ortho c) (keyword axis) (veq:ff val) (veq:fvec look))
   (unless (> (abs val) 0) (return-from around nil))
-  (macrolet ((_ (&rest rest) `(veq:f_ (veq:lst ,@rest)))
-             (rot (a b) `(veq:f3rots (veq:f3$s ortho- c ,a ,b val) 0f0 0f0 0f0)))
+  (macrolet ((_ (&rest rest) `(veq:fvprogn (veq:f_ (veq:lst ,@rest))))
+             (rot (a b) `(veq:fvprogn (veq:f3rots (veq:f3$s ortho- c ,a ,b val) 0f0 0f0 0f0))))
     (case axis
       (:pitch (veq:f3let ((pos (rot :cam :u))
                           (up (veq:f3norm (rot :up :u)))

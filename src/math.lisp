@@ -17,7 +17,7 @@
 
 (defmacro nrep (n &body body)
   "returns list with body :evaluated: n times."
-  `(the list (loop repeat (the weird:pos-int ,n) collect (progn ,@body))))
+  `(the list (loop repeat (the veq:pn ,n) collect (progn ,@body))))
 
 (defun range (a &optional (b nil))
   (declare #.*opt* (fixnum a))
@@ -43,13 +43,13 @@ assumes all initial lists in l have the same length."
                                                    collect (list))))))
 
 (defun list>than (l n)
-  (declare #.*opt* (list l) (weird:pos-int n))
+  (declare #.*opt* (list l) (veq:pn n))
   "list is longer than n?"
   (consp (nthcdr n l)))
 
 
 (defun linspace (n a b &key (end t))
-  (declare #.*opt* (weird:pos-int n) (veq:ff a b) (boolean end))
+  (declare #.*opt* (veq:pn n) (veq:ff a b) (boolean end))
   "n veq:ffs from a to b."
   (if (> n 1)
     (loop with ban of-type veq:ff = (/ (- b a) (if end (1- n) n))

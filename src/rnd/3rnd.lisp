@@ -68,7 +68,7 @@
   (declare (optimize speed (safety 0)) (veq:ff r))
   "random point on sphere with rad r. centered at origin."
   (let* ((th (* veq:fpii (rnd:rnd)))
-         (la (- (acos (- (* 2.0 (rnd:rnd)) 1f0)) veq:fpi5))
+         (la (- (the veq:ff (acos (- (* 2.0 (rnd:rnd)) 1f0))) veq:fpi5))
          (co (* r (cos la))))
     (declare (veq:ff th la co))
     (values (* co (cos th)) (* co (sin th)) (* r (sin la)))))
@@ -86,7 +86,7 @@
 
 (defun 3non-sphere (n &optional (r 1f0))
   (declare #.*opt* (veq:ff r))
-  "n random points on sphere with rad r. centered at origin"
+  "n random points on sphere with rad r. centered at origin."
   (veq:fwith-arrays (:n n :itr k
     :arr ((a 3))
     :fxs ((f () (3on-sphere r)))
@@ -95,7 +95,7 @@
 
 (veq:def* 3nin-sphere (n &optional (r 1f0))
   (declare #.*opt* (veq:ff r))
-  "n random points in sphere with rad r. centered at origin"
+  "n random points in sphere with rad r. centered at origin."
   (veq:fwith-arrays (:n n :itr k
     :arr ((a 3))
     :fxs ((f () (3in-sphere r)))

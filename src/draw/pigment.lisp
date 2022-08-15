@@ -27,8 +27,13 @@
       (declare (veq:ff ,r ,g ,b ,a))
       (progn ,@body))))
 
+(defun -print-rgba (o s)
+  (declare (notinline rgba-r rgba-g rgba-b rgba-a))
+  (-with (o r g b a) (format s "~&@rgba: (r: ~f, g: ~a, b: ~a, a: ~a)~&" r g b a)))
 
-(defstruct (rgba (:constructor make-rgba) (:constructor -make-rgba (r g b a)))
+(defstruct (rgba (:constructor make-rgba)
+                 (:constructor -make-rgba (r g b a))
+                 (:print-object -print-rgba))
   (r 0f0 :type veq:ff :read-only nil)
   (g 0f0 :type veq:ff :read-only nil)
   (b 0f0 :type veq:ff :read-only nil)

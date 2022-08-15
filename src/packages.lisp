@@ -33,12 +33,12 @@
    #:mvb
    #:mvc
    #:numshow
-   #:pos-int
    #:print-every
    #:psymb
    #:reorder
    #:reread
    #:show-ht
+   #:small-ind
    #:split
    #:string-list-concat
    #:symb
@@ -58,8 +58,8 @@
    #:vector-last
    #:vextend
    #:vl
-   #:with-struct)
-  (:import-from #:split-sequence #:split-sequence))
+   #:with-fast-stack
+   #:with-struct))
 
 (defpackage #:fn (:use #:common-lisp) (:export #:fn #:seed))
 
@@ -79,23 +79,11 @@
            #:copy-sort #:imod #:integer-search #:last* #:lerp #:lget #:linspace
            #:list>than #:ll-transpose #:lpos #:mod2 #:mult #:nrep #:range
            #:range-search #:sub)
-  (:import-from #:weird #:*opt* #:ensure-vector #:pos-int))
+  (:import-from #:weird #:*opt* #:ensure-vector))
 
 (defpackage #:rnd
   (:use #:common-lisp)
   (:export
-    #:3in-box
-    #:3in-cube
-    #:3in-sphere
-    #:3nin-box
-    #:3nin-cube
-    #:3nin-sphere
-    #:3non-line
-    #:3non-line*
-    #:3non-sphere
-    #:3on-line
-    #:3on-line*
-    #:3on-sphere
     #:2in-circ
     #:2in-rect
     #:2in-square
@@ -108,6 +96,22 @@
     #:2on-circ
     #:2on-line
     #:2on-line*
+    #:2walker
+    #:2walker-acc
+    #:3in-box
+    #:3in-cube
+    #:3in-sphere
+    #:3nin-box
+    #:3nin-cube
+    #:3nin-sphere
+    #:3non-line
+    #:3non-line*
+    #:3non-sphere
+    #:3on-line
+    #:3on-line*
+    #:3on-sphere
+    #:3walker
+    #:3walker-acc
     #:array-split
     #:bernoulli
     #:either
@@ -122,6 +126,7 @@
     #:nrndrng
     #:nrndrngi
     #:prob
+    #:prob*
     #:rcond
     #:rep
     #:rnd
@@ -133,6 +138,8 @@
     #:rndspace
     #:rndspacei
     #:set-rnd-state
+    #:walker
+    #:walker-acc
     #:shuffle)
   (:import-from #:weird
     #:*opt*
@@ -152,7 +159,7 @@
            #:gray #:green #:hsv #:magenta #:mdark #:red #:rgb #:scale
            #:scale! #:to-hex #:to-list #:to-list* #:transparent #:vdark #:white
            #:with)
-  (:import-from #:weird #:*opt* #:pos-int #:ensure-vector))
+  (:import-from #:weird #:*opt* #:ensure-vector))
 
 (defpackage #:hset
   (:use #:common-lisp)
@@ -173,7 +180,6 @@
     #:edge-set->path
     #:edge-set-symdiff
     #:edge-sets->cycle-basis
-    #:get-segments
     #:get-cycle-basis
     #:get-edges
     #:get-incident-edges
@@ -181,6 +187,7 @@
     #:get-min-spanning-tree
     #:get-num-edges
     #:get-num-verts
+    #:get-segments
     #:get-spanning-tree
     #:get-verts
     #:make
@@ -188,7 +195,8 @@
     #:path->edge-set
     #:vmem
     #:walk-graph
-    #:with-graph-edges)
+    #:with-graph-edges
+    #:with-graph-verts)
   (:import-from #:weird
     #:*opt*
     #:make-adjustable-vector
@@ -200,7 +208,7 @@
 (defpackage #:bzspl
   (:use #:common-lisp)
   (:export #:adaptive-pos #:len #:make #:pos #:pos* #:rndpos)
-  (:import-from #:weird #:*opt* #:pos-int #:make-adjustable-vector #:to-list
+  (:import-from #:weird #:*opt* #:make-adjustable-vector #:to-list
                 #:with-struct))
 
 (defpackage #:simplify
@@ -267,12 +275,13 @@
     #:3gv
     #:3gvs
     #:3triangulate!
+    #:?
     #:add-edge!
     #:add-edges!
     #:add-grp!
     #:add-path-ind!
-    #:add-polygon!
-    #:add-polygons!
+    #:add-poly!
+    #:add-polys!
     #:ae!
     #:all-grps->main!
     #:append-edge!
@@ -287,23 +296,25 @@
     #:copy-edge-props
     #:copy-vert-props
     #:de!
+    #:defalt
     #:del-edge!
     #:del-grp!
     #:del-path!
-    #:del-polygon!
-    #:del-polygons!
+    #:del-poly!
+    #:del-polys!
     #:edge-exists
+    #:vert-exists
     #:edge-has-prop
     #:edge-prop->path
     #:edge-prop-nxt-vert
     #:export-verts-grp
     #:get-all-grps
-    #:get-all-polygons
+    #:get-all-polys
     #:get-alt-res
     #:get-alteration-result-list
     #:get-alteration-result-map
     #:get-connected-verts
-    #:get-edge-polygons
+    #:get-edge-polys
     #:get-edge-prop
     #:get-edge-props
     #:get-edges
@@ -319,10 +330,10 @@
     #:get-min-spanning-tree
     #:get-num-edges
     #:get-num-grps
-    #:get-num-polygons
+    #:get-num-polys
     #:get-num-verts
+    #:get-poly-edges
     #:get-poly-prop
-    #:get-polygon-edges
     #:get-segments
     #:get-spanning-tree
     #:get-vert-inds
@@ -336,6 +347,7 @@
     #:itr-edges
     #:itr-grp-verts
     #:itr-grps
+    #:itr-polys
     #:itr-verts
     #:ladd-edge!
     #:lcollapse-verts!
@@ -370,20 +382,21 @@
   (:import-from #:weird
     #:*eps* #:*opt*
     #:awf #:awg #:dsb #:mvb #:mvc
+    #:make-adjustable-vector #:to-list #:to-vector #:vextend
     #:filter-by-predicate
-    #:make-adjustable-vector
     #:mkstr
-    #:to-list #:to-vector
+    #:small-ind
     #:tree-find
-    #:vextend
     #:with-struct)
   (:import-from #:math #:last*))
 
 (defpackage #:voxel
   (:use #:common-lisp)
   (:export #:get-mesh #:getvoxel #:make #:setvoxel)
-  (:import-from #:weird #:*opt* #:*eps* pos-int))
+  (:import-from #:weird #:*opt* #:*eps*))
 
 (defpackage #:canvas
   (:use #:common-lisp)
-  (:export #:canvas #:make #:save #:set-gray-pix #:set-pix))
+  (:export #:canvas #:make #:save #:set-gray-pix #:set-pix)
+  (:import-from #:weird #:*opt* small-ind))
+

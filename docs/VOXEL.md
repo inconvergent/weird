@@ -1,19 +1,18 @@
 #### VOXEL:GET-MESH
 
 ```
-reconstruct mesh at the isosurfaces of [low high] (inclusive).
+reconstruct mesh surounding (fx ...) == t.
 
  ; VOXEL:GET-MESH
  ;   [symbol]
  ; 
  ; GET-MESH names a compiled function:
- ;   Lambda-list: (WER VOXS &KEY (LO -99999.0) (HI 99999.0) W)
+ ;   Lambda-list: (WER VOXS &KEY W (FX (LAMBDA (V) (>= 0.0 V))))
  ;   Derived type: (FUNCTION
- ;                  (T VOXEL::VOXELS &KEY (:LO SINGLE-FLOAT)
- ;                   (:HI SINGLE-FLOAT) (:W BOOLEAN))
+ ;                  (T VOXEL::VOXELS &KEY (:W BOOLEAN) (:FX FUNCTION))
  ;                  (VALUES LIST &OPTIONAL))
  ;   Documentation:
- ;     reconstruct mesh at the isosurfaces of [low high] (inclusive).
+ ;     reconstruct mesh surounding (fx ...) == t.
  ;   Source file: /data/x/weird/src/voxel/voxel.lisp
 ```
 

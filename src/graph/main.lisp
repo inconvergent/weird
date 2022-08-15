@@ -3,17 +3,23 @@
 
 "a simple (undirected) graph structure based on adjacency lists."
 
-(deftype pos-int (&optional (bits 31)) `(unsigned-byte ,bits))
+(defun -print-graph (o s)
+  (declare (notinline graph-name graph-num-edges))
+  (weird:with-struct (graph- name num-edges) o
+    (format s "<@graph: ~a (verts: ~a, edges: ~a)>"
+            name (get-num-verts o) (/ num-edges 2))))
 
-
-(defstruct (graph (:constructor -make-graph))
-  (size 0 :type pos-int :read-only t)
-  (num-edges 0 :type pos-int)
+(defstruct (graph (:constructor -make-graph)
+                  (:print-object -print-graph))
+  (name (gensym "GRAPH") :type symbol :read-only t)
+  (size 0 :type veq:pn :read-only t)
+  (num-edges 0 :type veq:pn)
   (adj nil :type hash-table)
   (make-hset #'identity :type function :read-only t))
 
 
-(defun make (&key (adj-size 4) (adj-inc 2f0)
+(defun make (&key (name (gensym "GRAPH"))
+                  (adj-size 4) (adj-inc 2f0)
                   (set-size 10) (set-inc 2f0))
   (declare #.*opt*)
   "create undirected graph instance with no spatial awareness.
@@ -46,8 +52,9 @@ arguments:
     (typical number of edges per vert)
   - set-inc: size multiplier vert adjecency list
 default values should usually work fine."
-  (-make-graph :num-edges 0
-    :adj (make-hash-table :test #'eql :size adj-size :rehash-size adj-inc)
+  (-make-graph :name name
+    :adj (make-hash-table :test #'eql :size adj-size :rehash-size adj-inc
+                          :rehash-threshold 0.9)
     :make-hset (lambda (x) (hset:make :init x :size set-size :inc set-inc))))
 
 (defun copy (grph)
@@ -56,14 +63,15 @@ default values should usually work fine."
   ; :key is called in the value before setting
   ; https://common-lisp.net/project/alexandria/draft/alexandria.html#Hash-Tables
   ; TODO: handle adj-size, set-size, set-inc, adj-inc across graph struct
-  (-make-graph :num-edges (graph-num-edges grph)
+  (-make-graph :name (graph-name grph)
+               :num-edges (graph-num-edges grph)
                :adj (alexandria:copy-hash-table (graph-adj grph)
                       :key #'hset:copy)
                :make-hset (graph-make-hset grph)))
 
 
 (defun -add (makefx adj a b)
-  (declare #.*opt* (function makefx) (pos-int a b))
+  (declare #.*opt* (function makefx) (veq:pn a b))
   (multiple-value-bind (val exists) (gethash a adj)
     (if (not exists)
         (progn (setf val (funcall makefx (list b))
@@ -73,7 +81,7 @@ default values should usually work fine."
 
 
 (defun add (grph a b)
-  (declare #.*opt* (graph grph) (pos-int a b))
+  (declare #.*opt* (graph grph) (veq:pn a b))
   "add edge ab. returns t if edge did not exist."
   (with-struct (graph- adj make-hset) grph
     (declare (function make-hset))
@@ -86,20 +94,20 @@ default values should usually work fine."
 
 (declaim (inline -del))
 (defun -del (adj a b)
-  (declare #.*opt* (pos-int a b))
+  (declare #.*opt* (veq:pn a b))
   (multiple-value-bind (val exists) (gethash a adj)
     (when exists (hset:del val b))))
 
 
 (defun -prune (adj a)
-  (declare #.*opt* (pos-int a))
+  (declare #.*opt* (veq:pn a))
   (multiple-value-bind (val exists) (gethash a adj)
-    (when (and exists (< (the pos-int (hset:num val)) 1))
+    (when (and exists (< (the veq:pn (hset:num val)) 1))
           (remhash a adj))))
 
 
 (defun del (grph a b)
-  (declare #.*opt* (graph grph) (pos-int a b))
+  (declare #.*opt* (graph grph) (veq:pn a b))
   "del edge ab. returns t if edge existed."
   (with-struct (graph- adj) grph
     (let ((ab (-del adj a b))
@@ -124,7 +132,7 @@ edges." ;TODO: i think?
 
 
 (defun mem (grph a b)
-  (declare #.*opt* (graph grph) (pos-int a b))
+  (declare #.*opt* (graph grph) (veq:pn a b))
   "check if edge ab exists."
   (with-struct (graph- adj) grph
     (multiple-value-bind (val exists) (gethash a adj)
@@ -136,8 +144,8 @@ edges." ;TODO: i think?
   "get list of lists of all edges."
   (loop with res of-type list = (list)
         with adj of-type hash-table = (graph-adj grph)
-        for a of-type pos-int being the hash-keys of adj
-        do (loop for b of-type pos-int being the hash-keys of (gethash a adj)
+        for a of-type veq:pn being the hash-keys of adj
+        do (loop for b of-type veq:pn being the hash-keys of (gethash a adj)
                  if (< a b) do (push (list a b) res))
         finally (return res)))
 
@@ -145,31 +153,30 @@ edges." ;TODO: i think?
 (defun get-verts (grph)
   (declare #.*opt* (graph grph))
   "return all vertices with at least one connected edge."
-  (loop for v being the hash-keys of (graph-adj grph) using (hash-value ee)
-        collect v))
-
+  (loop for v being the hash-keys of (graph-adj grph) collect v))
 
 (defun get-incident-edges (grph v)
-  (declare #.*opt* (graph grph) (pos-int v))
+  (declare #.*opt* (graph grph) (veq:pn v))
   "get all incident edges of v."
   (labels ((-srt (a b)
-             (declare (optimize speed) (pos-int a b))
+             (declare (optimize speed) (veq:pn a b))
              (if (< a b) (list a b) (list b a))))
     (with-struct (graph- adj) grph
       (let ((a (gethash v adj)))
-        (when a (loop for w of-type pos-int
+        (when a (loop for w of-type veq:pn
                         being the hash-keys of (the hash-table a)
                       collect (-srt v w)))))))
 
+; TODO: this is inefficient
 (defun -only-incident-verts (v ee)
-  (declare #.*opt* (pos-int v) (list ee))
+  (declare #.*opt* (veq:pn v) (list ee))
   (remove-if (lambda (i)
-               (declare (optimize speed) (pos-int i))
+               (declare (optimize speed) (veq:pn i))
                (= i v))
              (alexandria:flatten ee)))
 
 (defun get-incident-verts (grph v)
-  (declare #.*opt* (graph grph) (pos-int v))
+  (declare #.*opt* (graph grph) (veq:pn v))
   "get all incident vertices of v."
   ; TODO: avoid using incident edges, to avoid consing
   ; this is used by cycle finder, so it should be fast
@@ -177,21 +184,28 @@ edges." ;TODO: i think?
 
 
 (defun vmem (grph v)
-  (declare #.*opt* (graph grph) (pos-int v))
+  (declare #.*opt* (graph grph) (veq:pn v))
   "check if v has at least one connected edge."
   (if (gethash v (graph-adj grph)) t nil))
 
+
+(defmacro with-graph-verts ((grph v) &body body)
+  "iterate over all verts as v."
+  `(loop for ,v being the hash-keys of (graph-adj ,grph)
+         do (progn ,@body)))
 
 (defmacro with-graph-edges ((grph e) &body body)
   "iterate over all edges as e. more efficient than get-edges because it does
 not build the entire structure.
 ex (with-graph-edges (grph e) (print e))"
   (alexandria:with-gensyms (adj a b)
-    `(loop with ,e of-type list
-           with ,adj of-type hash-table = (graph-adj ,grph)
-           for ,a of-type pos-int being the hash-keys of ,adj collect
-      (loop for ,b of-type pos-int being the hash-keys of (gethash ,a ,adj)
+    `(loop with ,adj of-type hash-table = (graph-adj ,grph)
+           for ,a of-type veq:pn being the hash-keys of ,adj
+           repeat 10
+           do
+      (loop for ,b of-type veq:pn being the hash-keys of (gethash ,a ,adj)
             if (< ,a ,b)
-            do (setf ,e (list ,a ,b))
-               (progn ,@body)))))
+            do (let ((,e (list ,a ,b)))
+                 (declare (list ,e))
+                 ,@body)))))
 

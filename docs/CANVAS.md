@@ -13,10 +13,10 @@
  ;   No subclasses.
  ;   Slots:
  ;     CANVAS::SIZE
- ;       Type: CANVAS::SMALL-INT
+ ;       Type: WEIRD:SMALL-IND
  ;       Initform: NIL
  ;     CANVAS::VALS
- ;       Type: (SIMPLE-ARRAY SINGLE-FLOAT)
+ ;       Type: VEQ:FVEC
  ;       Initform: NIL
  ;     CANVAS::INDFX
  ;       Type: FUNCTION

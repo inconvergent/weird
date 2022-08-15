@@ -104,7 +104,7 @@ return new fixnum set which contains the intersection of a,b.
 #### HSET:MAKE
 
 ```
-create fixnum set. init (optional) is a list of integers
+create fixnum set. init (optional) is a list of integers.
 
  ; HSET:MAKE
  ;   [symbol]
@@ -114,7 +114,7 @@ create fixnum set. init (optional) is a list of integers
  ;   Derived type: (FUNCTION (&KEY (:INIT T) (:SIZE FIXNUM) (:INC T))
  ;                  (VALUES HASH-TABLE &OPTIONAL))
  ;   Documentation:
- ;     create fixnum set. init (optional) is a list of integers
+ ;     create fixnum set. init (optional) is a list of integers.
  ;   Source file: /data/x/weird/src/hset.lisp
 ```
 

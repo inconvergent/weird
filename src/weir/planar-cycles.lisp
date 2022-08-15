@@ -111,7 +111,7 @@
 
 (declaim (inline -absub))
 (veq:fvdef -absub (verts i j)
-  (declare #.*opt* (veq:fvec verts) (pos-int i j))
+  (declare #.*opt* (veq:fvec verts) (veq:pn i j))
   ; (when (< (veq:f2dst (veq:f2$ verts i j)) eps) (error "oh no"))
   (veq:f2- (veq:f2$ verts i j)))
 
@@ -135,7 +135,7 @@
 
 (defun -do-walk-cycle (grph &key dirfx adjfx vertfx)
   (declare #.*opt* (graph::graph grph) (function dirfx adjfx))
-  (when (< (the pos-int (graph:get-num-edges grph)) 1) (return-from -do-walk-cycle nil))
+  (when (< (the veq:pn (graph:get-num-edges grph)) 1) (return-from -do-walk-cycle nil))
   (let* ((prev (-get-west-most-vert (graph:get-verts grph)
                                     vertfx
                                     (lambda (v)
@@ -147,7 +147,7 @@
 
     (unless next (return-from -do-walk-cycle nil))
 
-    (loop until (= (the pos-int next) (the pos-int start))
+    (loop until (= (the veq:pn next) (the veq:pn start))
           do (let ((c (-get-ccw-most-vert next prev :dirfx dirfx :adjfx adjfx)))
                (push c res)
                (setf prev next next c)))
@@ -173,7 +173,7 @@
                             (graph::-only-incident-verts c
                               (graph:get-incident-edges grph c)))))
 
-        (loop while (> (the pos-int (graph:get-num-edges grph)) 0)
+        (loop while (> (the veq:pn (graph:get-num-edges grph)) 0)
               do (let ((cycle (-do-walk-cycle grph :dirfx #'dirfx
                                 :adjfx #'adjfx :vertfx #'vertfx)))
                    (when cycle (push cycle res)))))))

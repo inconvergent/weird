@@ -26,7 +26,7 @@
                             :symbols res :scale scale :sp sp :xy xy :nl nl
                             :left (first xy))))))
 
-(veq:vdef -detect-closed (paths)
+(veq:fvdef -detect-closed (paths)
   (declare (list paths))
   (labels ((-closed (p &key (tol 0.001f0))
              (declare (veq:fvec p) (veq:ff tol))
@@ -65,7 +65,7 @@
   (declare (list pp) (veq:ff s))
   (mapcar (lambda (x) (veq:ff (* s x))) pp))
 
-(veq:vdef -path-to-arr (paths s (:varg 2 x))
+(veq:fvdef -path-to-arr (paths s (:varg 2 x))
   (declare (list paths) (veq:ff s x))
   (loop for path of-type list in paths
         collect (veq:f2$+ (values (veq:f$_ (loop for p of-type list in path

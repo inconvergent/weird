@@ -32,7 +32,7 @@ whether the segment is a cycle."
     (graph:get-segments (grp-grph grp) :cycle-info cycle-info)))
 
 
-(veq:vdef 2walk-graph (wer &key g)
+(veq:fvdef 2walk-graph (wer &key g)
   (declare (weir wer))
   "returns all segments of the graph in g.
 greedily attempts to connect segments such that the angle is minimal. useful
@@ -72,7 +72,7 @@ as such the overall structure of the graph will remain the same."
 
 (deftype simple-list () `(simple-array list))
 
-(veq:vdef 2intersect-all! (wer &key g prop)
+(veq:fvdef 2intersect-all! (wer &key g prop)
   (declare #.*opt* (weir wer))
   "creates intersections for all edges in g such that g becomes a planar graph.
 :prop can contain a symbol which will be used as a
@@ -98,7 +98,7 @@ a useful method for making plotter drawings is to do:
          (loop for (c . p) in hits
                if (not (gethash (the list (ic i c)) crossing->vert))
                do (let ((new (2add-vert! wer (veq:f2lerp (veq:f2$ line 0 1) p))))
-                    (declare (pos-int new))
+                    (declare (veq:pn new))
                     (setf (gethash (the list (ic i c)) crossing->vert) new)
                     (when prop (set-vert-prop wer new
                                  (the keyword prop) old-edge)))))
@@ -133,7 +133,7 @@ a useful method for making plotter drawings is to do:
          isects)
 
        (-add! (a b &key e g)
-         (declare (pos-int a b) (list e))
+         (declare (veq:pn a b) (list e))
          (if prop (set-edge-prop wer
                     (add-edge! wer a b :g g) (the keyword prop) e)
                   (add-edge! wer a b :g g)))
@@ -169,7 +169,7 @@ a useful method for making plotter drawings is to do:
 
 
 ; TODO: clean this up and rename
-(veq:vdef 3intersect-all! (wer fx &key g prop)
+(veq:fvdef 3intersect-all! (wer fx &key g prop)
   (declare #.*opt* (weir wer) (function fx))
   "does the same as 2intersect-all!
 assuming that fx is a function (values x y z) -> (values x1 y1)."
@@ -184,7 +184,7 @@ assuming that fx is a function (values x y z) -> (values x1 y1)."
        (loop for (c . p) in hits
              collect (let ((new (3add-vert! wer
                                   (veq:f3lerp (veq:f3$ line 0 1) p))))
-                       (declare (pos-int new))
+                       (declare (veq:pn new))
                        (when prop (set-vert-prop wer new
                                     (the keyword prop) old-edge))
                        new)))

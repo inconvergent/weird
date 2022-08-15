@@ -1,20 +1,20 @@
 
 (in-package :simplify)
 
-(deftype int-vector () `(vector weird:pos-int))
+(deftype int-vector () `(vector veq:pn))
 
 ; TODO: make 3d version similar to vert-utils?
 
-(veq:vdef -simplify (pts lim &key left right)
-  (declare #.*opt* (veq:fvec pts) (veq:ff lim) (weird:pos-int left right))
-  (let ((res (make-adjustable-vector :type 'weird:pos-int))
+(veq:fvdef -simplify (pts lim &key left right)
+  (declare #.*opt* (veq:fvec pts) (veq:ff lim) (veq:pn left right))
+  (let ((res (make-adjustable-vector :type 'veq:pn))
         (dmax -1f0)
         (index 0))
-    (declare (int-vector res) (weird:pos-int index) (veq:ff dmax))
+    (declare (int-vector res) (veq:pn index) (veq:ff dmax))
 
     (veq:f2let ((sl (veq:f2$ pts left))
                 (sr (veq:f2$ pts right)))
-      (loop for i of-type weird:pos-int from (1+ left) below right
+      (loop for i of-type veq:pn from (1+ left) below right
             do (let ((d (veq:f2segdst sl sr (veq:f2$ pts i))))
                  (declare (veq:ff d))
                  (when (> d dmax) (setf dmax d index i)))))
@@ -32,7 +32,7 @@
 
 
 ; https://hydra.hull.ac.uk/resources/hull:8338
-(veq:vdef path (pts &key (lim 1f0))
+(defun path (pts &key (lim 1f0))
   (declare #.*opt* (veq:fvec pts) (veq:ff lim))
   "
   simplify path, pts.
@@ -43,7 +43,7 @@
                 :left 0 :right (1- (round (/ (length pts) 2))))))
     (declare (vector inds))
     ; this is kind of inefficient. but it works just fine.
-    (values (veq:f$_ (loop for i of-type weird:pos-int across inds
+    (values (veq:f$_ (loop for i of-type veq:pn across inds
                            collect (veq:lst (veq:f2$ pts i)) of-type list))
             inds)))
 

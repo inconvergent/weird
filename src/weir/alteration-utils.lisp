@@ -17,21 +17,12 @@
 
 (defun get-alt-res (wer res)
   (declare #.*opt* (weir wer) (symbol res))
-  (unless (promise-symbp res)
+  (unless (future-symbp res)
           (error "invalid alteration result name: ~a~%" res))
   (gethash res (weir-alt-res wer)))
 
 
-(defun -print-debug (alt lvl)
-  (format t "~&----------------------~%")
-  (pprint alt)
-  (when (and (symbolp lvl) (eq lvl :verbose))
-    (format t "~%~%--->~%")
-    (pprint (third (sb-cltl2:macroexpand-all `(veq:vprogn ,alt)))))
-  (format t "~&--------------------~%"))
-
-
-(defun -if-all-resolved (alt-res arg)
+(defun -if-all-resolved (alt-res &rest arg)
   (declare #.*opt* (hash-table alt-res) (list arg))
   "check if all references of an alteration have been resolved."
   (loop for k of-type symbol in arg
@@ -45,13 +36,13 @@
 
 
 (defun fdim-symbp (s &key dim)
-  (declare #.*opt* (pos-int dim))
+  (declare #.*opt* (veq:pn dim))
   "t if symbol starts with Fd! where d is a positive integer"
   (and (symbolp s)
        (> (length (symbol-name s)) 3)
        (string= (symbol-name s) (mkstr "F" dim "!") :start1 0 :end1 3)))
 
-(defun promise-symbp (s)
+(defun future-symbp (s)
   (declare #.*opt*)
   "t if symbol ends with ?"
   (and (symbolp s)
@@ -65,13 +56,13 @@
      ,@body))
 
 
-(defmacro -valid-vert (wer v) `(< -1 (the pos-int ,v)
-                                     (the pos-int (weir-num-verts ,wer))))
+(defmacro -valid-vert (wer v) `(< -1 (the veq:pn ,v)
+                                     (the veq:pn (weir-num-verts ,wer))))
 (defmacro -valid-verts (wer vv)
   (weird:awg (num v)
     `(let ((,num (weir-num-verts ,wer)))
-      (declare (pos-int ,num))
-      (every (lambda (,v) (declare (optimize speed) (pos-int ,v))
+      (declare (veq:pn ,num))
+      (every (lambda (,v) (declare (optimize speed) (veq:pn ,v))
                           (< -1 ,v ,num))
              ,vv))))
 

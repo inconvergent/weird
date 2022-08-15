@@ -1,8 +1,6 @@
 
 (in-package :weir)
 
-(deftype single-array () `(simple-array veq:ff))
-(deftype pos-int (&optional (bits 31)) `(unsigned-byte ,bits))
 
 (defmacro make-ht (tst &optional (s 20) (r 2f0))
   (declare (number s r))
@@ -12,30 +10,47 @@
   (declare (list a))
   (append (subseq a 1) (list (first a))))
 
-(defun -hash-table-get-key (ht key)
+(defun -ht-get-key (ht key)
   (declare #.*opt* (hash-table ht) (list key))
   (veq:mvb (v exists) (gethash key ht)
     (if exists v nil)))
 
 
-(defstruct (weir (:constructor -make-weir))
+(defstruct (weir (:constructor -make-weir)
+                 (:print-object -print-weir))
   (name :main :type symbol :read-only t)
-  (dim 2 :type pos-int :read-only t)
-  (num-verts 0 :type pos-int)
-  (max-verts 5000 :type pos-int)
+  (dim 2 :type veq:pn :read-only t)
+  (num-verts 0 :type veq:pn)
+  (max-verts 10000 :type veq:pn)
   (verts nil :type veq:fvec)
   (kdtree nil :read-only nil)
-  (adj-size 100 :type pos-int :read-only t)
-  (set-size 5 :type pos-int :read-only t)
+  (adj-size 4 :type veq:pn :read-only t)
+  (set-size 10 :type veq:pn :read-only t)
   (alt-res (make-ht #'eq))
   (grps (make-ht #'equal))
   (props (make-ht #'equal 500)))
 
 
-(defstruct (grp (:constructor -make-grp))
+(defun -print-weir (o s)
+  (declare (notinline weir-name weir-dim weir-num-verts
+                      weir-max-verts))
+  (weird:with-struct (weir- name dim num-verts max-verts) o
+    (format s "<@weir: ~a (dim: ~d, verts: ~d, max: ~d)>"
+            name dim num-verts max-verts)))
+
+(defun -print-grp (o s)
+  (declare (notinline grp-name grp-grph grp-polys grp-edges->poly))
+  (weird:with-struct (grp- name grph polys edges->poly ) o
+    (format s "<@grp: ~a (edges: ~a verts: ~a, poly: ~a, poly-edges: ~a)>"
+            name (graph:get-num-edges grph) (graph:get-num-verts (grp-grph o))
+            (hash-table-count polys)
+            (hash-table-count edges->poly))))
+
+(defstruct (grp (:constructor -make-grp)
+                (:print-object -print-grp))
   (name nil :type symbol :read-only t)
   (grph nil :type graph::graph)
-  (polygons (make-ht #'equal) :type hash-table) ; (a b c) -> (() () ())
+  (polys (make-ht #'equal 1000) :type hash-table) ; (a b c) -> (() () ())
   (edges->poly (make-ht #'equal) :type hash-table))
 
 (defmacro with-grp ((wer g* g) &body body)
@@ -57,21 +72,20 @@
                                do (setf (gethash k res) v)
                                finally (return res))))
     (-make `((nil ,(-make-grp :name :main
-                     :grph (graph:make :adj-size adj-size
-                                       :set-size set-size)))))))
+                     :grph (graph:make :name :main :adj-size adj-size
+                                                   :set-size set-size)))))))
 
-(defun make (&key (max-verts 5000) (adj-size 4) (set-size 10) name (dim 2))
-  "
-  make weir instance of dim.
+(defun make (&key (max-verts 10000) (adj-size 4) (set-size 10)
+                  (name (gensym "WEIR")) (dim 2))
+  "make weir instance of dim.
 
-  - max-verts is the maximum number of verts in weir (across all grps).
-  - set-size is the initial size of edge adjacency sets.
-      ie. the expected number of vertices in the graph
-  - adj-size is the initial size of the adjacency map.
-      ie. the expected number of incident vertices
-  - dim is the vector dimension of vertices
-  "
-  (declare #.*opt* (pos-int max-verts adj-size set-size dim) (symbol name))
+- max-verts is the maximum number of verts in weir (across all grps).
+- set-size is the initial size of edge adjacency sets.
+  ie. the expected number of vertices in the graph
+- adj-size is the initial size of the adjacency map.
+  ie. the expected number of incident vertices
+- dim is the vector dimension of vertices"
+  (declare #.*opt* (veq:pn max-verts adj-size set-size dim) (symbol name))
   (when (not (> 4 dim 1)) (error "dim must be 2 or 3."))
   (-make-weir :name name :set-size set-size :adj-size adj-size :dim dim
     :max-verts max-verts
@@ -80,7 +94,7 @@
 
 (defun clear! (wer &key keep-props keep-verts keep-grps)
   (declare #.*opt* (weir wer) (boolean keep-props keep-grps keep-verts))
-  "clear values of weir instance. unless keep is set for a given property"
+  "clear values of weir instance. unless keep is set for a given property."
   ; TODO: hard reset verts to 0?
 
   (setf (weir-kdtree wer) nil
@@ -93,41 +107,38 @@
   wer)
 
 
-(defun add-grp! (wer &key name &aux (name* (if name name (gensym "GRP"))))
+(defun add-grp! (wer &key (name (gensym "GRP")))
   (declare #.*opt* (weir wer))
-  "
-  constructor for grp instances.
+  "constructor for grp instances.
 
-  grps contain edge adjacency graphs as well as polygons.
+grps contain edge adjacency graphs as well as polys.
 
-  nil is the default grp. as such, nil is not an allowed grp name (there is
-  always a default grp named nil). if name is nil, the name will be a gensym.
+nil is the default grp. as such, nil is not an allowed grp name (there is
+always a default grp named nil). if name is nil, the name will be a gensym.
 
-  edges can be associated with multiple grps.
+edges can be associated with multiple grps.
 
-  verts are global. that is, they do not belong to any grp on their own.
-  however, if a vert is associated with an edge, that vert is also associated
-  with whatever grp that edge belongs to.
-
-    - to get verts in a grp: (get-grp-verts wer :g g).
-    - to get indices of verts (in a grp): (get-vert-inds wer :g g)
-  "
+verts are global. that is, they do not belong to any grp on their own.
+however, if a vert is associated with an edge, that vert is also associated
+with whatever grp that edge belongs to.
+  - to get verts in a grp: (get-grp-verts wer :g g).
+  - to get indices of verts (in a grp): (get-vert-inds wer :g g)"
   (with-struct (weir- grps adj-size set-size) wer
-    (multiple-value-bind (v exists) (gethash name* grps)
+    (multiple-value-bind (v exists) (gethash name grps)
       (declare (ignore v) (boolean exists))
-      (when exists (error "grp name already exists: ~a" name*)))
-    (setf (gethash name* grps) (-make-grp
-                                 :name name*
-                                 :grph (graph:make :adj-size adj-size
-                                                   :set-size set-size))))
-  name*)
+      (when exists (error "grp name already exists: ~a" name)))
+    (setf (gethash name grps) (-make-grp :name name
+                                :grph (graph:make :name name :adj-size adj-size
+                                                             :set-size set-size))))
+  name)
 
 (defun reset-grp! (wer &key g)
   (declare #.*opt* (weir wer))
   "reset grp, g. if g does not exist it will be created."
   (setf (gethash g (weir-grps wer))
         (-make-grp :name (if g g :main)
-                   :grph (graph:make :adj-size (weir-adj-size wer)
+                   :grph (graph:make :name (if g g :main)
+                                     :adj-size (weir-adj-size wer)
                                      :set-size (weir-set-size wer)))))
 
 (defun clone-grp! (wer &key from to)
@@ -138,8 +149,8 @@
     (setf (gethash to (weir-grps wer))
           (-make-grp :name to
                      :grph (graph:copy (grp-grph gfrom))
-                     :polygons (alexandria:copy-hash-table
-                                 (grp-polygons gfrom))
+                     :polys (alexandria:copy-hash-table
+                              (grp-polys gfrom))
                      :edges->poly (alexandria:copy-hash-table
                                     (grp-edges->poly gfrom))))))
 
@@ -174,9 +185,9 @@
   (weir-num-verts wer))
 
 (defun is-vert-in-grp (wer v &key g)
-  (declare #.*opt* (weir wer) (pos-int v))
+  (declare #.*opt* (weir wer) (veq:pn v))
   "tests whether v is in grp g
-   note: verts only belong to a grp if they are part of an edge in grp."
+note: verts only belong to a grp if they are part of an edge in grp."
   (with-struct (weir- grps) wer
     (mvb (g* exists) (gethash g grps)
       (if exists (graph:vmem (grp-grph g*) v)
@@ -225,21 +236,19 @@ non-existing vertices. these have to be deleted separately."
 
 
 (defun get-incident-edges (wer v &key g)
-  (declare #.*opt* (weir wer) (pos-int v))
+  (declare #.*opt* (weir wer) (veq:pn v))
   "get incident edges of v."
   (with-grp (wer g* g) (graph:get-incident-edges (grp-grph g*) v)))
 
 (defun get-incident-verts (wer v &key g)
-  (declare #.*opt* (weir wer) (pos-int v))
+  (declare #.*opt* (weir wer) (veq:pn v))
   "get incident verts of v."
   (with-grp (wer g* g) (graph:get-incident-verts (grp-grph g*) v)))
 
 
 (defun get-vert-inds (wer &key g order)
-  "
-  returns all vertex indices that belongs to a grp.
-  note: verts only belong to a grp if they are part of an edge in grp.
-  "
+  "returns all vertex indices that belongs to a grp.
+note: verts only belong to a grp if they are part of an edge in grp."
   (declare #.*opt* (weir wer) (boolean order))
   (with-struct (weir- grps) wer
     (multiple-value-bind (g* exists) (gethash g grps)
@@ -253,19 +262,19 @@ non-existing vertices. these have to be deleted separately."
   "t if edge exists (in g)."
   (with-grp (wer g* g) (apply #'graph:mem (grp-grph g*) ee)))
 
+(defun vert-exists (wer v) (< v (weir-num-verts wer)))
+
 
 (defun add-edge! (wer a b &key g)
-  "
-  adds a new edge to weir. provided the edge is valid.
-  otherwise it returns nil.
+  "adds a new edge to weir. provided the edge is valid.
+otherwise it returns nil.
 
-  returns nil if the edge exists already.
-  "
-  (declare #.*opt* (weir wer) (pos-int a b))
+returns nil if the edge exists already."
+  (declare #.*opt* (weir wer) (veq:pn a b))
   (when (= a b) (return-from add-edge! nil))
   (with-grp (wer g* g)
     (with-struct (weir- num-verts) wer
-      (declare (pos-int num-verts))
+      (declare (veq:pn num-verts))
       (with-struct (grp- grph) g*
         (when (and (< a num-verts) (< b num-verts))
               (when (graph:add grph a b)
@@ -276,7 +285,7 @@ non-existing vertices. these have to be deleted separately."
   (declare #.*opt* (weir wer) (list ee))
   "add edge from list with two indices."
   (destructuring-bind (a b) ee
-    (declare (pos-int a b))
+    (declare (veq:pn a b))
     (add-edge! wer a b :g g)))
 
 
@@ -287,7 +296,7 @@ non-existing vertices. these have to be deleted separately."
 
 
 (defun del-edge! (wer a b &key g)
-  (declare #.*opt* (weir wer) (pos-int a b))
+  (declare #.*opt* (weir wer) (veq:pn a b))
   "delete edge a,b. returns t if edge existed."
   (with-grp (wer g* g) (with-struct (grp- grph) g*
                          (graph:del grph a b))))
@@ -308,7 +317,7 @@ non-existing vertices. these have to be deleted separately."
 
 
 (defun swap-edge! (wer a b &key g from)
-  (declare #.*opt* (weir wer) (pos-int a b))
+  (declare #.*opt* (weir wer) (veq:pn a b))
   "move edge from grp from to grp g."
   (when (del-edge! wer a b :g from)
         (add-edge! wer a b :g g)))
@@ -328,27 +337,27 @@ non-existing vertices. these have to be deleted separately."
   (when closed (setf path (cons (last* path) path)))
   (with-grp (wer g* g)
     (with-struct (grp- grph) g*
-      (loop for a of-type pos-int in path and b of-type pos-int in (cdr path)
+      (loop for a of-type veq:pn in path and b of-type veq:pn in (cdr path)
             collect (graph:del grph a b)))))
 
 
 (defun split-edge-ind! (wer a b &key via g force)
-  (declare #.*opt* (weir wer) (pos-int a b via) (boolean force))
+  (declare #.*opt* (weir wer) (veq:pn a b via) (boolean force))
   "add delete edge (a b) and add edges (a via b)"
   (when (or (del-edge! wer a b :g g) force)
         (list (add-edge! wer a via :g g)
               (add-edge! wer via b :g g))))
 
 (defun lsplit-edge-ind! (wer ee &key via g force)
-  (declare #.*opt* (weir wer) (list ee) (pos-int via) (boolean force))
-  "insert vertex at coordinate via, between edge ee=(u w)"
+  (declare #.*opt* (weir wer) (list ee) (veq:pn via) (boolean force))
+  "insert vertex at coordinate via, between edge ee=(u w)."
   (destructuring-bind (u w) ee
-    (declare (pos-int u w))
+    (declare (veq:pn u w))
     (split-edge-ind! wer u w :via via :g g :force force)))
 
 
 (defun collapse-verts! (wer u v &key g)
-  (declare #.*opt* (weir wer) (pos-int u v))
+  (declare #.*opt* (weir wer) (veq:pn u v))
   "move all incident edges of v to u. returns the moved verts."
   (loop with incident = (get-incident-verts wer v :g g)
         for w in incident
@@ -358,10 +367,10 @@ non-existing vertices. these have to be deleted separately."
 
 (defun lcollapse-verts! (wer uv &key g)
   (declare #.*opt* (weir wer) (list uv))
-  "move all incident edges of v1, v2, ... to u. assuming uv = (u v1 v2 ...)"
-  (loop with u of-type pos-int = (car uv)
+  "move all incident edges of v1, v2, ... to u. assuming uv = (u v1 v2 ...)."
+  (loop with u of-type veq:pn = (car uv)
         with res of-type list = (list)
-        for v of-type pos-int in (cdr uv)
+        for v of-type veq:pn in (cdr uv)
         do (loop with incident of-type list = (get-incident-verts wer v :g g)
                  for w in incident
                  do (del-edge! wer v w :g g)
@@ -371,9 +380,9 @@ non-existing vertices. these have to be deleted separately."
 
 (defun add-path-ind! (wer path &key g closed)
   (declare #.*opt* (weir wer) (list path) (boolean closed))
-  "create edges of path"
-  (loop for a of-type pos-int in path
-        and b of-type pos-int in
+  "create edges of path."
+  (loop for a of-type veq:pn in path
+        and b of-type veq:pn in
           (if closed (butlast (cons (math:last* path) path) 1) (cdr path))
         collect (add-edge! wer a b :g g)))
 

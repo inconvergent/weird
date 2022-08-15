@@ -2,7 +2,7 @@
 
 (defmacro dimtest (wer dim fx)
   "used internally to check that weir instance has correct dimension."
-  (declare (symbol wer) (pos-int dim))
+  (declare (symbol wer) (veq:pn dim))
   `(when (not (= (weir-dim ,wer) ,dim))
          (error "weir error: incorrect use of: ~a. ~%
                  for weir instance of dim: ~a" ',fx (weir-dim ,wer))))
@@ -26,8 +26,8 @@
     docs
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts) wer
-      (declare (veq:fvec verts) (pos-int num-verts))
-      (unless (every (lambda (v) (declare (optimize speed) (pos-int v))
+      (declare (veq:fvec verts) (veq:pn num-verts))
+      (unless (every (lambda (v) (declare (optimize speed) (veq:pn v))
                        (< v num-verts)) inds)
               (error "~a error. ~% invalid vert index in: ~a. ~% num verts: ~a~%"
                      'fx inds num-verts))
@@ -49,7 +49,7 @@ note: verts only belong to a grp if they are part of an edge in grp.")
     docs
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts max-verts) wer
-      (declare (veq:fvec verts) (pos-int num-verts max-verts))
+      (declare (veq:fvec verts) (veq:pn num-verts max-verts))
       (when (>= num-verts max-verts)
             (error "~a error. ~% too many verts ~a~%." 'fx num-verts))
       (veq::@$vset (verts num-verts) (values x))
@@ -72,10 +72,10 @@ note: verts only belong to a grp if they are part of an edge in grp.")
     docs
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts max-verts) wer
-      (declare (veq:fvec verts) (pos-int num-verts))
+      (declare (veq:fvec verts) (veq:pn num-verts))
       (let* ((n (/ (length vv) dim))
              (new-num (+ num-verts n)))
-        (declare (pos-int n new-num))
+        (declare (veq:pn n new-num))
         (unless (<= new-num max-verts)
                 (error "~a error. too many verts: ~a~%" 'fx new-num))
         (veq:fwith-arrays (:n new-num :itr i :start num-verts :cnt c
@@ -90,11 +90,11 @@ note: verts only belong to a grp if they are part of an edge in grp.")
 (dimtemplate (get-vert
   "get the coordinate of vert v.")
   (veq:fvdef fx (wer v)
-    (declare #.*opt* (weir wer) (pos-int v))
+    (declare #.*opt* (weir wer) (veq:pn v))
     docs
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts) wer
-      (declare (veq:fvec verts) (pos-int num-verts))
+      (declare (veq:fvec verts) (veq:pn num-verts))
       (when (>= v num-verts)
             (error "~a error. ~% invalid vert: ~a~%. ~% num verts: ~a~%"
                    'fx v num-verts))
@@ -108,7 +108,7 @@ note: verts only belong to a grp if they are part of an edge in grp.")
     docs
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts) wer
-      (declare (veq:fvec verts) (pos-int num-verts))
+      (declare (veq:fvec verts) (veq:pn num-verts))
       (veq:fwith-arrays (:n num-verts :itr k
         :arr ((verts dim verts)
               (res dim (veq:f$make :dim dim :n num-verts)))
@@ -122,11 +122,11 @@ note: verts only belong to a grp if they are part of an edge in grp.")
 (dimtemplate (move-vert!
   "move vertex by x. use :rel nil to move to absolute position.")
   (veq:fvdef* fx (wer i (:varg dim x) &key (rel t))
-    (declare #.*opt* (weir wer) (pos-int i) (veq:ff x) (boolean rel))
+    (declare #.*opt* (weir wer) (veq:pn i) (veq:ff x) (boolean rel))
     docs
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts) wer
-      (declare (veq:fvec verts) (pos-int num-verts))
+      (declare (veq:fvec verts) (veq:pn num-verts))
       (when (>= i num-verts)
             (error "~a error. attempting to move invalid vert, ~a. ~% num verts: ~a~%"
                    'fx i num-verts))
@@ -142,8 +142,8 @@ note: verts only belong to a grp if they are part of an edge in grp.")
     (dimtest wer dim fx)
     docs
     (with-struct (weir- verts num-verts) wer
-      (declare (veq:fvec verts) (pos-int num-verts))
-      (unless (every (lambda (v) (declare (optimize speed) (pos-int v))
+      (declare (veq:fvec verts) (veq:pn num-verts))
+      (unless (every (lambda (v) (declare (optimize speed) (veq:pn v))
                        (< v num-verts)) inds)
               (error "~a error. ~% invalid vert index in: ~a. ~% num verts: ~a~%"
                      'fx inds num-verts))
@@ -166,12 +166,12 @@ note: verts only belong to a grp if they are part of an edge in grp.")
 (dimtemplate (split-edge!
   "split edge (u v) at x. returns new vert ind (and new edges).")
   (veq:fvdef* fx (wer u v (:varg dim x) &key g force)
-  (declare #.*opt* (weir wer) (pos-int u v) (veq:ff x) (boolean force))
+  (declare #.*opt* (weir wer) (veq:pn u v) (veq:ff x) (boolean force))
   docs
   (dimtest wer dim fx)
   (if (or (del-edge! wer u v :g g) force)
       (let ((c (@add-vert! wer x)))
-        (declare (pos-int c))
+        (declare (veq:pn c))
         (values c (list (add-edge! wer c u :g g) (add-edge! wer c v :g g))))
       (values nil nil))))
 
@@ -181,13 +181,13 @@ note: verts only belong to a grp if they are part of an edge in grp.")
     (declare #.*opt* (weir wer) (list ee) (veq:ff x) (boolean))
     docs
     (destructuring-bind (u v) ee
-      (declare (pos-int u v))
+      (declare (veq:pn u v))
       (@split-edge! wer u v x :g g :force force))))
 
 (dimtemplate (append-edge!
   "add edge between vert v and new vert at xy.")
   (veq:fvdef* fx (wer v (:varg dim x) &key (rel t) g)
-    (declare (weir wer) (pos-int v) (veq:ff x) (boolean rel))
+    (declare (weir wer) (veq:pn v) (veq:ff x) (boolean rel))
     docs
     (dimtest wer dim fx)
     (add-edge! wer v (if rel (@add-vert! wer (veq::f@+ x (@get-vert wer v)))
@@ -198,11 +198,11 @@ note: verts only belong to a grp if they are part of an edge in grp.")
 (dimtemplate (edge-length
   "returns the length of edge e=(u v). regardless of whether the edge exists.")
   (veq:fvdef fx (wer u v)
-    (declare #.*opt* (weir wer) (pos-int u v))
+    (declare #.*opt* (weir wer) (veq:pn u v))
     docs
     (dimtest wer dim fx)
     (with-struct (weir- verts num-verts) wer
-      (declare (veq:fvec verts) (pos-int num-verts))
+      (declare (veq:fvec verts) (veq:pn num-verts))
       (unless (and (< u num-verts) (< v num-verts))
               (error "~a error. invalid vert in edge (~a ~a). ~% num verts: ~a~%"
                      'fx u v num-verts))
@@ -277,7 +277,7 @@ note: verts only belong to a grp if they are part of an edge in grp.")
              (declare (veq:ff ms w h))
              (if (> w h) (/ ms w) (/ ms h))))
     (with-struct (weir- verts num-verts) wer
-      (declare (veq:fvec verts) (pos-int num-verts))
+      (declare (veq:fvec verts) (veq:pn num-verts))
       (mvb (minx maxx miny maxy)
         (if non-edge (veq:f2$mima verts :n num-verts)
                      (veq:f2$mima verts :inds (get-vert-inds wer :g g)))
@@ -301,7 +301,7 @@ note: verts only belong to a grp if they are part of an edge in grp.")
 ;   "center the verts of wer on xy. returns the previous center"
 ;   (dimtest wer 3 '3center!)
 ;   (with-struct (weir- verts num-verts) wer
-;     (declare (veq:fvec verts) (pos-int num-verts))
+;     (declare (veq:fvec verts) (veq:pn num-verts))
 ;     (mvb (minx maxx miny maxy)
 ;       (if non-edge (veq:f3$mima verts :n num-verts)
 ;                    (veq:f3$mima verts :inds (get-vert-inds wer :g g)))
@@ -320,7 +320,7 @@ note: verts only belong to a grp if they are part of an edge in grp.")
 ; SHAPES ----------------------
 
 (veq:fvdef* 2is-intersection (wer a b c d)
-  (declare (weir wer) (pos-int aa bb))
+  (declare (weir wer) (veq:pn aa bb))
   "check if edge ab intersect edge bc. does not check if edges exist."
   (veq:f2segx (2$verts wer a b c d)))
 

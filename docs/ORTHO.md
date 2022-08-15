@@ -109,7 +109,7 @@ cast a ray in direction -vpn from pt
 #### ORTHO:PROJECT
 
 ```
-docstring for %PROJECT
+DOCSTRING for %PROJECT;
 project single point. returns (values x y d)
 
  ; ORTHO:PROJECT
@@ -118,7 +118,7 @@ project single point. returns (values x y d)
  ; PROJECT names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     docstring for %PROJECT
+ ;     DOCSTRING for %PROJECT;
  ;     project single point. returns (values x y d)
  ;   Source file: /data/x/weird/src/draw/ortho.lisp
 ```

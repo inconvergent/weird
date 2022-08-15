@@ -425,19 +425,6 @@ extend v with all items in x.
  ;   Source file: /data/x/weird/src/utils.lisp
 ```
 
-#### WEIRD:POS-INT
-
-```
-:missing:todo:
-
- ; WEIRD:POS-INT
- ;   [symbol]
- ; 
- ; POS-INT names a type-specifier:
- ;   Lambda-list: (&OPTIONAL (BITS 31))
- ;   Expansion: (UNSIGNED-BYTE 31)
-```
-
 #### WEIRD:PRINT-EVERY
 
 ```
@@ -508,6 +495,19 @@ extend v with all items in x.
  ;   Source file: /data/x/weird/src/utils.lisp
 ```
 
+#### WEIRD:SMALL-IND
+
+```
+:missing:todo:
+
+ ; WEIRD:SMALL-IND
+ ;   [symbol]
+ ; 
+ ; SMALL-IND names a type-specifier:
+ ;   Lambda-list: (&OPTIONAL (SIZE 30000))
+ ;   Expansion: (INTEGER 0 30000)
+```
+
 #### WEIRD:SPLIT
 
 ```
@@ -518,8 +518,7 @@ split s at c
  ; 
  ; SPLIT names a compiled function:
  ;   Lambda-list: (S C)
- ;   Derived type: (FUNCTION (STRING T)
- ;                  (VALUES LIST UNSIGNED-BYTE &REST T))
+ ;   Derived type: (FUNCTION (STRING T) *)
  ;   Documentation:
  ;     split s at c
  ;   Source file: /data/x/weird/src/utils.lisp
@@ -769,6 +768,21 @@ split s at c
  ; 
  ; VL names a macro:
  ;   Lambda-list: (&REST ARGS)
+ ;   Source file: /data/x/weird/src/utils.lisp
+```
+
+#### WEIRD:WITH-FAST-STACK
+
+```
+:missing:todo:
+
+ ; WEIRD:WITH-FAST-STACK
+ ;   [symbol]
+ ; 
+ ; WITH-FAST-STACK names a macro:
+ ;   Lambda-list: ((SYM &KEY (TYPE (QUOTE FIXNUM)) (N 1000) (V 0)
+ ;                  (SAFE-Z 100))
+ ;                 &REST BODY)
  ;   Source file: /data/x/weird/src/utils.lisp
 ```
 

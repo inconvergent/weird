@@ -5,7 +5,7 @@
 ; STRIP FILAMENTS
 
 (defun -del-filament (grph v)
-  (declare (graph grph) (pos-int v))
+  (declare (graph grph) (veq:pn v))
   (let ((ee (get-incident-edges grph v)))
     (when (= (length ee) 1)
           (apply #'del grph (first ee)))))
@@ -28,13 +28,13 @@
   (if (= (first k) (first (last k))) (list (cdr k) t) (list k nil)))
 
 (defun -find-segment (grph start curr)
-  (declare (graph grph) (pos-int start curr))
-  (loop with res = (make-adjustable-vector :type 'pos-int :init (list start))
-        with prev of-type pos-int = start
+  (declare (graph grph) (veq:pn start curr))
+  (loop with res = (make-adjustable-vector :type 'veq:pn :init (list start))
+        with prev of-type veq:pn = start
         while t
         do (let* ((incident (get-incident-edges grph curr))
                   (n (length incident)))
-             (declare (pos-int n))
+             (declare (veq:pn n))
 
              ; loop. attach curr to indicate loop
              (when (= curr start)
@@ -76,7 +76,7 @@ multi-intersections. consider walk-graph instead."
          (= (length incident) 2))
 
        (-do-find-segment (v next)
-         (declare (pos-int v next))
+         (declare (veq:pn v next))
          (let* ((path (to-list (-find-segment grph v next)))
                 (key (sort (copy-list path) #'<)))
            (declare (list path key))
@@ -85,7 +85,7 @@ multi-intersections. consider walk-graph instead."
                    (setf (gethash key all-paths) path))))
 
        (-walk-incident-verts (v testfx)
-         (declare (pos-int v) (function testfx))
+         (declare (veq:pn v) (function testfx))
          (let ((incident (get-incident-edges grph v)))
            (declare (list incident))
            (when (funcall testfx incident)

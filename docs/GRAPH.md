@@ -394,11 +394,11 @@ default values should usually work fine.
  ;   [symbol]
  ; 
  ; MAKE names a compiled function:
- ;   Lambda-list: (&KEY (ADJ-SIZE 4) (ADJ-INC 2.0) (SET-SIZE 10)
- ;                 (SET-INC 2.0))
+ ;   Lambda-list: (&KEY (NAME (GENSYM GRAPH)) (ADJ-SIZE 4) (ADJ-INC 2.0)
+ ;                 (SET-SIZE 10) (SET-INC 2.0))
  ;   Derived type: (FUNCTION
- ;                  (&KEY (:ADJ-SIZE T) (:ADJ-INC T) (:SET-SIZE T)
- ;                   (:SET-INC T))
+ ;                  (&KEY (:NAME T) (:ADJ-SIZE T) (:ADJ-INC T)
+ ;                   (:SET-SIZE T) (:SET-INC T))
  ;                  (VALUES GRAPH::GRAPH &OPTIONAL))
  ;   Documentation:
  ;     create undirected graph instance with no spatial awareness.
@@ -527,6 +527,21 @@ ex (with-graph-edges (grph e) (print e))
  ;     iterate over all edges as e. more efficient than get-edges because it does
  ;     not build the entire structure.
  ;     ex (with-graph-edges (grph e) (print e))
+ ;   Source file: /data/x/weird/src/graph/main.lisp
+```
+
+#### GRAPH:WITH-GRAPH-VERTS
+
+```
+iterate over all verts as v.
+
+ ; GRAPH:WITH-GRAPH-VERTS
+ ;   [symbol]
+ ; 
+ ; WITH-GRAPH-VERTS names a macro:
+ ;   Lambda-list: ((GRPH V) &BODY BODY)
+ ;   Documentation:
+ ;     iterate over all verts as v.
  ;   Source file: /data/x/weird/src/graph/main.lisp
 ```
 
