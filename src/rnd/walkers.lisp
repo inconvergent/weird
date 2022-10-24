@@ -12,7 +12,8 @@
   (declare #.*opt* (veq:ff x a))
   "accelerated random walker."
   (lambda (s) (declare (veq:ff s))
-    (incf x (incf a (rnd* s)))))
+    (incf a (rnd* s))
+    (values (incf x a) a)))
 
 
 (veq:fvdef* 2walker ((:va 2 x))
@@ -28,7 +29,7 @@
   (lambda (s) (declare (veq:ff s))
     (veq:f2vset (a) (veq:f2+ a (2in-circ s)))
     (veq:f2vset (x) (veq:f2+ x a))
-    (veq:f2 x)))
+    (values x a)))
 
 
 (veq:fvdef* 3walker ((:va 3 x))
@@ -46,5 +47,5 @@
     (declare (veq:ff s))
     (veq:f3vset (a) (veq:f3+ a (3in-sphere s)))
     (veq:f3vset (x) (veq:f3+ x a))
-    (veq:f3 x)))
+    (values x a)))
 

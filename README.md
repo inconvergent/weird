@@ -4,6 +4,11 @@
 use this for anything remotely important. Make sure to clone the repo if you
 need it to remain stable.**
 
+**NOTE: An improved version of the graph data structure in the `weir` package
+can be found in my new project:
+[cl-grph](https://github.com/inconvergent/cl-grph). Among multiple
+improvements, the graph structure in `grph` is immutable, and supports Datomic
+queries.**
 
 ## About
 
