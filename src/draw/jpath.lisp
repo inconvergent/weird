@@ -52,7 +52,7 @@
     ((make-joint (i (:varg 2 a p b))
        (veq:f2let ((in (veq:f2norm (veq:f2- p a)))
                    (out (veq:f2norm (veq:f2- b p))))
-         (let* ((alpha (- veq:fpi (acos (veq:f2. in out))))
+         (let* ((alpha (- veq:fpi (acos (veq:fclamp* (veq:f2. in out) -1.0 1f0))))
                 (s (/ w (veq:ff (sin alpha))))
                 (in-out (veq:f$_ (list (veq:lst (veq:f2scale in s))
                                        (veq:lst (veq:f2scale out s))))))
@@ -93,7 +93,7 @@
 
     (when (< n (if closed 3 2))
           (error "jpath error: must have at least 2 (open)
-                  or 3 (closed) elements. n: ~a~ closed: ~a%" n closed))
+                  or 3 (closed) elements. n: ~a~%closed: ~a" n closed))
 
     (if closed (closed-path->joints) (open-path->joints))))
 
