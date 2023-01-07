@@ -1,4 +1,3 @@
-:y
 (in-package #:weir)
 
 ; TODO: docs for arguments

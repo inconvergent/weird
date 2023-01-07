@@ -24,7 +24,7 @@ generate file names using https://github.com/inconvergent/fn
  ; 
  ; SEED names a compiled function:
  ;   Lambda-list: (FN)
- ;   Derived type: (FUNCTION (T) (VALUES T (OR INTEGER NULL) &OPTIONAL))
+ ;   Derived type: (FUNCTION (T) (VALUES T (OR NULL INTEGER) &OPTIONAL))
  ;   Source file: /data/x/weird/src/fn.lisp
 ```
 

@@ -131,7 +131,7 @@ binary integer search. assumes presorted list of integers
  ; INTEGER-SEARCH names a compiled function:
  ;   Lambda-list: (AA V &AUX (N (LENGTH AA)))
  ;   Derived type: (FUNCTION (VECTOR FIXNUM)
- ;                  (VALUES (OR NULL (MOD 4611686018427387900)) &OPTIONAL))
+ ;                  (VALUES (OR NULL (MOD 4611686018427387901)) &OPTIONAL))
  ;   Documentation:
  ;     binary integer search. assumes presorted list of integers
  ;   Source file: /data/x/weird/src/math.lisp

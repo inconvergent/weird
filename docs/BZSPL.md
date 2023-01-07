@@ -5,6 +5,11 @@
 
  ; BZSPL:ADAPTIVE-POS
  ;   [symbol]
+ ; 
+ ; ADAPTIVE-POS names a compiled function:
+ ;   Lambda-list: (BZ &OPTIONAL (LIM *LIM*))
+ ;   Derived type: (FUNCTION (BZSPL::BZSPL &OPTIONAL SINGLE-FLOAT) *)
+ ;   Source file: /data/x/weird/src/draw/bzspl.lisp
 ```
 
 #### BZSPL:LEN
@@ -14,6 +19,12 @@
 
  ; BZSPL:LEN
  ;   [symbol]
+ ; 
+ ; LEN names a compiled function:
+ ;   Lambda-list: (BZ &OPTIONAL (LIM *LIM*))
+ ;   Derived type: (FUNCTION (BZSPL::BZSPL &OPTIONAL T)
+ ;                  (VALUES (SINGLE-FLOAT 0.0) &OPTIONAL))
+ ;   Source file: /data/x/weird/src/draw/bzspl.lisp
 ```
 
 #### BZSPL:MAKE

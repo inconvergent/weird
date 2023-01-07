@@ -168,10 +168,13 @@ START, END:     bounding index designators of SEQUENCE.
       (loop for (val pos newl) =
                   (multiple-value-list (read-line-into-sequence buffer is
                                          :eof-error-p nil))
-            while val
-            do (when newl
+            for i from 1 while val if newl
+            ; TODO: need a better way to handle potential errors/warnings here
+            do (handler-case
                  (with-input-from-string (in val :start 0 :end pos)
-                   (funcall fx in)))))))
+                   (funcall fx in))
+                 (error (e) (warn "DAT error for: ~s~%on line: ~a~%msg: ~a~%"
+                                  (weird::trim val) i e)))))))
 
 ;; ----------------------------------------------------------------------
 

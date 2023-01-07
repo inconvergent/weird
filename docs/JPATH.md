@@ -11,7 +11,7 @@
  ;   Derived type: (FUNCTION
  ;                  ((SIMPLE-ARRAY SINGLE-FLOAT) SINGLE-FLOAT &KEY
  ;                   (:REP FIXNUM) (:CLOSED BOOLEAN) (:LIMITS T))
- ;                  (VALUES (SIMPLE-ARRAY SINGLE-FLOAT (*)) &OPTIONAL))
+ ;                  *)
  ;   Source file: /data/x/weird/src/draw/jpath.lisp
 ```
 

@@ -169,6 +169,15 @@
   (format nil "~a-~8,'0d" fn i))
 
 
+; dirty solution from:
+; https://stackoverflow.com/questions/20963313/how-do-i-trim-leading-and-trailing-whitespace-in-common-lisp
+; TODO: improve this
+(defun trim (s)
+  (declare (string s))
+  (string-trim '(#\Space #\Newline #\Backspace #\Tab
+                 #\Linefeed #\Page #\Return #\Rubout)
+               s))
+
 (defun ensure-filename (fn &optional (postfix "") (silent nil))
   (let ((fn* (append-postfix (if fn fn "tmp") postfix)))
     (declare (string fn*))
