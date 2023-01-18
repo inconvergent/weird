@@ -109,8 +109,10 @@ cast a ray in direction -vpn from pt
 #### ORTHO:PROJECT
 
 ```
-DOCSTRING for %PROJECT;
-project single point. returns (values x y d)
+WRAPS: %PROJECT
+ARGS: (PROJ (VA 3 PT))
+DOCSTRING: project single point. returns (values x y d)
+defined via veq:FVDEF*
 
  ; ORTHO:PROJECT
  ;   [symbol]
@@ -118,8 +120,10 @@ project single point. returns (values x y d)
  ; PROJECT names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %PROJECT;
- ;     project single point. returns (values x y d)
+ ;     WRAPS: %PROJECT
+ ;     ARGS: (PROJ (VA 3 PT))
+ ;     DOCSTRING: project single point. returns (values x y d)
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/draw/ortho.lisp
 ```
 

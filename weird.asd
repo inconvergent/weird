@@ -2,7 +2,7 @@
 
 (asdf:defsystem #:weird
   :description "A System for Making Generative Systems"
-  :version "7.0.0"
+  :version "7.1.0"
   :author "anders hoff/inconvergent"
   :licence "MIT"
   :in-order-to ((asdf:test-op (asdf:test-op #:weird/tests)))

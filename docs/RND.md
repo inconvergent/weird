@@ -1,8 +1,10 @@
 #### RND:2IN-CIRC
 
 ```
-DOCSTRING for %2IN-CIRC;
-random point in circle with rad r. centered at origin.
+WRAPS: %2IN-CIRC
+ARGS: (&OPTIONAL (R 1.0))
+DOCSTRING: random point in circle with rad r. centered at origin.
+defined via veq:DEF*
 
  ; RND:2IN-CIRC
  ;   [symbol]
@@ -10,16 +12,20 @@ random point in circle with rad r. centered at origin.
  ; 2IN-CIRC names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2IN-CIRC;
- ;     random point in circle with rad r. centered at origin.
+ ;     WRAPS: %2IN-CIRC
+ ;     ARGS: (&OPTIONAL (R 1.0))
+ ;     DOCSTRING: random point in circle with rad r. centered at origin.
+ ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
 
 #### RND:2IN-RECT
 
 ```
-DOCSTRING for %2IN-RECT;
-random point in rectangle of size sx,sy. centered at origin.
+WRAPS: %2IN-RECT
+ARGS: (S-X-8 S-Y-9)
+DOCSTRING: random point in rectangle of size sx,sy. centered at origin.
+defined via veq:DEF*
 
  ; RND:2IN-RECT
  ;   [symbol]
@@ -27,16 +33,20 @@ random point in rectangle of size sx,sy. centered at origin.
  ; 2IN-RECT names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2IN-RECT;
- ;     random point in rectangle of size sx,sy. centered at origin.
+ ;     WRAPS: %2IN-RECT
+ ;     ARGS: (S-X-8 S-Y-9)
+ ;     DOCSTRING: random point in rectangle of size sx,sy. centered at origin.
+ ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
 
 #### RND:2IN-SQUARE
 
 ```
-DOCSTRING for %2IN-SQUARE;
-random point in square of size s. centered at origin.
+WRAPS: %2IN-SQUARE
+ARGS: (&OPTIONAL (S 1.0))
+DOCSTRING: random point in square of size s. centered at origin.
+defined via veq:DEF*
 
  ; RND:2IN-SQUARE
  ;   [symbol]
@@ -44,16 +54,20 @@ random point in square of size s. centered at origin.
  ; 2IN-SQUARE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2IN-SQUARE;
- ;     random point in square of size s. centered at origin.
+ ;     WRAPS: %2IN-SQUARE
+ ;     ARGS: (&OPTIONAL (S 1.0))
+ ;     DOCSTRING: random point in square of size s. centered at origin.
+ ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
 
 #### RND:2NIN-CIRC
 
 ```
-DOCSTRING for %2NIN-CIRC;
-n random points in circle with rad r. centered at origin.
+WRAPS: %2NIN-CIRC
+ARGS: (N &OPTIONAL (R 1.0))
+DOCSTRING: n random points in circle with rad r. centered at origin.
+defined via veq:DEF*
 
  ; RND:2NIN-CIRC
  ;   [symbol]
@@ -61,16 +75,20 @@ n random points in circle with rad r. centered at origin.
  ; 2NIN-CIRC names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2NIN-CIRC;
- ;     n random points in circle with rad r. centered at origin.
+ ;     WRAPS: %2NIN-CIRC
+ ;     ARGS: (N &OPTIONAL (R 1.0))
+ ;     DOCSTRING: n random points in circle with rad r. centered at origin.
+ ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
 
 #### RND:2NIN-RECT
 
 ```
-DOCSTRING for %2NIN-RECT;
-n random points in rectangle of size sx,sy. centered at origin.
+WRAPS: %2NIN-RECT
+ARGS: (N S-X-10 S-Y-11)
+DOCSTRING: n random points in rectangle of size sx,sy. centered at origin.
+defined via veq:DEF*
 
  ; RND:2NIN-RECT
  ;   [symbol]
@@ -78,16 +96,20 @@ n random points in rectangle of size sx,sy. centered at origin.
  ; 2NIN-RECT names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2NIN-RECT;
- ;     n random points in rectangle of size sx,sy. centered at origin.
+ ;     WRAPS: %2NIN-RECT
+ ;     ARGS: (N S-X-10 S-Y-11)
+ ;     DOCSTRING: n random points in rectangle of size sx,sy. centered at origin.
+ ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
 
 #### RND:2NIN-SQUARE
 
 ```
-DOCSTRING for %2NIN-SQUARE;
-n random points in square of size s. centered at origin.
+WRAPS: %2NIN-SQUARE
+ARGS: (N &OPTIONAL (S 1.0))
+DOCSTRING: n random points in square of size s. centered at origin.
+defined via veq:DEF*
 
  ; RND:2NIN-SQUARE
  ;   [symbol]
@@ -95,16 +117,20 @@ n random points in square of size s. centered at origin.
  ; 2NIN-SQUARE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2NIN-SQUARE;
- ;     n random points in square of size s. centered at origin.
+ ;     WRAPS: %2NIN-SQUARE
+ ;     ARGS: (N &OPTIONAL (S 1.0))
+ ;     DOCSTRING: n random points in square of size s. centered at origin.
+ ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
 
 #### RND:2NON-CIRC
 
 ```
-DOCSTRING for %2NON-CIRC;
-n random points on circle with rad r. centered at origin.
+WRAPS: %2NON-CIRC
+ARGS: (N &OPTIONAL (R 1.0))
+DOCSTRING: n random points on circle with rad r. centered at origin.
+defined via veq:DEF*
 
  ; RND:2NON-CIRC
  ;   [symbol]
@@ -112,16 +138,20 @@ n random points on circle with rad r. centered at origin.
  ; 2NON-CIRC names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2NON-CIRC;
- ;     n random points on circle with rad r. centered at origin.
+ ;     WRAPS: %2NON-CIRC
+ ;     ARGS: (N &OPTIONAL (R 1.0))
+ ;     DOCSTRING: n random points on circle with rad r. centered at origin.
+ ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
 
 #### RND:2NON-LINE
 
 ```
-DOCSTRING for %2NON-LINE;
-n random points between a,b.
+WRAPS: %2NON-LINE
+ARGS: (N A-X-4 A-Y-5 B-X-6 B-Y-7)
+DOCSTRING: n random points between a,b.
+defined via veq:DEF*
 
  ; RND:2NON-LINE
  ;   [symbol]
@@ -129,8 +159,10 @@ n random points between a,b.
  ; 2NON-LINE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2NON-LINE;
- ;     n random points between a,b.
+ ;     WRAPS: %2NON-LINE
+ ;     ARGS: (N A-X-4 A-Y-5 B-X-6 B-Y-7)
+ ;     DOCSTRING: n random points between a,b.
+ ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
 
@@ -146,8 +178,10 @@ n random points between a,b.
 #### RND:2ON-CIRC
 
 ```
-DOCSTRING for %2ON-CIRC;
-random point on circle with rad r. centered at origin.
+WRAPS: %2ON-CIRC
+ARGS: (&OPTIONAL (R 1.0))
+DOCSTRING: random point on circle with rad r. centered at origin.
+defined via veq:DEF*
 
  ; RND:2ON-CIRC
  ;   [symbol]
@@ -155,16 +189,20 @@ random point on circle with rad r. centered at origin.
  ; 2ON-CIRC names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2ON-CIRC;
- ;     random point on circle with rad r. centered at origin.
+ ;     WRAPS: %2ON-CIRC
+ ;     ARGS: (&OPTIONAL (R 1.0))
+ ;     DOCSTRING: random point on circle with rad r. centered at origin.
+ ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
 
 #### RND:2ON-LINE
 
 ```
-DOCSTRING for %2ON-LINE;
-random point between a,b.
+WRAPS: %2ON-LINE
+ARGS: (A-X-0 A-Y-1 B-X-2 B-Y-3)
+DOCSTRING: random point between a,b.
+defined via veq:DEF*
 
  ; RND:2ON-LINE
  ;   [symbol]
@@ -172,8 +210,10 @@ random point between a,b.
  ; 2ON-LINE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2ON-LINE;
- ;     random point between a,b.
+ ;     WRAPS: %2ON-LINE
+ ;     ARGS: (A-X-0 A-Y-1 B-X-2 B-Y-3)
+ ;     DOCSTRING: random point between a,b.
+ ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
 ```
 
@@ -189,8 +229,10 @@ random point between a,b.
 #### RND:2WALKER
 
 ```
-DOCSTRING for %2WALKER;
-random 2d walker.
+WRAPS: %2WALKER
+ARGS: ((VA 2 X))
+DOCSTRING: random 2d walker.
+defined via veq:FVDEF*
 
  ; RND:2WALKER
  ;   [symbol]
@@ -198,16 +240,20 @@ random 2d walker.
  ; 2WALKER names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2WALKER;
- ;     random 2d walker.
+ ;     WRAPS: %2WALKER
+ ;     ARGS: ((VA 2 X))
+ ;     DOCSTRING: random 2d walker.
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/rnd/walkers.lisp
 ```
 
 #### RND:2WALKER-ACC
 
 ```
-DOCSTRING for %2WALKER-ACC;
-accelerated random 2d walker.
+WRAPS: %2WALKER-ACC
+ARGS: ((VA 2 X A))
+DOCSTRING: accelerated random 2d walker.
+defined via veq:FVDEF*
 
  ; RND:2WALKER-ACC
  ;   [symbol]
@@ -215,16 +261,20 @@ accelerated random 2d walker.
  ; 2WALKER-ACC names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2WALKER-ACC;
- ;     accelerated random 2d walker.
+ ;     WRAPS: %2WALKER-ACC
+ ;     ARGS: ((VA 2 X A))
+ ;     DOCSTRING: accelerated random 2d walker.
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/rnd/walkers.lisp
 ```
 
 #### RND:3IN-BOX
 
 ```
-DOCSTRING for %3IN-BOX;
-random point in box of size sx,sy,sz. centered at origin.
+WRAPS: %3IN-BOX
+ARGS: (S-X-12 S-Y-13 S-Z-14)
+DOCSTRING: random point in box of size sx,sy,sz. centered at origin.
+defined via veq:DEF*
 
  ; RND:3IN-BOX
  ;   [symbol]
@@ -232,16 +282,20 @@ random point in box of size sx,sy,sz. centered at origin.
  ; 3IN-BOX names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %3IN-BOX;
- ;     random point in box of size sx,sy,sz. centered at origin.
+ ;     WRAPS: %3IN-BOX
+ ;     ARGS: (S-X-12 S-Y-13 S-Z-14)
+ ;     DOCSTRING: random point in box of size sx,sy,sz. centered at origin.
+ ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
 ```
 
 #### RND:3IN-CUBE
 
 ```
-DOCSTRING for %3IN-CUBE;
-random point in cube of size s. centered at origin.
+WRAPS: %3IN-CUBE
+ARGS: (&OPTIONAL (S 1.0))
+DOCSTRING: random point in cube of size s. centered at origin.
+defined via veq:DEF*
 
  ; RND:3IN-CUBE
  ;   [symbol]
@@ -249,8 +303,10 @@ random point in cube of size s. centered at origin.
  ; 3IN-CUBE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %3IN-CUBE;
- ;     random point in cube of size s. centered at origin.
+ ;     WRAPS: %3IN-CUBE
+ ;     ARGS: (&OPTIONAL (S 1.0))
+ ;     DOCSTRING: random point in cube of size s. centered at origin.
+ ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
 ```
 
@@ -276,8 +332,10 @@ random point in sphere with rad r. centered at origin.
 #### RND:3NIN-BOX
 
 ```
-DOCSTRING for %3NIN-BOX;
-n random points in box of size sx,sy,sz. centered at origin.
+WRAPS: %3NIN-BOX
+ARGS: (N S-X-15 S-Y-16 S-Z-17)
+DOCSTRING: n random points in box of size sx,sy,sz. centered at origin.
+defined via veq:DEF*
 
  ; RND:3NIN-BOX
  ;   [symbol]
@@ -285,8 +343,10 @@ n random points in box of size sx,sy,sz. centered at origin.
  ; 3NIN-BOX names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %3NIN-BOX;
- ;     n random points in box of size sx,sy,sz. centered at origin.
+ ;     WRAPS: %3NIN-BOX
+ ;     ARGS: (N S-X-15 S-Y-16 S-Z-17)
+ ;     DOCSTRING: n random points in box of size sx,sy,sz. centered at origin.
+ ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
 ```
 
@@ -310,8 +370,10 @@ n random points in cube of size sx. centered at origin.
 #### RND:3NIN-SPHERE
 
 ```
-DOCSTRING for %3NIN-SPHERE;
-n random points in sphere with rad r. centered at origin.
+WRAPS: %3NIN-SPHERE
+ARGS: (N &OPTIONAL (R 1.0))
+DOCSTRING: n random points in sphere with rad r. centered at origin.
+defined via veq:DEF*
 
  ; RND:3NIN-SPHERE
  ;   [symbol]
@@ -319,16 +381,20 @@ n random points in sphere with rad r. centered at origin.
  ; 3NIN-SPHERE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %3NIN-SPHERE;
- ;     n random points in sphere with rad r. centered at origin.
+ ;     WRAPS: %3NIN-SPHERE
+ ;     ARGS: (N &OPTIONAL (R 1.0))
+ ;     DOCSTRING: n random points in sphere with rad r. centered at origin.
+ ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
 ```
 
 #### RND:3NON-LINE
 
 ```
-DOCSTRING for %3NON-LINE;
-n random points between a,b.
+WRAPS: %3NON-LINE
+ARGS: (N A-X-6 A-Y-7 A-Z-8 B-X-9 B-Y-10 B-Z-11)
+DOCSTRING: n random points between a,b.
+defined via veq:DEF*
 
  ; RND:3NON-LINE
  ;   [symbol]
@@ -336,8 +402,10 @@ n random points between a,b.
  ; 3NON-LINE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %3NON-LINE;
- ;     n random points between a,b.
+ ;     WRAPS: %3NON-LINE
+ ;     ARGS: (N A-X-6 A-Y-7 A-Z-8 B-X-9 B-Y-10 B-Z-11)
+ ;     DOCSTRING: n random points between a,b.
+ ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
 ```
 
@@ -370,8 +438,10 @@ n random points on sphere with rad r. centered at origin.
 #### RND:3ON-LINE
 
 ```
-DOCSTRING for %3ON-LINE;
-random point between a,b.
+WRAPS: %3ON-LINE
+ARGS: (A-X-0 A-Y-1 A-Z-2 B-X-3 B-Y-4 B-Z-5)
+DOCSTRING: random point between a,b.
+defined via veq:DEF*
 
  ; RND:3ON-LINE
  ;   [symbol]
@@ -379,8 +449,10 @@ random point between a,b.
  ; 3ON-LINE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %3ON-LINE;
- ;     random point between a,b.
+ ;     WRAPS: %3ON-LINE
+ ;     ARGS: (A-X-0 A-Y-1 A-Z-2 B-X-3 B-Y-4 B-Z-5)
+ ;     DOCSTRING: random point between a,b.
+ ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
 ```
 
@@ -415,8 +487,10 @@ random point on sphere with rad r. centered at origin.
 #### RND:3WALKER
 
 ```
-DOCSTRING for %3WALKER;
-random 3d walker.
+WRAPS: %3WALKER
+ARGS: ((VA 3 X))
+DOCSTRING: random 3d walker.
+defined via veq:FVDEF*
 
  ; RND:3WALKER
  ;   [symbol]
@@ -424,16 +498,20 @@ random 3d walker.
  ; 3WALKER names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %3WALKER;
- ;     random 3d walker.
+ ;     WRAPS: %3WALKER
+ ;     ARGS: ((VA 3 X))
+ ;     DOCSTRING: random 3d walker.
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/rnd/walkers.lisp
 ```
 
 #### RND:3WALKER-ACC
 
 ```
-DOCSTRING for %3WALKER-ACC;
-accelerated random 3d walker.
+WRAPS: %3WALKER-ACC
+ARGS: ((VA 3 X A))
+DOCSTRING: accelerated random 3d walker.
+defined via veq:FVDEF*
 
  ; RND:3WALKER-ACC
  ;   [symbol]
@@ -441,8 +519,10 @@ accelerated random 3d walker.
  ; 3WALKER-ACC names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %3WALKER-ACC;
- ;     accelerated random 3d walker.
+ ;     WRAPS: %3WALKER-ACC
+ ;     ARGS: ((VA 3 X A))
+ ;     DOCSTRING: accelerated random 3d walker.
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/rnd/walkers.lisp
 ```
 
@@ -882,8 +962,8 @@ use this random seed. only implemented for SBCL.
  ;   [symbol]
  ; 
  ; SET-RND-STATE names a compiled function:
- ;   Lambda-list: (I)
- ;   Derived type: (FUNCTION (NUMBER) (VALUES RANDOM-STATE &OPTIONAL))
+ ;   Lambda-list: (&OPTIONAL I)
+ ;   Derived type: (FUNCTION (&OPTIONAL T) *)
  ;   Documentation:
  ;     use this random seed. only implemented for SBCL.
  ;   Source file: /data/x/weird/src/rnd/rnd.lisp

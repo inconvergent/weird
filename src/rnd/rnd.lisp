@@ -1,19 +1,17 @@
 (in-package :rnd)
 
 
-(defun set-rnd-state (i)
-  (declare (number i))
-  "use this random seed. only implemented for SBCL."
-   #+SBCL ; this is called feature expressions
-   (setf *random-state* (sb-ext:seed-random-state i))
-
-   #+(not SBCL)
-   (warn "rnd:state is only implemented for SBCL. see src/rnd.lisp
-          to implement state for your environment."))
-
 (defun make-rnd-state ()
   "generate a new random state."
   (setf *random-state* (make-random-state t)))
+
+(defun set-rnd-state (&optional i)
+  "use this random seed. only implemented for SBCL."
+   #+SBCL (if i (setf *random-state* (sb-ext:seed-random-state (the number i)))
+                (make-rnd-state))
+   #-SBCL (warn
+"rnd:state is only implemented for SBCL. see src/rnd.lisp
+to implement state for your environment."))
 
 ; NUMBERS AND RANGES
 

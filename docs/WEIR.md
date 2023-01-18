@@ -51,8 +51,10 @@ adds a new vertex to weir. returns the new vert ind.
  ; 2ADD-VERT! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2ADD-VERT!;
- ;     adds a new vertex to weir. returns the new vert ind.
+ ;     WRAPS: %2ADD-VERT!
+ ;     ARGS: (WER (VARG 2 X))
+ ;     DOCSTRING: adds a new vertex to weir. returns the new vert ind.
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -92,8 +94,10 @@ add edge between vert v and new vert at xy.
  ; 2APPEND-EDGE! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2APPEND-EDGE!;
- ;     add edge between vert v and new vert at xy.
+ ;     WRAPS: %2APPEND-EDGE!
+ ;     ARGS: (WER V (VARG 2 X) &KEY (REL T) G)
+ ;     DOCSTRING: add edge between vert v and new vert at xy.
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -134,13 +138,15 @@ short for 2add-verts!.
 #### WEIR:2CUT-TO-AREA!
 
 ```
-DOCSTRING for %2CUT-TO-AREA!;
-
+WRAPS: %2CUT-TO-AREA!
+ARGS: (WER &KEY G (TOP 0.0) (LEFT 0.0) (BOTTOM 1000.0) (RIGHT 1000.0))
+DOCSTRING: 
   removes all edges (in g) outside envelope (ox oy), (w h).
   all edges intersecting the envelope will be deleted, a new vert will be
   inserted on the intersection. connected to the inside vert.
   edges inside the envelope will be left as they are.
   
+defined via veq:FVDEF*
 
  ; WEIR:2CUT-TO-AREA!
  ;   [symbol]
@@ -148,13 +154,15 @@ DOCSTRING for %2CUT-TO-AREA!;
  ; 2CUT-TO-AREA! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2CUT-TO-AREA!;
- ;     
+ ;     WRAPS: %2CUT-TO-AREA!
+ ;     ARGS: (WER &KEY G (TOP 0.0) (LEFT 0.0) (BOTTOM 1000.0) (RIGHT 1000.0))
+ ;     DOCSTRING: 
  ;       removes all edges (in g) outside envelope (ox oy), (w h).
  ;       all edges intersecting the envelope will be deleted, a new vert will be
  ;       inserted on the intersection. connected to the inside vert.
  ;       edges inside the envelope will be left as they are.
- ; 
+ ;       
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/extra.lisp
 ```
 
@@ -365,8 +373,10 @@ introduce edge between ll=(u v) at coordinate x.
  ; 2LSPLIT-EDGE! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2LSPLIT-EDGE!;
- ;     introduce edge between ll=(u v) at coordinate x.
+ ;     WRAPS: %2LSPLIT-EDGE!
+ ;     ARGS: (WER EE (VARG 2 X) &KEY G FORCE)
+ ;     DOCSTRING: introduce edge between ll=(u v) at coordinate x.
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -389,8 +399,10 @@ move vertex by x. use :rel nil to move to absolute position.
  ; 2MOVE-VERT! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2MOVE-VERT!;
- ;     move vertex by x. use :rel nil to move to absolute position.
+ ;     WRAPS: %2MOVE-VERT!
+ ;     ARGS: (WER I (VARG 2 X) &KEY (REL T))
+ ;     DOCSTRING: move vertex by x. use :rel nil to move to absolute position.
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -405,9 +417,10 @@ body: (WHEN (-VALID-VERT WER I) (PROGN (2MOVE-VERT! WER I F2!P REL REL) I))
 #### WEIR:2NN
 
 ```
-fx: %2NN
-macro wrapper: 2NN
-defined via veq:fvdef*
+WRAPS: %2NN
+ARGS: (WER (VARG 2 X) &AUX (RES -1) (RESDST2 0.0))
+DOCSTRING: get index of nearest neighbour of x.
+defined via veq:FVDEF*
 
  ; WEIR:2NN
  ;   [symbol]
@@ -415,9 +428,10 @@ defined via veq:fvdef*
  ; 2NN names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %2NN
- ;     macro wrapper: 2NN
- ;     defined via veq:fvdef*
+ ;     WRAPS: %2NN
+ ;     ARGS: (WER (VARG 2 X) &AUX (RES -1) (RESDST2 0.0))
+ ;     DOCSTRING: get index of nearest neighbour of x.
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/kdtree.lisp
 ```
 
@@ -441,9 +455,10 @@ remove edges longer than lim, use fx #'< to remove edges shorter than lim.
 #### WEIR:2RAD
 
 ```
-fx: %2RAD
-macro wrapper: 2RAD
-defined via veq:fvdef*
+WRAPS: %2RAD
+ARGS: (WER (VARG 2 X) RAD &AUX (RAD2 (* RAD RAD)) (RES (LIST)))
+DOCSTRING: get indices of all verts in rad around x
+defined via veq:FVDEF*
 
  ; WEIR:2RAD
  ;   [symbol]
@@ -451,9 +466,10 @@ defined via veq:fvdef*
  ; 2RAD names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %2RAD
- ;     macro wrapper: 2RAD
- ;     defined via veq:fvdef*
+ ;     WRAPS: %2RAD
+ ;     ARGS: (WER (VARG 2 X) RAD &AUX (RAD2 (* RAD RAD)) (RES (LIST)))
+ ;     DOCSTRING: get indices of all verts in rad around x
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/kdtree.lisp
 ```
 
@@ -512,8 +528,10 @@ split edge (u v) at x. returns new vert ind (and new edges).
  ; 2SPLIT-EDGE! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2SPLIT-EDGE!;
- ;     split edge (u v) at x. returns new vert ind (and new edges).
+ ;     WRAPS: %2SPLIT-EDGE!
+ ;     ARGS: (WER U V (VARG 2 X) &KEY G FORCE)
+ ;     DOCSTRING: split edge (u v) at x. returns new vert ind (and new edges).
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -552,8 +570,10 @@ add edge from two coordinates.
  ; 2VADD-EDGE! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %2VADD-EDGE!;
- ;     add edge from two coordinates.
+ ;     WRAPS: %2VADD-EDGE!
+ ;     ARGS: (WER (VARG 2 A B) &KEY G)
+ ;     DOCSTRING: add edge from two coordinates.
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -703,8 +723,10 @@ adds a new vertex to weir. returns the new vert ind.
  ; 3ADD-VERT! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %3ADD-VERT!;
- ;     adds a new vertex to weir. returns the new vert ind.
+ ;     WRAPS: %3ADD-VERT!
+ ;     ARGS: (WER (VARG 3 X))
+ ;     DOCSTRING: adds a new vertex to weir. returns the new vert ind.
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -744,8 +766,10 @@ add edge between vert v and new vert at xy.
  ; 3APPEND-EDGE! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %3APPEND-EDGE!;
- ;     add edge between vert v and new vert at xy.
+ ;     WRAPS: %3APPEND-EDGE!
+ ;     ARGS: (WER V (VARG 3 X) &KEY (REL T) G)
+ ;     DOCSTRING: add edge between vert v and new vert at xy.
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -941,8 +965,10 @@ introduce edge between ll=(u v) at coordinate x.
  ; 3LSPLIT-EDGE! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %3LSPLIT-EDGE!;
- ;     introduce edge between ll=(u v) at coordinate x.
+ ;     WRAPS: %3LSPLIT-EDGE!
+ ;     ARGS: (WER EE (VARG 3 X) &KEY G FORCE)
+ ;     DOCSTRING: introduce edge between ll=(u v) at coordinate x.
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -965,8 +991,10 @@ move vertex by x. use :rel nil to move to absolute position.
  ; 3MOVE-VERT! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %3MOVE-VERT!;
- ;     move vertex by x. use :rel nil to move to absolute position.
+ ;     WRAPS: %3MOVE-VERT!
+ ;     ARGS: (WER I (VARG 3 X) &KEY (REL T))
+ ;     DOCSTRING: move vertex by x. use :rel nil to move to absolute position.
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -1006,8 +1034,10 @@ split edge (u v) at x. returns new vert ind (and new edges).
  ; 3SPLIT-EDGE! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %3SPLIT-EDGE!;
- ;     split edge (u v) at x. returns new vert ind (and new edges).
+ ;     WRAPS: %3SPLIT-EDGE!
+ ;     ARGS: (WER U V (VARG 3 X) &KEY G FORCE)
+ ;     DOCSTRING: split edge (u v) at x. returns new vert ind (and new edges).
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -1055,8 +1085,10 @@ add edge from two coordinates.
  ; 3VADD-EDGE! names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %3VADD-EDGE!;
- ;     add edge from two coordinates.
+ ;     WRAPS: %3VADD-EDGE!
+ ;     ARGS: (WER (VARG 3 A B) &KEY G)
+ ;     DOCSTRING: add edge from two coordinates.
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/vert-utils.lisp
 ```
 
@@ -2649,8 +2681,12 @@ body: (MCOPY-VERT-PROPS WER FROM TO CLEAR CLEAR)
 #### WEIR:MESH-BISECT
 
 ```
-DOCSTRING for %MESH-BISECT;
-cut-pt: cut plane pt
+WRAPS: %MESH-BISECT
+ARGS: (WER (VA 3 CUT-PT CUT-N) &KEY (VFX (-GET-VFX CUT-PT CUT-N))
+       (PFX (-GET-PROJ-FX CUT-PT CUT-N))
+       (VERT->SIDE (MAKE-HASH-TABLE TEST #'EQ)) (MAT INSIDE) (MAT-PROP MAT)
+       (CUT-PROP (GENSYM CUT)))
+DOCSTRING: cut-pt: cut plane pt
    cut-n: cut plane normal
    vfx: classify vertex to either side of the cut plane
    pfx: fx that projects verts into projection plane pt, n
@@ -2659,6 +2695,7 @@ cut-pt: cut plane pt
    mat-prop: property used to set material
    cut-prop: material used to indicate cut verts
   
+defined via veq:FVDEF*
 
  ; WEIR:MESH-BISECT
  ;   [symbol]
@@ -2666,8 +2703,12 @@ cut-pt: cut plane pt
  ; MESH-BISECT names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     DOCSTRING for %MESH-BISECT;
- ;     cut-pt: cut plane pt
+ ;     WRAPS: %MESH-BISECT
+ ;     ARGS: (WER (VA 3 CUT-PT CUT-N) &KEY (VFX (-GET-VFX CUT-PT CUT-N))
+ ;            (PFX (-GET-PROJ-FX CUT-PT CUT-N))
+ ;            (VERT->SIDE (MAKE-HASH-TABLE TEST #'EQ)) (MAT INSIDE) (MAT-PROP MAT)
+ ;            (CUT-PROP (GENSYM CUT)))
+ ;     DOCSTRING: cut-pt: cut plane pt
  ;        cut-n: cut plane normal
  ;        vfx: classify vertex to either side of the cut plane
  ;        pfx: fx that projects verts into projection plane pt, n
@@ -2675,16 +2716,20 @@ cut-pt: cut plane pt
  ;        mat: material assigned to intersection surface
  ;        mat-prop: property used to set material
  ;        cut-prop: material used to indicate cut verts
- ; 
+ ;       
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/poly-modify.lisp
 ```
 
 #### WEIR:MESH-SLICE
 
 ```
-fx: %MESH-SLICE
-macro wrapper: MESH-SLICE
-defined via veq:fvdef*
+WRAPS: %MESH-SLICE
+ARGS: (WER (VA 3 CUT-PT CUT-N) &KEY (SIDE T) DEL-POLYS
+       (VFX (-GET-VFX CUT-PT CUT-N)) (VERT->SIDE (MAKE-HASH-TABLE TEST #'EQ))
+       (MAT-PROP MAT) MAT (CUT-PROP (GENSYM CUT)))
+DOCSTRING: [none]
+defined via veq:FVDEF*
 
  ; WEIR:MESH-SLICE
  ;   [symbol]
@@ -2692,9 +2737,12 @@ defined via veq:fvdef*
  ; MESH-SLICE names a macro:
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
- ;     fx: %MESH-SLICE
- ;     macro wrapper: MESH-SLICE
- ;     defined via veq:fvdef*
+ ;     WRAPS: %MESH-SLICE
+ ;     ARGS: (WER (VA 3 CUT-PT CUT-N) &KEY (SIDE T) DEL-POLYS
+ ;            (VFX (-GET-VFX CUT-PT CUT-N)) (VERT->SIDE (MAKE-HASH-TABLE TEST #'EQ))
+ ;            (MAT-PROP MAT) MAT (CUT-PROP (GENSYM CUT)))
+ ;     DOCSTRING: [none]
+ ;     defined via veq:FVDEF*
  ;   Source file: /data/x/weird/src/weir/poly-modify.lisp
 ```
 
