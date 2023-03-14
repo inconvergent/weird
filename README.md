@@ -7,7 +7,7 @@ need it to remain stable.**
 **NOTE: An improved version of the graph data structure in the `weir` package
 can be found in my new project:
 [cl-grph](https://github.com/inconvergent/cl-grph). Among multiple
-improvements, the graph structure in `grph` is immutable, and supports Datomic
+improvements, the graph structure in `grph` is immutable, and supports Datalog
 queries.**
 
 ## About
