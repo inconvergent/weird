@@ -88,7 +88,7 @@
            (mima (veq:f3$zero (* 3 npolys))) ; 2x, but how many actual nodes for n polys?
            (nodes (veq:p$zero (* #.(* 3 +leap+) npolys*)))
            (polys (veq:p3$zero npolys))
-           (mat (veq:$make :n npolys :dim 2 :v :ao :type 'symbol))
+           (mat (veq:$make :n npolys :dim 2 :v :ao :type symbol))
            (polyfx (veq:f3$zero (* 3 npolys)))
            (normals (veq:f3$zero npolys)))
       (declare (veq:pn ni npolys npolys* polyind) (veq:pvec polys nodes)
@@ -133,17 +133,17 @@
            (veq:fvec fx) (veq:ff org ll) (veq:pn i))
 
   (macrolet ((i (leap) `(aref fx (the veq:pn (+ i ,leap)))))
-    (veq:fvlet ((h 3 (veq:f3cross ll (i 0) (i 1) (i 2)))  ;0
-                (a (veq:f3. (i 3) (i 4) (i 5) h))) ; 1
+    (veq:xlet ((f3!h (veq:f3cross ll (i 0) (i 1) (i 2)))  ;0
+               (f!a (veq:f3. (i 3) (i 4) (i 5) h))) ; 1
       ; e1,e2 are parallel, miss!
       (when (< (abs a) (the veq:ff #.*eps*)) (return-from -polyx -1f0))
-      (veq:fvlet ((f (/ a))
-                  (s 3 (veq:f3- org (i 6) (i 7) (i 8))) ; 2
-                  (u (the veq:ff (* f (veq:f3. s h)))))
+      (veq:xlet ((f!f (/ a))
+                 (f3!s (veq:f3- org (i 6) (i 7) (i 8))) ; 2
+                 (f!u (the veq:ff (* f (veq:f3. s h)))))
         ; miss!
         (when (or (> u 1f0) (< u 0f0)) (return-from -polyx -1f0))
-        (veq:fvlet ((q 3 (veq:f3cross s (i 3) (i 4) (i 5))) ; 1
-                    (v (the veq:ff (* f (veq:ff (veq:f3. ll q))))))
+        (veq:xlet ((f3!q (veq:f3cross s (i 3) (i 4) (i 5))) ; 1
+                   (f!v (the veq:ff (* f (veq:ff (veq:f3. ll q))))))
           ; miss!
           (when (or (< v 0f0) (> (the veq:ff (+ u v)) 1f0)) (return-from -polyx -1f0))
           ; technically we should do this:

@@ -8,8 +8,8 @@
   (let ((wer (weir:make :max-verts 1000 :name :weirinst)))
     (weir:2add-vert! wer 70f0 200f0)
     (weir:2add-vert! wer 20f0 300f0)
-    (weir:2add-verts! wer (veq:f2$+ (rnd:2nin-square 20 500f0)
-                                    (veq:f2rep 500f0)))
+    (weir:2add-verts! wer (f2!@$+ (rnd:2nin-square 20 500f0)
+                                  (veq:f2rep 500f0)))
     (weir:add-edge! wer 1 2)
     (weir:ladd-edge! wer '(0 1))
     (weir:ladd-edge! wer '(3 1))
@@ -75,7 +75,7 @@
         (wsvg:circ wsvg rad :xy (veq:lst (weir:2gv wer v)) :fill "black")
         (wsvg:circ wsvg rad :xy (veq:lst (weir:2gv wer v))))))
 
-  (wsvg:save wsvg "example")))
+  (wsvg:save wsvg "ex")))
 
 
 (time (main 1000 (second (weird:cmd-args))))

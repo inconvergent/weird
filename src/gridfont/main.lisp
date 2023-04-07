@@ -68,9 +68,9 @@
 (veq:fvdef -path-to-arr (paths s (:varg 2 x))
   (declare (list paths) (veq:ff s x))
   (loop for path of-type list in paths
-        collect (veq:f2$+ (values (veq:f$_ (loop for p of-type list in path
-                                                 collect (-pos p s))))
-                          x)))
+        collect (f2!@$+ (values (veq:f$_ (loop for p of-type list in path
+                                               collect (-pos p s))))
+                        x)))
 
 ; TODO: return (values paths width height)
 (defun wc (gf c &key xy)

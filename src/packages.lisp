@@ -70,7 +70,8 @@
   (:use #:common-lisp)
   (:export #:export-data #:import-data #:make #:make-rayfx #:pan-cam #:pan-xy
            #:project #:project* #:project-offset #:project-offset* #:rotate
-           #:update #:zoom)
+           #:update #:zoom
+           #:@cam #:@vpn #:@xy #:@up)
   (:import-from #:weird #:*opt* #:with-struct))
 
 (defpackage #:math
@@ -155,10 +156,12 @@
 
 (defpackage #:pigment
   (:use #:common-lisp)
-  (:export #:as-hsv #:black #:cmyk #:copy #:cyan #:dark
-           #:gray #:green #:hsv #:magenta #:mdark #:red #:rgb #:scale
-           #:scale! #:to-hex #:to-list #:to-list* #:transparent #:vdark #:white
-           #:with)
+  (:export #:as-hex #:as-hsv #:as-list
+           #:as-list* #:as-val #:as-val*
+           #:black #:cmyk #:copy #:cyan #:dark #:gray #:green
+           #:hsv #:magenta #:mdark #:red #:rgb #:scale #:scale!
+           #:transparent #:vdark #:white
+           #:with #:with*)
   (:import-from #:weird #:*opt* #:ensure-vector))
 
 (defpackage #:hset

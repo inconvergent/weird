@@ -1,3 +1,20 @@
+#### PIGMENT:AS-HEX
+
+```
+return pigment colour as hex string.
+
+ ; PIGMENT:AS-HEX
+ ;   [symbol]
+ ; 
+ ; AS-HEX names a compiled function:
+ ;   Lambda-list: (C)
+ ;   Derived type: (FUNCTION (PIGMENT::RGBA)
+ ;                  (VALUES SIMPLE-STRING SINGLE-FLOAT &OPTIONAL))
+ ;   Documentation:
+ ;     return pigment colour as hex string.
+ ;   Source file: /data/x/weird/src/draw/pigment.lisp
+```
+
 #### PIGMENT:AS-HSV
 
 ```
@@ -11,6 +28,70 @@ return pigment as (list h s v a)
  ;   Derived type: (FUNCTION (PIGMENT::RGBA) (VALUES CONS &OPTIONAL))
  ;   Documentation:
  ;     return pigment as (list h s v a)
+ ;   Source file: /data/x/weird/src/draw/pigment.lisp
+```
+
+#### PIGMENT:AS-LIST
+
+```
+return list with (r g b a), (r g b) is pre multiplied
+
+ ; PIGMENT:AS-LIST
+ ;   [symbol]
+ ; 
+ ; AS-LIST names a compiled function:
+ ;   Lambda-list: (C)
+ ;   Derived type: (FUNCTION (PIGMENT::RGBA) (VALUES CONS &OPTIONAL))
+ ;   Documentation:
+ ;     return list with (r g b a), (r g b) is pre multiplied
+ ;   Source file: /data/x/weird/src/draw/pigment.lisp
+```
+
+#### PIGMENT:AS-LIST\*
+
+```
+return (r g b a)
+
+ ; PIGMENT:AS-LIST*
+ ;   [symbol]
+ ; 
+ ; AS-LIST* names a compiled function:
+ ;   Lambda-list: (C)
+ ;   Derived type: (FUNCTION (PIGMENT::RGBA) (VALUES CONS &OPTIONAL))
+ ;   Documentation:
+ ;     return (r g b a)
+ ;   Source file: /data/x/weird/src/draw/pigment.lisp
+```
+
+#### PIGMENT:AS-VAL
+
+```
+:missing:todo:
+
+ ; PIGMENT:AS-VAL
+ ;   [symbol]
+ ; 
+ ; AS-VAL names a compiled function:
+ ;   Lambda-list: (C)
+ ;   Derived type: (FUNCTION (PIGMENT::RGBA)
+ ;                  (VALUES SINGLE-FLOAT SINGLE-FLOAT SINGLE-FLOAT
+ ;                          SINGLE-FLOAT &OPTIONAL))
+ ;   Source file: /data/x/weird/src/draw/pigment.lisp
+```
+
+#### PIGMENT:AS-VAL\*
+
+```
+:missing:todo:
+
+ ; PIGMENT:AS-VAL*
+ ;   [symbol]
+ ; 
+ ; AS-VAL* names a compiled function:
+ ;   Lambda-list: (C)
+ ;   Derived type: (FUNCTION (PIGMENT::RGBA)
+ ;                  (VALUES SINGLE-FLOAT SINGLE-FLOAT SINGLE-FLOAT
+ ;                          SINGLE-FLOAT &OPTIONAL))
  ;   Source file: /data/x/weird/src/draw/pigment.lisp
 ```
 
@@ -250,55 +331,6 @@ scale this pigment by s.
  ;   Source file: /data/x/weird/src/draw/pigment.lisp
 ```
 
-#### PIGMENT:TO-HEX
-
-```
-return pigment colour as hex string.
-
- ; PIGMENT:TO-HEX
- ;   [symbol]
- ; 
- ; TO-HEX names a compiled function:
- ;   Lambda-list: (C)
- ;   Derived type: (FUNCTION (PIGMENT::RGBA)
- ;                  (VALUES SIMPLE-STRING SINGLE-FLOAT &OPTIONAL))
- ;   Documentation:
- ;     return pigment colour as hex string.
- ;   Source file: /data/x/weird/src/draw/pigment.lisp
-```
-
-#### PIGMENT:TO-LIST
-
-```
-return (r/a g/a b/a a) for pre-multiplied alpha (r g b).
-
- ; PIGMENT:TO-LIST
- ;   [symbol]
- ; 
- ; TO-LIST names a compiled function:
- ;   Lambda-list: (C)
- ;   Derived type: (FUNCTION (PIGMENT::RGBA) (VALUES CONS &OPTIONAL))
- ;   Documentation:
- ;     return (r/a g/a b/a a) for pre-multiplied alpha (r g b).
- ;   Source file: /data/x/weird/src/draw/pigment.lisp
-```
-
-#### PIGMENT:TO-LIST\*
-
-```
-return (r g b a) where (r g b) are pre-multiplied.
-
- ; PIGMENT:TO-LIST*
- ;   [symbol]
- ; 
- ; TO-LIST* names a compiled function:
- ;   Lambda-list: (C)
- ;   Derived type: (FUNCTION (PIGMENT::RGBA) (VALUES CONS &OPTIONAL))
- ;   Documentation:
- ;     return (r g b a) where (r g b) are pre-multiplied.
- ;   Source file: /data/x/weird/src/draw/pigment.lisp
-```
-
 #### PIGMENT:TRANSPARENT
 
 ```
@@ -350,7 +382,8 @@ white with alpha a.
 #### PIGMENT:WITH
 
 ```
-macro: (with (pigment r g b a) (list r g b a)).
+access pre multiplied values (r g b a)
+ex: (with (pigment r g b a) (list r g b a)).
 
  ; PIGMENT:WITH
  ;   [symbol]
@@ -358,7 +391,25 @@ macro: (with (pigment r g b a) (list r g b a)).
  ; WITH names a macro:
  ;   Lambda-list: ((C R G B A) &BODY BODY)
  ;   Documentation:
- ;     macro: (with (pigment r g b a) (list r g b a)).
+ ;     access pre multiplied values (r g b a)
+ ;     ex: (with (pigment r g b a) (list r g b a)).
+ ;   Source file: /data/x/weird/src/draw/pigment.lisp
+```
+
+#### PIGMENT:WITH\*
+
+```
+access values (r g b a)
+ex: (with (pigment r g b a) (list r g b a)).
+
+ ; PIGMENT:WITH*
+ ;   [symbol]
+ ; 
+ ; WITH* names a macro:
+ ;   Lambda-list: ((C R G B A) &BODY BODY)
+ ;   Documentation:
+ ;     access values (r g b a)
+ ;     ex: (with (pigment r g b a) (list r g b a)).
  ;   Source file: /data/x/weird/src/draw/pigment.lisp
 ```
 

@@ -320,7 +320,7 @@ note: verts only belong to a grp if they are part of an edge in grp.")
 ; SHAPES ----------------------
 
 (veq:fvdef* 2is-intersection (wer a b c d)
-  (declare (weir wer) (veq:pn aa bb))
+  (declare (weir wer) (veq:pn a b c d))
   "check if edge ab intersect edge bc. does not check if edges exist."
   (veq:f2segx (2$verts wer a b c d)))
 

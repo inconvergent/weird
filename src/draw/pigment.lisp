@@ -6,8 +6,9 @@
 ; TODO: consider rewriting to utilize :veq
 
 (defmacro with ((c r g b a) &body body)
-  "macro: (with (pigment r g b a) (list r g b a))."
-  (alexandria:with-gensyms (c*)
+  "access pre multiplied values (r g b a)
+ex: (with (pigment r g b a) (list r g b a))."
+  (weird:awg (c*)
     `(let* ((,c* ,c)
             (,r (rgba-r ,c*))
             (,g (rgba-g ,c*))
@@ -17,8 +18,10 @@
       (progn ,@body))))
 
 
-(defmacro -with ((c r g b a) &body body)
-  (alexandria:with-gensyms (c*)
+(defmacro with* ((c r g b a) &body body)
+  "access values (r g b a)
+ex: (with (pigment r g b a) (list r g b a))."
+  (weird:awg (c*)
     `(let* ((,c* ,c)
             (,a (rgba-a ,c*))
             (,r (/ (rgba-r ,c*) ,a))
@@ -27,9 +30,10 @@
       (declare (veq:ff ,r ,g ,b ,a))
       (progn ,@body))))
 
-(defun -print-rgba (o s)
+(defun -print-rgba (c s)
   (declare (notinline rgba-r rgba-g rgba-b rgba-a))
-  (-with (o r g b a) (format s "~&@rgba: (r: ~f, g: ~a, b: ~a, a: ~a)~&" r g b a)))
+  (with* (c r g b a)
+    (format s "~&@rgba: (r: ~f, g: ~a, b: ~a, a: ~a)~&" r g b a)))
 
 (defstruct (rgba (:constructor make-rgba)
                  (:constructor -make-rgba (r g b a))
@@ -42,6 +46,22 @@
 (weird:define-struct-load-form rgba)
 #+SBCL(declaim (sb-ext:freeze-type rgba))
 
+(defun rgb (r g b &optional (a 1f0))
+  (declare #.*opt* (veq:ff r g b a))
+  "synonym for make."
+  (make r g b a))
+
+(defun scale (c s)
+  (declare #.*opt* (rgba c) (veq:ff s))
+  "return a new pigment scaled by s."
+  (-make-rgba (* (rgba-r c) s) (* (rgba-g c) s)
+              (* (rgba-b c) s) (* (rgba-a c) s)))
+(defun scale! (c s)
+  (declare #.*opt* (rgba c) (veq:ff s))
+  "scale this pigment by s."
+  (setf (rgba-r c) (* (rgba-r c) s) (rgba-g c) (* (rgba-g c) s)
+        (rgba-b c) (* (rgba-b c) s) (rgba-a c) (* (rgba-a c) s))
+  c)
 
 (defun make (r g b &optional (a 1f0))
   (declare #.*opt* (veq:ff r g b a))
@@ -49,47 +69,46 @@
   0.0-1.0. values are stored internally with pre-multiplied alpha."
   (-make-rgba (* a r) (* a g) (* a b) a))
 
+(defun as-val (c)
+  (declare #.*opt* (rgba c))
+  (with (c r g b a) (values r g b a)))
+(defun as-val* (c)
+  (declare #.*opt* (rgba c))
+  (with* (c r g b a) (values r g b a)))
+
+(defun as-list (c)
+  (declare #.*opt* (rgba c))
+  "return list with (r g b a), (r g b) is pre multiplied"
+  (with (c r g b a) (list r g b a)))
+(defun as-list* (c)
+  (declare #.*opt* (rgba c))
+  "return (r g b a)"
+  (with* (c r g b a) (list r g b a)))
+
 (defun copy (c)
   (declare #.*opt* (rgba c))
   "copy a pigment instance."
   (-make-rgba (rgba-r c) (rgba-g c) (rgba-b c) (rgba-a c)))
 
-(defun to-list (c)
-  (declare #.*opt* (rgba c))
-  "return (r/a g/a b/a a) for pre-multiplied alpha (r g b)."
-  (let ((a (rgba-a c)))
-    (list (/ (rgba-r c) a) (/ (rgba-g c) a) (/ (rgba-b c) a) a)))
-
-(defun to-list* (c)
-  (declare #.*opt* (rgba c))
-  "return (r g b a) where (r g b) are pre-multiplied."
-  (list (rgba-r c) (rgba-g c) (rgba-b c) (rgba-a c)))
-
-
 (defun white (&optional (a 1f0))
   (declare #.*opt* (veq:ff a))
   "white with alpha a."
   (make 1f0 1f0 1f0 a))
-
 (defun black (&optional (a 1f0))
   (declare #.*opt* (veq:ff a))
   "black with alpha a."
   (make 0f0 0f0 0f0 a))
-
 (defun red (&optional (a 1f0))
   (declare #.*opt* (veq:ff a))
   "red with alpha a."
   (make 1f0 0f0 0f0 a))
-
 (defun green (&optional (a 1f0))
   (declare #.*opt* (veq:ff a))
   "green with alpha a."
   (make 0f0 1f0 0f0 a))
-
 (defun blue (&optional (a 1f0))
   (declare #.*opt* (veq:ff a))
   (make 0f0 0f0 1f0 a))
-
 (defun mdark (&optional (a 1f0))
   (declare #.*opt* (veq:ff a))
   "0.3 gray with alpha a."
@@ -99,12 +118,10 @@
   (declare #.*opt* (veq:ff a))
   "0.2 gray with alpha a."
   (make 0.2f0 0.2f0 0.2f0 a))
-
 (defun vdark (&optional (a 1f0))
   (declare #.*opt* (veq:ff a))
   "0.1 gray with alpha a."
   (make 0.1f0 0.1f0 0.1f0 a))
-
 (defun gray (v &optional (a 1f0))
   (declare #.*opt* (veq:ff v a))
   "v gray with alpha a."
@@ -115,36 +132,14 @@
   "fully transparent. by defninition this has no colour."
   (make 0f0 0f0 0f0 0f0))
 
-
-(defun rgb (r g b &optional (a 1f0))
-  (declare #.*opt* (veq:ff r g b a))
-  "synonym for make."
-  (make r g b a))
-
-
-(defun scale (c s)
-  (declare #.*opt* (rgba c) (veq:ff s))
-  "return a new pigment scaled by s."
-  (-make-rgba (* (rgba-r c) s) (* (rgba-g c) s)
-              (* (rgba-b c) s) (* (rgba-a c) s)))
-
-(defun scale! (c s)
-  (declare #.*opt* (rgba c) (veq:ff s))
-  "scale this pigment by s."
-  (setf (rgba-r c) (* (rgba-r c) s) (rgba-g c) (* (rgba-g c) s)
-        (rgba-b c) (* (rgba-b c) s) (rgba-a c) (* (rgba-a c) s))
-  c)
-
-(defun to-hex (c)
+(defun as-hex (c)
   (declare #.*opt* (rgba c))
   "return pigment colour as hex string."
   (labels ((-hex (d)
              (declare #.*opt* (veq:ff d))
              (min 255 (max 0 (floor (veq:ff (* d 256)))))))
-    (weird:dsb (r g b a) (to-list c)
-      (declare #.*opt* (veq:ff r g b a))
+    (with* (c r g b a)
       (values (format nil "#~@{~2,'0x~}" (-hex r) (-hex g) (-hex b)) a))))
-
 
 (defun cmyk (c m y k &optional (a 1f0))
   (declare #.*opt* (veq:ff c m y k a))
@@ -183,7 +178,7 @@
                                           (/ (the veq:ff (- ca cb)) df)))))
                (declare (ignore _) (veq:ff res))
                res)))
-    (-with (c r g b a)
+    (with* (c r g b a)
       (let ((rgb (list r g b)))
         (declare (list rgb))
         (weird:mvb (imn mn) (math:argmin rgb)
@@ -202,7 +197,6 @@
 (defun magenta (&key (sat 1f0) (val 1f0) (alpha 1f0))
   "magenta with sat, val, alpha."
   (hsv #.(/ 300f0 360f0) sat val alpha))
-
 (defun cyan (&key (sat 1f0) (val 1f0) (alpha 1f0))
   "cyan with sat, val, alpha."
   (hsv #.(/ 180f0 360f0) sat val alpha))

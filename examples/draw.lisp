@@ -4,18 +4,18 @@
 (ql:quickload :weird)
 
 
-(veq:vdef main (size fn)
+(veq:fvdef main (size fn)
  (let ((wer (weir:make))
        (wsvg (wsvg:make*)))
 
    (weir:2add-path! wer
-     (veq:f2$+ (veq:f$_ '((-1f0 -202f0) (400f0 300f0))) 50f0 700f0))
+     (f2!@$+ (veq:f$_ '((-1f0 -202f0) (400f0 300f0))) 51f0 700f0))
    (weir:2add-path! wer (veq:f$_ '((401f0 2f0) (4f0 300f0))))
 
    (weir:2add-path! wer
-     (veq:f2$+ (veq:f2$square 50f0) 700f0 700f0))
+     (f2!@$+ (veq:f2$square* 52f0) 700f0 700f0))
    (weir:2add-path! wer
-     (veq:f2$+ (veq:f2$polygon 5 100f0) 800f0 800f0)
+     (f2!@$+ (veq:f2$polygon 5 100f0) 800f0 800f0)
      :closed t)
 
    (weir:2intersect-all! wer)

@@ -23,7 +23,7 @@ defined via veq:DEF*
 
 ```
 WRAPS: %2IN-RECT
-ARGS: (S-X-8 S-Y-9)
+ARGS: (S/X-8 S/Y-9)
 DOCSTRING: random point in rectangle of size sx,sy. centered at origin.
 defined via veq:DEF*
 
@@ -34,7 +34,7 @@ defined via veq:DEF*
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
  ;     WRAPS: %2IN-RECT
- ;     ARGS: (S-X-8 S-Y-9)
+ ;     ARGS: (S/X-8 S/Y-9)
  ;     DOCSTRING: random point in rectangle of size sx,sy. centered at origin.
  ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
@@ -86,7 +86,7 @@ defined via veq:DEF*
 
 ```
 WRAPS: %2NIN-RECT
-ARGS: (N S-X-10 S-Y-11)
+ARGS: (N S/X-10 S/Y-11)
 DOCSTRING: n random points in rectangle of size sx,sy. centered at origin.
 defined via veq:DEF*
 
@@ -97,7 +97,7 @@ defined via veq:DEF*
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
  ;     WRAPS: %2NIN-RECT
- ;     ARGS: (N S-X-10 S-Y-11)
+ ;     ARGS: (N S/X-10 S/Y-11)
  ;     DOCSTRING: n random points in rectangle of size sx,sy. centered at origin.
  ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
@@ -149,7 +149,7 @@ defined via veq:DEF*
 
 ```
 WRAPS: %2NON-LINE
-ARGS: (N A-X-4 A-Y-5 B-X-6 B-Y-7)
+ARGS: (N A/X-4 A/Y-5 B/X-6 B/Y-7)
 DOCSTRING: n random points between a,b.
 defined via veq:DEF*
 
@@ -160,7 +160,7 @@ defined via veq:DEF*
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
  ;     WRAPS: %2NON-LINE
- ;     ARGS: (N A-X-4 A-Y-5 B-X-6 B-Y-7)
+ ;     ARGS: (N A/X-4 A/Y-5 B/X-6 B/Y-7)
  ;     DOCSTRING: n random points between a,b.
  ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
@@ -200,7 +200,7 @@ defined via veq:DEF*
 
 ```
 WRAPS: %2ON-LINE
-ARGS: (A-X-0 A-Y-1 B-X-2 B-Y-3)
+ARGS: (A/X-0 A/Y-1 B/X-2 B/Y-3)
 DOCSTRING: random point between a,b.
 defined via veq:DEF*
 
@@ -211,7 +211,7 @@ defined via veq:DEF*
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
  ;     WRAPS: %2ON-LINE
- ;     ARGS: (A-X-0 A-Y-1 B-X-2 B-Y-3)
+ ;     ARGS: (A/X-0 A/Y-1 B/X-2 B/Y-3)
  ;     DOCSTRING: random point between a,b.
  ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/2rnd.lisp
@@ -272,7 +272,7 @@ defined via veq:FVDEF*
 
 ```
 WRAPS: %3IN-BOX
-ARGS: (S-X-12 S-Y-13 S-Z-14)
+ARGS: (S/X-12 S/Y-13 S/Z-14)
 DOCSTRING: random point in box of size sx,sy,sz. centered at origin.
 defined via veq:DEF*
 
@@ -283,7 +283,7 @@ defined via veq:DEF*
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
  ;     WRAPS: %3IN-BOX
- ;     ARGS: (S-X-12 S-Y-13 S-Z-14)
+ ;     ARGS: (S/X-12 S/Y-13 S/Z-14)
  ;     DOCSTRING: random point in box of size sx,sy,sz. centered at origin.
  ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
@@ -333,7 +333,7 @@ random point in sphere with rad r. centered at origin.
 
 ```
 WRAPS: %3NIN-BOX
-ARGS: (N S-X-15 S-Y-16 S-Z-17)
+ARGS: (N S/X-15 S/Y-16 S/Z-17)
 DOCSTRING: n random points in box of size sx,sy,sz. centered at origin.
 defined via veq:DEF*
 
@@ -344,7 +344,7 @@ defined via veq:DEF*
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
  ;     WRAPS: %3NIN-BOX
- ;     ARGS: (N S-X-15 S-Y-16 S-Z-17)
+ ;     ARGS: (N S/X-15 S/Y-16 S/Z-17)
  ;     DOCSTRING: n random points in box of size sx,sy,sz. centered at origin.
  ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
@@ -392,7 +392,7 @@ defined via veq:DEF*
 
 ```
 WRAPS: %3NON-LINE
-ARGS: (N A-X-6 A-Y-7 A-Z-8 B-X-9 B-Y-10 B-Z-11)
+ARGS: (N A/X-6 A/Y-7 A/Z-8 B/X-9 B/Y-10 B/Z-11)
 DOCSTRING: n random points between a,b.
 defined via veq:DEF*
 
@@ -403,7 +403,7 @@ defined via veq:DEF*
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
  ;     WRAPS: %3NON-LINE
- ;     ARGS: (N A-X-6 A-Y-7 A-Z-8 B-X-9 B-Y-10 B-Z-11)
+ ;     ARGS: (N A/X-6 A/Y-7 A/Z-8 B/X-9 B/Y-10 B/Z-11)
  ;     DOCSTRING: n random points between a,b.
  ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp
@@ -439,7 +439,7 @@ n random points on sphere with rad r. centered at origin.
 
 ```
 WRAPS: %3ON-LINE
-ARGS: (A-X-0 A-Y-1 A-Z-2 B-X-3 B-Y-4 B-Z-5)
+ARGS: (A/X-0 A/Y-1 A/Z-2 B/X-3 B/Y-4 B/Z-5)
 DOCSTRING: random point between a,b.
 defined via veq:DEF*
 
@@ -450,7 +450,7 @@ defined via veq:DEF*
  ;   Lambda-list: (&REST REST)
  ;   Documentation:
  ;     WRAPS: %3ON-LINE
- ;     ARGS: (A-X-0 A-Y-1 A-Z-2 B-X-3 B-Y-4 B-Z-5)
+ ;     ARGS: (A/X-0 A/Y-1 A/Z-2 B/X-3 B/Y-4 B/Z-5)
  ;     DOCSTRING: random point between a,b.
  ;     defined via veq:DEF*
  ;   Source file: /data/x/weird/src/rnd/3rnd.lisp

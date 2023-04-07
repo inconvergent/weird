@@ -6,10 +6,8 @@ Simple orthographic projection with camera position (cam), view vector (vpn)
 view plane offset (xy) and scaling (s).
 "
 
-(declaim (inline 3identity))
+(declaim (inline 3identity zero))
 (veq:fvdef 3identity ((:va 3 x)) (values x))
-
-(declaim (inline zero))
 (veq:fvdef zero () (veq:f3$point 0f0 0f0 0f0))
 
 
@@ -27,6 +25,13 @@ view plane offset (xy) and scaling (s).
   (projfx #'3identity :type function :read-only nil)
   (dstfx #'3identity :type function :read-only nil)
   (rayfx #'3identity :type function :read-only nil))
+
+(declaim (inline @cam @s @up @vpn @xy))
+(veq:fvdef @cam (proj) (veq:f3$ (ortho-cam proj)))
+(veq:fvdef @s (proj) (ortho-s proj))
+(veq:fvdef @up (proj) (veq:f3$ (ortho-up proj)))
+(veq:fvdef @vpn (proj) (veq:f3$ (ortho-vpn proj)))
+(veq:fvdef @xy (proj) (veq:f2$ (ortho-xy proj)))
 
 
 (veq:fvdef -get-u-v (up* vpn* &optional (s 1f0))
@@ -47,7 +52,6 @@ view plane offset (xy) and scaling (s).
   (declare #.*opt* (veq:fvec cam look))
   (veq:f3$point (veq:f3norm (veq:f3- (veq:f3$ cam) (veq:f3$ look)))))
 
-
 (veq:fvdef make-dstfx (proj)
   (declare #.*opt*)
   "distance from pt to camera plane with current parameters"
@@ -57,7 +61,6 @@ view plane offset (xy) and scaling (s).
       (weird:mvb (hit d) (veq:f3planex vpn cam pt (veq:f3+ pt vpn))
         (declare (boolean hit) (veq:ff d))
         (if hit d 0f0)))))
-
 
 (veq:fvdef make-projfx (proj)
   (declare #.*opt*)
@@ -72,7 +75,6 @@ view plane offset (xy) and scaling (s).
         (veq:f3let ((pt* (veq:f3- pt cam)))
           (veq:f2 (+ x (veq:f3. su pt*)) (+ y (veq:f3. sv pt*))))))))
 
-
 (veq:fvdef make-rayfx (proj)
   (declare #.*opt* (ortho proj))
   "cast a ray in direction -vpn from pt"
@@ -81,7 +83,6 @@ view plane offset (xy) and scaling (s).
     (lambda ((:va 3 pt))
       (declare #.*opt* (veq:ff pt))
       (veq:~ pt (veq:f3+ pt dir)))))
-
 
 (veq:fvdef make (&key (up (veq:f3$point 0f0 0f0 1f0))
                       (cam (veq:f3$point 1000f0 1000f0 1000f0))
@@ -153,7 +154,6 @@ view plane offset (xy) and scaling (s).
         (ortho-rayfx proj) (make-rayfx proj))
   proj)
 
-
 (veq:fvdef around (c axis val &key (look (veq:f3$point (veq:f3rep 0f0))))
   (declare (ortho c) (keyword axis) (veq:ff val) (veq:fvec look))
   (unless (> (abs val) 0) (return-from around nil))
@@ -177,7 +177,6 @@ view plane offset (xy) and scaling (s).
   "project single point. returns (values x y d)"
   (veq:~ (funcall (ortho-projfx proj) pt)
          (funcall (ortho-dstfx proj) pt)))
-
 
 (veq:vdef project* (proj path)
   (declare #.*opt* (ortho proj) (veq:fvec path))

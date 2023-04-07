@@ -1,3 +1,70 @@
+#### ORTHO:@CAM
+
+```
+:missing:todo:
+
+ ; ORTHO:@CAM
+ ;   [symbol]
+ ; 
+ ; @CAM names a compiled function:
+ ;   Lambda-list: (PROJ)
+ ;   Derived type: (FUNCTION (T)
+ ;                  (VALUES SINGLE-FLOAT SINGLE-FLOAT SINGLE-FLOAT
+ ;                          &OPTIONAL))
+ ;   Inline proclamation: INLINE (inline expansion available)
+ ;   Source file: /data/x/weird/src/draw/ortho.lisp
+```
+
+#### ORTHO:@UP
+
+```
+:missing:todo:
+
+ ; ORTHO:@UP
+ ;   [symbol]
+ ; 
+ ; @UP names a compiled function:
+ ;   Lambda-list: (PROJ)
+ ;   Derived type: (FUNCTION (T)
+ ;                  (VALUES SINGLE-FLOAT SINGLE-FLOAT SINGLE-FLOAT
+ ;                          &OPTIONAL))
+ ;   Inline proclamation: INLINE (inline expansion available)
+ ;   Source file: /data/x/weird/src/draw/ortho.lisp
+```
+
+#### ORTHO:@VPN
+
+```
+:missing:todo:
+
+ ; ORTHO:@VPN
+ ;   [symbol]
+ ; 
+ ; @VPN names a compiled function:
+ ;   Lambda-list: (PROJ)
+ ;   Derived type: (FUNCTION (T)
+ ;                  (VALUES SINGLE-FLOAT SINGLE-FLOAT SINGLE-FLOAT
+ ;                          &OPTIONAL))
+ ;   Inline proclamation: INLINE (inline expansion available)
+ ;   Source file: /data/x/weird/src/draw/ortho.lisp
+```
+
+#### ORTHO:@XY
+
+```
+:missing:todo:
+
+ ; ORTHO:@XY
+ ;   [symbol]
+ ; 
+ ; @XY names a compiled function:
+ ;   Lambda-list: (PROJ)
+ ;   Derived type: (FUNCTION (T)
+ ;                  (VALUES SINGLE-FLOAT SINGLE-FLOAT &OPTIONAL))
+ ;   Inline proclamation: INLINE (inline expansion available)
+ ;   Source file: /data/x/weird/src/draw/ortho.lisp
+```
+
 #### ORTHO:EXPORT-DATA
 
 ```

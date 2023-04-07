@@ -94,11 +94,12 @@
 (defun -save8 (canv fn &key gamma)
   (declare #.*opt*)
   (-do-op (canv size vals indfx)
-    (let ((png (make-instance 'zpng::pixel-streamed-png :color-type :truecolor
-                              :width size :height size)))
+    (let ((png (make-instance 'zpng::pixel-streamed-png
+                 :color-type :truecolor :width size :height size)))
       (with-open-file (fstream (weird:ensure-filename fn ".png")
                         :direction :output :if-exists :supersede
-                        :if-does-not-exist :create :element-type '(unsigned-byte 8))
+                        :if-does-not-exist :create
+                        :element-type '(unsigned-byte 8))
         (zpng:start-png png fstream)
         (-square-loop (x y size)
           (weird:mvb (r g b) (-png-vals indfx vals x y gamma)
