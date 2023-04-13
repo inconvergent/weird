@@ -133,7 +133,7 @@
                          (return voxs)))))
 
 (defun get-mesh (wer voxs &key w (fx (lambda (v) (>= 0.0 v ))))
-  (declare #.*opt* (voxels voxs) (veq:ff lo hi) (boolean w) (function fx))
+  (declare #.*opt* (voxels voxs) (boolean w) (function fx))
   "reconstruct mesh surounding (fx ...) == t."
   (let ((imap (-make-pos-vec 24))
         (voxellist (-make-pos-vec 24))

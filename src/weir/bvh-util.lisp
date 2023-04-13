@@ -77,8 +77,7 @@
 (defconstant +leap+ 3)
 
 (veq:fvdef make (all-objs leaffx &key (num 5) matfx)
-  (declare #.*opt* (list all-objs) (function leaffx)
-           (veq:pn maxlvl nodeind polyind num))
+  (declare #.*opt* (list all-objs) (function leaffx) (veq:pn num))
   (macrolet ((nodes- (slot v) `(setf (aref nodes (+ (* +leap+ ni) ,slot)) ,v)))
 
     (let* ((t0 (get-internal-real-time))
@@ -127,32 +126,32 @@
                                     internal-time-units-per-second)))))))
 
 ; ; ;https://en.wikipedia.org/wiki/M%C3%B6ller%E2%80%93Trumbore_intersection_algorithm
-(declaim (inline -polyx))
+; (declaim (inline -polyx))
 (veq:fvdef -polyx (fx i (:va 3 org ll))
-  (declare (optimize space speed (safety 0) (debug 0))
-           (veq:fvec fx) (veq:ff org ll) (veq:pn i))
+  ; (declare (optimize space speed (safety 0) (debug 0))
+  ;          (veq:fvec fx) (veq:ff org ll) (veq:pn i))
 
   (macrolet ((i (leap) `(aref fx (the veq:pn (+ i ,leap)))))
     (veq:xlet ((f3!h (veq:f3cross ll (i 0) (i 1) (i 2)))  ;0
-               (f!a (veq:f3. (i 3) (i 4) (i 5) h))) ; 1
+               (f!a (veq:f3dot (i 3) (i 4) (i 5) h))) ; 1
       ; e1,e2 are parallel, miss!
       (when (< (abs a) (the veq:ff #.*eps*)) (return-from -polyx -1f0))
       (veq:xlet ((f!f (/ a))
                  (f3!s (veq:f3- org (i 6) (i 7) (i 8))) ; 2
-                 (f!u (the veq:ff (* f (veq:f3. s h)))))
+                 (f!u (the veq:ff (* f (veq:f3dot s h)))))
         ; miss!
         (when (or (> u 1f0) (< u 0f0)) (return-from -polyx -1f0))
         (veq:xlet ((f3!q (veq:f3cross s (i 3) (i 4) (i 5))) ; 1
-                   (f!v (the veq:ff (* f (veq:ff (veq:f3. ll q))))))
+                   (f!v (the veq:ff (* f (veq:ff (veq:f3dot ll q))))))
           ; miss!
           (when (or (< v 0f0) (> (the veq:ff (+ u v)) 1f0)) (return-from -polyx -1f0))
           ; technically we should do this:
-          ; (max (the veq:ff (* f (veq:f3. (veq:f3$ fx 2) q))) ; hit!
+          ; (max (the veq:ff (* f (veq:f3dot (veq:f3$ fx 2) q))) ; hit!
           ;      (the veq:ff #.(- *eps*))))
           ; but the final check is performed in make raycaster,
           ; so we do this instead:
           (the veq:ff
-            (* f (the veq:ff (veq:f3. (i 0) (i 1) (i 2) q))))))))) ; hit/miss! ; 2
+            (* f (the veq:ff (veq:f3dot (i 0) (i 1) (i 2) q))))))))) ; hit/miss! ; 2
 
 
 (declaim (inline -bbox-test))

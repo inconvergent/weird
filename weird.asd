@@ -68,11 +68,11 @@
                (:file "voxel/voxel" :depends-on ("voxel/init"))
                (:file "draw/canvas" :depends-on ("utils"))))
 
+
 (asdf:defsystem #:weird/tests
   :depends-on (#:weird #:prove)
   :perform (asdf:test-op (o s) (uiop:symbol-call ':weird-tests '#:run-tests))
   :pathname "test/"
   :serial t
-  :components ((:file "packages")
-               (:file "run" :depends-on ("packages"))))
+  :components ((:file "run")))
 

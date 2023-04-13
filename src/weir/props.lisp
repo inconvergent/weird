@@ -138,10 +138,11 @@
   "copy props from, from, into edges, to*."
   (loop for to of-type list in to*
         do (copy-edge-props wer from to :clear clear)))
+
 (defun mcopy-vert-props (wer from to* &key clear)
-  (declare (weir wer) (list from to*))
-  "copy props from, from, into edges, to*."
-  (loop for to of-type list in to*
+  (declare (weir wer) (veq:pn from) (list to*))
+  "copy props from, from, into verts, to*."
+  (loop for to of-type veq:pn in to*
         do (copy-vert-props wer from to :clear clear)))
 
 ; HAS PROP

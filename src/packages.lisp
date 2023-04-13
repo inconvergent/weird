@@ -246,7 +246,7 @@
   (:use #:common-lisp)
   (:export #:*half-long* #:*half-short* #:*long* #:*short* #:bzspl #:carc
            #:circ #:compound #:draw #:wcirc #:hatch #:jpath #:make #:make*
-           #:path #:rect #:save #:square #:update #:wpath)
+           #:path #:rect #:save #:square #:update #:wpath #:sign)
   (:import-from #:weird #:dsb #:ensure-filename #:with-struct))
 
 

@@ -47,8 +47,7 @@
 
 
 (veq:fvdef make-raycaster (bvh &aux (res (make-bvhres)))
-  (declare (optimize speed (safety 0))
-           (bvh::bvh bvh) (bvhres res))
+  (declare (optimize speed (safety 0)) (bvh::bvh bvh) (bvhres res))
   (macrolet
     ((nodes- (slot) `(aref nodes (the veq:pn (+ ,slot ni))))
      (for-leaves- ((res i3) &body body)
@@ -71,7 +70,7 @@
       (declare (veq:fvec mima polyfx) (veq:pvec nodes))
       (labels
         ((raycast ((:va 3 org ll))
-           (declare (veq:ff org b))
+           (declare (veq:ff org))
            (veq:f3let ((inv (-eps-div ll)))
                (labels
                  ((rec (ni &aux (ni2 (the veq:pn (* 2 ni))))
@@ -109,13 +108,13 @@
         (declare (veq:fvec mima polyfx) (veq:pvec nodes))
         (labels
           ((raycast-short ((:va 3 org ll))
-             (declare (veq:ff org b))
+             (declare (veq:ff org))
              (veq:f3let ((inv (-eps-div ll)))
                (nil-rt)
                (push-rt 0)
                (loop while (con-rt)
-                     do (let* ((ni (the veq:pn (pop-rt)))
-                               (ni2 (the veq:pn (* 2 ni)))) ; LEAP?
+                     do (let* ((ni (pop-rt))
+                               (ni2 (* 2 ni))) ; LEAP?
                           (declare (veq:pn ni ni2))
                           (when (bvh::-bbox-test mima ni2 inv org)
                                 (for-leaves- (i3) (bvh::-polyx polyfx i3 org ll))

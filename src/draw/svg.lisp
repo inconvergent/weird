@@ -356,14 +356,15 @@ a jpath is a wide line emulation useful for drawing wide lines in plotter drawin
            :stroke-opacity (-select-so wsvg so))))
 
 
-(defun wcirc (wsvg rad* &key (xy *zero*) outer-rad sw rs stroke so)
+(defun wcirc (wsvg rad* &key (xy *zero*) outer-rad sw rs ns stroke so)
   (declare (wsvg wsvg) (list xy) (number rad*))
   "draw a circled filled with concentric circles. use rs to set density."
+  (when (and ns rs) (error "WCIRC: either rs or ns must be nil"))
   (let* ((rad (veq:ff rad*))
          (inner (max 0.1f0 (if outer-rad rad 0.1f0)))
          (outer (if outer-rad outer-rad rad))
-         (n (ceiling (* (abs (- outer inner))
-                        (-select-rep-scale wsvg rs)))))
+         (n (if ns ns (ceiling (* (abs (- outer inner))
+                                  (-select-rep-scale wsvg rs))))))
     (loop for r of-type veq:ff in (math:linspace n inner outer)
           do (circ wsvg r :xy xy :sw sw :stroke stroke :so so))))
 
@@ -380,17 +381,22 @@ ex: M20,230 Q40,205 50,230 T90,230"
          :fill-opacity (-select-fo wsvg fo)))
 
 
-; (defun sign (wsvg str &key sw so (scale 2.5f0) (right 55f0) (bottom 9f0))
-;   (declare (wsvg wsvg) (string str))
-;   (with-struct (wsvg- width height) wsvg
-;     (loop with gf = (gridfont:make :scale scale)
-;           with b = (gridfont::get-phrase-box gf str)
-;           with pos = (vec:vec (- width (vec:vec-x b) right)
-;                               (- height (vec:vec-y b) bottom))
-;           initially (gridfont:update gf :pos pos)
-;           for c across str
-;           do (loop for (path closed) in (gridfont:wc gf c)
-;                    do (path wsvg path :so so :sw sw :closed closed)))))
+(defun sign (wsvg str &key sw so (scale 2.5f0) (pos :br) (x 20f0) (y 20f0))
+  (declare (wsvg wsvg) (string str))
+  "write str along the edge at :tl, :tr :bl or :br (default). shift with x,y"
+  (with-struct (wsvg- width height) wsvg
+    (loop with gf = (gridfont:make :scale scale)
+          with (bx by) = (gridfont::get-phrase-box gf str)
+          initially (gridfont:update gf
+                      :xy (ecase pos (:br (list #1=(- width bx x)
+                                                #2=(- height by y)))
+                                     (:bl (list x #2#))
+                                     (:tr (list #1# y)) (:tl (list x y))
+                                     (:tm (list #3=(* 0.5 (- width bx)) y))
+                                     (:bm (list #3# #2#))))
+          for c across str
+          do (loop for (path c*) in (gridfont:wc gf c)
+                   do (path wsvg path :so so :sw sw :closed c*)))))
 
 
 (defun save (wsvg fn)
