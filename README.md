@@ -1,5 +1,9 @@
 # WEIRD-A Generative Art System
 
+**NOTE: I will probably not update this repo anymore. See
+[auxin](https://github.com/inconvergent/auxin). For a stripped version of this
+repo**
+
 **NOTE: This code is likely to change with little or no warning. You should not
 use this for anything remotely important. Make sure to clone the repo if you
 need it to remain stable.**
