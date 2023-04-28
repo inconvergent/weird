@@ -4,9 +4,9 @@
 [auxin](https://github.com/inconvergent/auxin). For a stripped version of this
 repo**
 
-**NOTE: This code is likely to change with little or no warning. You should not
-use this for anything remotely important. Make sure to clone the repo if you
-need it to remain stable.**
+**NOTE: weird reqires cl-veq. the most recent compatible version of cl-veq must
+be installed locally for this system to work properly:
+https://github.com/inconvergent/cl-veq/releases/tag/v4.1.0-beta **
 
 **NOTE: An improved version of the graph data structure in the `weir` package
 can be found in my new project:
@@ -284,8 +284,9 @@ to accept PRs, reply to issues, or take requests.
 
 ## Installation and Dependencies
 
-`weird` depends on [cl-veq](https://github.com/inconvergent/cl-veq), and
-it requires Quicklisp to install dependencies (which are listed in
+`weird` depends on
+[cl-veq](https://github.com/inconvergent/cl-veq/releases/tag/v4.1.0-beta), and
+it requires Quicklisp to install other dependencies (which are listed in
 `weird.asd`).
 
 To install and load `weird`, do:
